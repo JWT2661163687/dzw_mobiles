@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" href="css/element.css" />
+		<style>
+			.el-header,
+			.el-footer {
+				background-color: #000000;
+				color: #333;
+				text-align: center;
+				line-height: 60px;
+			}
+			.el-header {
+				color: white;
+			}
+			
+			.el-main {
+				color: #333;
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<el-container>
+				<el-header>
+					<el-row>
+						<el-col :span="2" :push="1">
+							<img src="/mobile/img/u=2766504973,81511995&fm=26&gp=0.jpg" height="60px"/>
+							
+						</el-col>
+						<el-col :span="2" :push="4">
+							<i class="el-icon-user"></i>&nbsp;用户：<span>张三</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-no-smoking"></i>&nbsp;<span @click="loadclick('view/jwt/maintain.html')" style="cursor:pointer">维修</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-document-copy"></i>&nbsp;<span style="cursor:pointer">结算中心</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-s-custom"></i>&nbsp;<span style="cursor:pointer">客户档案</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-s-check"></i>&nbsp;<span style="cursor:pointer">行政人事</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-tickets"></i>&nbsp;<span style="cursor:pointer">基础数据</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							<i class="el-icon-setting"></i>&nbsp;<span style="cursor:pointer">系统</span>
+						</el-col>
+						<el-col :span="2" :push="6">
+							&nbsp;<span style="cursor:pointer">注销</span>
+						</el-col>
+					</el-row>
+				</el-header>
+				<el-main>
+					<el-col :span="4">
+						<div id="divload" ></div>
+					</el-col>
+					<el-col :span="19">
+						<div id="qiehuan">
+							<el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+								<el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
+									<div :id=`${item.title}${item.name}`></div>
+								</el-tab-pane>
+							</el-tabs>
+						</div>
+					</el-col>
+				</el-main>
+			</el-container>
+		</div>
+
+	</body>
+
+	<script type="text/javascript " src="js/jquery-1.12.4.js "></script>
+	<script type="text/javascript " src="js/jq_ajax_config.js "></script>
+	<script type="text/javascript " src="js/axios.min.js "></script>
+	<script type="text/javascript " src="js/axios_cfg.js "></script>
+	<script type="text/javascript " src="js/echarts.min.js "></script>
+	<script>
+		var vueapp = new Vue({
+			el: "#app",
+			data: {
+				editableTabsValue: '0',
+				editableTabs: [],
+				url: 'view/jwt/maintain.html',
+			},
+			mounted: function() {
+				this.loaddiv();
+			},
+			methods: {
+				loaddiv() {
+					$("#divload").load('view/jwt/maintain.html')
+				},
+				handleClick(tab, event) {
+					console.log(tab, event);
+				},
+				//页面加载
+				loadclick(url) {
+					if(vueapp.url == url) {
+						return;
+					}
+					vueapp.url = url;
+					$("#divload").load(url)
+				},
+
+				handleOpen(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				handleClose(key, keyPath) {
+					console.log(key, keyPath);
+				},
+
+				handleTabsEdit(targetName, action) {
+					if(action === 'add') {
+						let newTabName = ++this.tabIndex + '';
+						this.editableTabs.push({
+							title: 'New Tab',
+							name: newTabName,
+							content: 'New Tab content'
+						});
+						this.editableTabsValue = newTabName;
+					}
+					if(action === 'remove') {
+						let tabs = this.editableTabs;
+						let activeName = this.editableTabsValue;
+						if(activeName === targetName) {
+							tabs.forEach((tab, index) => {
+								if(tab.name === targetName) {
+									let nextTab = tabs[index + 1] || tabs[index - 1];
+									if(nextTab) {
+										activeName = nextTab.name;
+									}
+								}
+							});
+						}
+
+						this.editableTabsValue = activeName;
+						this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+					}
+				}
+
+			},
+		})
+	</script>
+
+</html>
