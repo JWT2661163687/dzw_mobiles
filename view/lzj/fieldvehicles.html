@@ -3,16 +3,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" href="../../css/index.css" />
 	</head>
 	<body>
-		<div id="app" style="background-color: white;color:#F56C6C">
+		<div id="fieldvehiclesapp" style="background-color: white;color:#F56C6C">
 			<el-row :gutter="20">
 				<el-col :span="16">
-					<div class="grid-content bg-purple"><h3>外勤车辆</h3></div>
+					<div ><h3>外勤车辆</h3></div>
 				</el-col>
 				<el-col :span="8">
-					<div class="grid-content bg-purple">
+					<div>
 						<el-button size="mini" style="float: right;background-color: white;color:#F56C6C;font-size: 15px;">关闭</el-button>
 					</div>
 				</el-col>
@@ -20,13 +19,13 @@
 			<br/>
 			<div style="background-color: white;color:#F56C6C">
 				<el-row :span="10">
-					<el-col :md="1" :push="20" style="margin-left: 10px;">
+					<el-col :md="1" :push="18" >
 						 <el-button style="background-color: white;color:#F56C6C">保存</el-button>
 					</el-col>
-					<el-col :md="1" :push="20" style="margin-left: 20px;">
+					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
 					</el-col>
-					<el-col :md="1" :push="20" style="margin-left: 20px;">
+					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">新增</el-button>
 					</el-col>
 				</el-row>
@@ -63,12 +62,10 @@
 			</el-table>
 		</div>
 	</body>
-	<script type="text/javascript" src="../../js/vue.js"></script>
-	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
-	<script type="text/javascript" src="../../js/index.js"></script>
+
 	<script>
-	var app = new Vue({
-			el: "#app",
+	new Vue({
+			el: "#fieldvehiclesapp",
 			data: {
 				cp:'',
 				pp:'',

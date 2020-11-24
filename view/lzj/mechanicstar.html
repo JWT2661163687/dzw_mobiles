@@ -11,11 +11,11 @@
 		<div id="mechanicstarapp" style="background-color: white;color:#F56C6C">
 			<el-row :gutter="20">
 				<el-col :span="16">
-					<div class="grid-content bg-purple">
+					<div>
 						<h1>技工星级</h1></div>
 				</el-col>
 				<el-col :span="8">
-					<div class="grid-content bg-purple">
+					<div>
 						<el-button size="mini" style="float: right;font-size: 15px;background-color: white;color:#F56C6C">关闭</el-button>
 					</div>
 				</el-col>
@@ -23,13 +23,13 @@
 			<br />
 			<div>
 				<el-row :span="10">
-					<el-col :md="1" :push="20">
+					<el-col :md="1" :push="18">
 						<el-button style="background-color: white;color:#F56C6C">保存</el-button>
 					</el-col>
-					<el-col :md="1" :push="20" style="margin-left: 20px;">
+					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
 					</el-col>
-					<el-col :md="1" :push="20" style="margin-left: 20px;">
+					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">新增</el-button>
 					</el-col>
 				</el-row>
@@ -52,7 +52,7 @@
 				</el-input>
 
 			</div>
-			<el-table style="background-color: white;color:#F56C6C" ref="singleTable" :data="persons" highlight-current-row @current-change="handleCurrentChange">
+			<el-table style="background-color: white;color:#F56C6C" ref="singleTable" :data="persons" highlight-current-row >
 				<el-table-column property="meid" label="编码">
 				</el-table-column>
 				<el-table-column property="starrating" label="星级">
