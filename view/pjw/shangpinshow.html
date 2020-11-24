@@ -14,13 +14,13 @@
 				<el-row>
 
 					<el-col :span="4"  style="border: 1px black solid;">
-						<div style="border-bottom: 1px black solid; background-color: #C0CCDA;line-height: 80px;">
+						<div style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
 							<span style="font-size: larger;">商品类型</span>
 						</div>
 						<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
 					</el-col >
 					<el-col :span="19" :push="1" style="border: 1px black solid;">
-						<div style="border-bottom: 1px black solid; background-color: #C0CCDA;line-height: 80px;">
+						<div style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
 							<span style="font-size: larger;">商品项目</span>
 						</div>
 						</br>
@@ -29,10 +29,10 @@
 							<el-col :span="3">
 							<el-input v-model="input" placeholder="请输入内容" style="width: 200px;"></el-input>
 							</el-col>
-							<el-col :span="1" :push="2">
+							<el-col :span="2" :push="3">
 							<el-button icon="el-icon-search" circle></el-button>
 							</el-col>
-							<el-col :span="2" :push="2">
+							<el-col :span="2" :push="3">
 							<el-button type="button" @click="dialogFormVisible = true">新增</el-button>
 							</el-col>
 							<el-dialog title="商品新增" :visible.sync="dialogFormVisible">
@@ -65,19 +65,14 @@
 									<el-button @click="dialogFormVisible = false">关闭</el-button>
 								</div>
 							</el-dialog>
-							<!--<el-col :span="2" :push="2">
-								<el-button>修改</el-button>
-							</el-col>
-							<el-col :span="2" :push="2">
-								<el-button>删除</el-button>
-							</el-col>-->
-							<el-col :span="2" :push="2">
+	
+							<el-col :span="2" :push="3">
 								<el-button>保存</el-button>
 							</el-col>
-							<el-col :span="2" :push="2">
+							<el-col :span="2" :push="3">
 								<el-button>导出</el-button>
 							</el-col>
-							<el-col :span="2" :push="2">
+							<el-col :span="2" :push="3">
 								<el-button>关闭</el-button>
 							</el-col>
 						</el-row>
