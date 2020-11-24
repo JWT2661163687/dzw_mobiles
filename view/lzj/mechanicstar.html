@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/index.css" />
+	</head>
+
+	<body>
+		<div id="app" style="background-color: white;color:#F56C6C">
+			<el-row :gutter="20">
+				<el-col :span="16">
+					<div class="grid-content bg-purple">
+						<h1>技工星级</h1></div>
+				</el-col>
+				<el-col :span="8">
+					<div class="grid-content bg-purple">
+						<el-button size="mini" style="float: right;font-size: 15px;background-color: white;color:#F56C6C">关闭</el-button>
+					</div>
+				</el-col>
+			</el-row>
+			<br />
+			<div>
+				<el-row :span="10">
+					<el-col :md="1" :push="20">
+						<el-button style="background-color: white;color:#F56C6C">保存</el-button>
+					</el-col>
+					<el-col :md="1" :push="20" style="margin-left: 20px;">
+						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
+					</el-col>
+					<el-col :md="1" :push="20" style="margin-left: 20px;">
+						<el-button style="background-color: white;color:#F56C6C">新增</el-button>
+					</el-col>
+				</el-row>
+			</div>
+			<div style="background-color: white;color:#F56C6C">
+				等级编码：
+				<el-input v-model="djbm" size="small" placeholder="请输入内容" style="width: 100px;">
+				</el-input>
+
+				星级：
+				<el-input v-model="xj" size="small" placeholder="请输入内容" style="width: 100px;">
+				</el-input>
+
+				等级：
+				<el-input v-model="dj" size="small" placeholder="请输入内容" style="width: 100px;">
+				</el-input>
+
+				提成权重：
+				<el-input v-model="tcqz" size="small" placeholder="请输入内容" style="width: 100px;">
+				</el-input>
+
+			</div>
+			<el-table style="background-color: white;color:#F56C6C" ref="singleTable" :data="persons" highlight-current-row @current-change="handleCurrentChange">
+				<el-table-column property="meid" label="编码">
+				</el-table-column>
+				<el-table-column property="starrating" label="星级">
+				</el-table-column>
+				<el-table-column property="grade" label="等级">
+				</el-table-column>
+				<el-table-column property="weight" label="提成权重">
+				</el-table-column>
+			</el-table>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/index.js"></script>
+	<script>
+		var app = new Vue({
+			el: "#app",
+			data: {
+				djbm:'',
+				xj:'',
+				dj:'',
+				tcqz:'',
+				persons: [{
+					meid: '10',
+					starrating: '1星',
+					grade: '1',
+					weight: '1.1'
+				}, {
+					meid: '10',
+					starrating: '1星',
+					grade: '1',
+					weight: '1.1'
+				}, {
+					meid: '10',
+					starrating: '1星',
+					grade: '1',
+					weight: '1.1'
+				}]
+			},
+			methods: {}
+		})
+	</script>
+
+</html>

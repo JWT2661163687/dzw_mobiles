@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/index.css" />
+	</head>
+	<style>
+		.el-row {
+			margin-bottom: 20px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+		
+		.el-col {
+			border-radius: 4px;
+		}
+		
+		.bg-purple-dark {
+			background: #99a9bf;
+		}
+		
+		.bg-purple {
+			background: #d3dce6;
+		}
+		
+		.bg-purple-light {
+			background: #e5e9f2;
+		}
+		
+		.grid-content {
+			border-radius: 4px;
+			min-height: 36px;
+		}
+		
+		.row-bg {
+			padding: 10px 0;
+			background-color: #f9fafc;
+		}
+	</style>
+
+	<body>
+		<div id="app" style="background-color: white;color:#F56C6C">
+			<el-row :gutter="20">
+				<el-col :span="16">
+					<h2>技工资料</h2>
+				</el-col>
+				<el-col :span="8">
+					
+						<el-button size="mini" style="float: right; font-size: 15px;background-color: white;color:#F56C6C">关闭</el-button>
+					
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					技工编号
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					技工姓名
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					性别
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					所在班组
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					手机
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					登录账号
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					地址
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					出生日期
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="8">
+					微信号
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="12">
+					身份证号
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="12">
+					户口地址
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="12">
+					开户银行
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+				<el-col :span="12">
+					银行账号
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					等级编码
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+
+					星级
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+
+					等级
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+
+					维修工种
+					<el-input size="small" style="width: 200px;">
+					</el-input>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					维修品牌
+					<el-input size="small" style="width: 600px;">
+					</el-input>
+				</el-col>
+			</el-row>
+
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/index.js"></script>
+	<script>
+		var app = new Vue().$mount("#app");
+	</script>
+
+</html>

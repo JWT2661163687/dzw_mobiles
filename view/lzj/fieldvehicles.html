@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/index.css" />
+	</head>
+	<body>
+		<div id="app" style="background-color: white;color:#F56C6C">
+			<el-row :gutter="20">
+				<el-col :span="16">
+					<div class="grid-content bg-purple"><h3>外勤车辆</h3></div>
+				</el-col>
+				<el-col :span="8">
+					<div class="grid-content bg-purple">
+						<el-button size="mini" style="float: right;background-color: white;color:#F56C6C;font-size: 15px;">关闭</el-button>
+					</div>
+				</el-col>
+			</el-row>
+			<br/>
+			<div style="background-color: white;color:#F56C6C">
+				<el-row :span="10">
+					<el-col :md="1" :push="20" style="margin-left: 20px;">
+						 <el-button style="background-color: white;color:#F56C6C">保存</el-button>
+					</el-col>
+					<el-col :md="1" :push="20" style="margin-left: 20px;">
+						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
+					</el-col>
+					<el-col :md="1" :push="20" style="margin-left: 20px;">
+						<el-button style="background-color: white;color:#F56C6C">新增</el-button>
+					</el-col>
+				</el-row>
+			</div>
+			<div style="background-color: white;color:#F56C6C">
+				车牌号
+				<el-input v-model="cp" size="small" placeholder="请输入内容" style="width: 150px;">
+				</el-input>
+
+				品牌
+				<el-input v-model="pp" size="small" placeholder="请输入内容" style="width: 150px;">
+				</el-input>
+				车型
+				<el-input v-model="cx" size="small" placeholder="请输入内容" style="width: 150px;">
+				</el-input>
+				当前里程
+				<el-input v-model="dqlc" size="small" placeholder="请输入内容" style="width: 150px;">
+				</el-input>
+				班组
+				<el-input v-model="bz" size="small" placeholder="请输入内容" style="width: 150px;">
+				</el-input>
+			</div>
+			<el-table ref="singleTable" :data="persons" highlight-current-row style="background-color: white;color:#F56C6C">
+				<el-table-column property="carnumber" label="车牌号">
+				</el-table-column>
+				<el-table-column property="fbrand" label="品牌">
+				</el-table-column>
+				<el-table-column property="fmodel" label="车型">
+				</el-table-column>
+				<el-table-column property="currentmileage" label="当前里程">
+				</el-table-column>
+				<el-table-column property="ascriptionteam" label="归属班组">
+				</el-table-column>
+			</el-table>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/index.js"></script>
+	<script>
+	var app = new Vue({
+			el: "#app",
+			data: {
+				cp:'',
+				pp:'',
+				cx:'',
+				dqlc:'',
+				bz:'',
+				persons: [{
+					carnumber: '湘B8820',
+					fbrand: '111',
+					fmodel: '111',
+					currentmileage: '111',
+					ascriptionteam:'湖南队'
+				}, {
+					carnumber: '湘B8820',
+					fbrand: '111',
+					fmodel: '111',
+					currentmileage: '111',
+					ascriptionteam:'湖南队'
+				}, {
+					carnumber: '湘B8820',
+					fbrand: '111',
+					fmodel: '111',
+					currentmileage: '111',
+					ascriptionteam:'湖南队'
+				}]
+			},
+			methods: {}
+		})
+	</script>
+</html>
