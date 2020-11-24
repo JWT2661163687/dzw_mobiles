@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="js/vue.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" href="css/element.css" />
 		<style>
 			.el-header,
 			.el-footer {
@@ -18,8 +19,10 @@
 			.el-header {
 				color: white;
 			}
+			
 			.el-main {
 				color: #333;
+				
 			}
 		</style>
 	</head>
@@ -45,11 +48,7 @@
 							<i class="el-icon-s-custom"></i>&nbsp;<span style="cursor:pointer">客户档案</span>
 						</el-col>
 						<el-col :span="2" :push="6">
-<<<<<<< HEAD
 							<i class="el-icon-s-check"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/lzj/maintain.html')">行政人事</span>
-=======
-							<i class="el-icon-s-check"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('view/kwt/maintain.html')" style="cursor:pointer">行政人事</span>
->>>>>>> e58ff234aaf544fb582ece7e140d5b4bc2de81dc
 						</el-col>
 						<el-col :span="2" :push="6">
 							<i class="el-icon-tickets"></i>&nbsp;<span style="cursor:pointer" >基础数据</span>
@@ -85,7 +84,7 @@
 	<script type="text/javascript " src="js/jq_ajax_config.js "></script>
 	<script type="text/javascript " src="js/axios.min.js "></script>
 	<script type="text/javascript " src="js/axios_cfg.js "></script>
-
+	<script type="text/javascript " src="js/echarts.min.js "></script>
 	<script>
 		var vueapp = new Vue({
 			el: "#app",
