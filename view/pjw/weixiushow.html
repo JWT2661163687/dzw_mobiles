@@ -14,13 +14,13 @@
 		<el-row>
 			
 		<el-col :span="4"  style="border: 1px black solid;">
-			<div  style="border-bottom: 1px black solid; background-color: #C0CCDA;line-height: 80px;">
+			<div  style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
 					<span style="font-size: larger;">维修类型</span>
 			</div>
 			<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
 		</el-col>
 		<el-col :span="19" :push="1" style="border: 1px black solid;">
-			<div  style="border-bottom: 1px black solid; background-color: #C0CCDA;line-height: 80px;">
+			<div  style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
 				<span style="font-size: larger;">维修项目</span>
 			</div>
 			</br>
@@ -28,10 +28,10 @@
 				<el-col :span="3">
 					<el-input v-model="input" placeholder="请输入内容" style="width: 200px;"></el-input>
 				</el-col>
-				<el-col :span="1" :push="2">
+				<el-col :span="2" :push="3">
 					<el-button icon="el-icon-search" circle></el-button>
 				</el-col>
-				<el-col :span="2" :push="2">
+				<el-col :span="2" :push="3">
 					<el-button type="button" @click="dialogFormVisible = true">新增</el-button>
 				</el-col>			
 							<el-dialog title="项目新增" :visible.sync="dialogFormVisible">
@@ -63,79 +63,54 @@
 									<el-button @click="dialogFormVisible = false">关闭</el-button>
 								</div>
 							</el-dialog>
-				<!--<el-button>修改</el-button>
-				<el-button>删除</el-button>-->
-				<el-col :span="2" :push="2">
+							
+				<el-col :span="2" :push="3">
 					<el-button>保存</el-button>
 				</el-col>
-				<el-col :span="2" :push="2">
+				<el-col :span="2" :push="3">
 					<el-button>导出</el-button>
 				</el-col>
-				<el-col :span="2" :push="2">	
+				<el-col :span="2" :push="3">	
 					<el-button>关闭</el-button>
 				</el-col>	
 			</el-row></br>
-			<template>
-				  <el-table
-				    :data="tableData"
-				    border
-				    show-summary
-				    style="width: 100%">
-				    <el-table-column
-				      prop="id"
-				      label="序号"
-				      width="100">
-				    </el-table-column>
-				    <el-table-column
-				      prop="name"
-				      label="项目编号">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount1"
-				     
-				      label="项目名称">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount2"
-				      
-				      label="收入种类">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount3"
-				    
-				      label="标准价">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount3"
-				    
-				      label="会员价">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount3"
-				    
-				      label="备注">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount3"
-				    
-				      label="修改">
-				    </el-table-column>
-				    <el-table-column
-				      prop="amount3"
-				    
-				      label="删除">
-				    </el-table-column>
-  				</el-table>
-  				
-			</template>
+			
+					<template>
+							<el-table :data="tableData" border show-summary style="width: 100%">
+								<el-table-column prop="id" label="序号" width="100">
+								</el-table-column>
+								<el-table-column prop="name" label="项目编号">
+								</el-table-column>
+								<el-table-column prop="mingcheng" label="项目名称">
+								</el-table-column>
+								<el-table-column prop="zhonglei" label="收入种类">
+								</el-table-column>
+								<el-table-column prop="biaozhun" label="标准价">
+								</el-table-column>
+								<el-table-column prop="huiyuan" label="会员价">
+								</el-table-column>
+								</el-table-column>
+								<el-table-column prop="beizhu" label="备注">
+								</el-table-column>
+								<el-table-column prop="xiugai" label="修改">
+									<template slot-scope="scope">
+       									<i class="el-icon-edit"></i>
+     								 </template>
+								</el-table-column>
+								<el-table-column prop="shanchu" label="删除">
+									<template slot-scope="scope">
+       									<i class="el-icon-delete"></i>
+     								 </template>
+								</el-table-column>
+							</el-table>
+						</template>
+			
 			<el-pagination class="el-col-push-5"
 			  background
 			  layout="prev, pager, next"
 			  :total="1000">
 			</el-pagination>
 		</el-col>
-		
-		
 		</el-row>
 		
 		</div>
@@ -200,7 +175,25 @@
 					beizhu: '',
 				},
 				formLabelWidth: '120px',
-				dialogFormVisible: false
+				dialogFormVisible: false,
+				//表格填数据
+				 tableData: [{
+			          id: '12987122',
+			          name: '王小虎',
+			          mingcheng: '234',
+			          zhonglei: '3.2',
+			          biaozhun: 10,
+			          huiyuan:'现金',
+			          beizhu:'很好'
+			        }, {
+			           id: '12987122',
+			          name: '王小虎',
+			          mingcheng: '234',
+			          zhonglei: '3.2',
+			          biaozhun: 10,
+			          huiyuan:'微信',
+			          beizhu:'好'
+			        }]
 			},
 			 methods: {
 	      handleNodeClick(data) {
