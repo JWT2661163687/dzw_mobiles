@@ -26,7 +26,7 @@
 			</br>
 			<el-row>
 				<el-col :span="3">
-					<el-input v-model="input" placeholder="请输入内容" style="width: 200px;"></el-input>
+					<el-input v-model="neirong" placeholder="请输入内容" style="width: 200px;"></el-input>
 				</el-col>
 				<el-col :span="2" :push="3">
 					<el-button icon="el-icon-search" circle></el-button>
@@ -126,6 +126,7 @@
 		new Vue({
 			el:"#weixiushowapp",
 			data:{
+				neirong:'',
 				data: [{
 	          label: '一级 1',
 	          children: [{

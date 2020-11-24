@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>通讯目录</title>
+		<link rel="stylesheet" href="css/index.css" />
+	</head>
+	<body>
+		<div id="tongxunapp">
+			<el-row>
+				<el-col>
+					<h1>通讯目录</h1>
+				</el-col>
+				<el-row>
+				<el-col :span="4">
+					<el-input v-model="neirong" placeholder="请输入内容" ></el-input>
+				</el-col>	
+				<el-col :span="2" :push="1">
+					 <el-button type="primary">搜索</el-button>
+				</el-col>
+				<el-col :span="2" :push="1">	 
+					  <el-button type="primary">关闭</el-button>
+				</el-col>	
+				</el-row>
+				<el-row>
+					<el-col>
+					<template>
+					  <el-table
+					    :data="tableData"
+					    border
+					    style="width: 100%">
+					    <el-table-column
+					      prop="bumen"
+					      label="部门名称"
+					      width="180">
+					    </el-table-column>
+					    <el-table-column
+					      prop="gangwei"
+					      label="岗位名称"
+					      width="180">
+					    </el-table-column>
+					    <el-table-column
+					      prop="bianhao"
+					      label="员工编号">
+					    </el-table-column>
+					    <el-table-column
+					      prop="name"
+					      label="姓名">
+					    </el-table-column>
+					    <el-table-column
+					      prop="dianhua"
+					      label="电话">
+					    </el-table-column>
+					    <el-table-column
+					      prop="youxiang"
+					      label="邮箱">
+					    </el-table-column>
+					   
+					  </el-table>
+					</template>
+				</el-col>
+				<el-col>
+					<span>合计:1条记录</span>
+				</el-col>
+				</el-row>
+			</el-row>
+		</div>
+	</body>
+	
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/axios_cfg.js"></script>
+	
+	<script>
+		var tongxunapp=new Vue({
+			el:"#tongxunapp",
+			data:{
+				neirong:'',
+				tableData: [{
+					  bumen:'人事',
+					  gangwei:'扫地',
+					  bianhao:1,
+					  name:'大哥',
+					  dianhua:'111111',
+			          youxiang: '1111@qq.com',		          
+			        }, {
+			          bumen:'人事',
+					  gangwei:'洗碗',
+					  bianhao:2,
+					  name:'小弟',
+					  dianhua:'2222',
+			          youxiang: '2222@qq.com',	
+			        }]
+			}
+		})
+	</script>
+</html>
