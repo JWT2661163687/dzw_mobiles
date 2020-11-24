@@ -11,14 +11,14 @@
 			<el-row>
 				<el-col>
 					<el-menu style="height: 550px;" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-						<el-submenu index="1">
+						<el-submenu index="4">
 							<template slot="title">
 								<i class="el-icon-location"></i>
 								<span>主数据</span>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item index="1-1" @click="menuclick('维修项目','1','/dzw_mobiles/view/pjw/weixiushow.html')">维修项目</el-menu-item>
-								<el-menu-item index="1-2" @click="menuclick('商品资料','2','/dzw_mobiles/view/pjw/shangpinshow.html')">商品资料</el-menu-item>
+								<el-menu-item index="4-1" @click="menuclick('维修项目','pjw1','/dzw_mobiles/view/pjw/weixiushow.html')">维修项目</el-menu-item>
+								<el-menu-item index="4-2" @click="menuclick('商品资料','pjw2','/dzw_mobiles/view/pjw/shangpinshow.html')">商品资料</el-menu-item>
 								<!--<el-menu-item index="1-3" >保险对价</el-menu-item>-->
 							</el-menu-item-group>
 						</el-submenu>
