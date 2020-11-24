@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/index.css" />
+	</head>
+	<style>
+		.el-row {
+			margin-bottom: 20px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+		
+		.el-col {
+			border-radius: 4px;
+		}
+		
+		.bg-purple-dark {
+			background: #99a9bf;
+		}
+		
+		.bg-purple {
+			background: #d3dce6;
+		}
+		
+		.bg-purple-light {
+			background: #e5e9f2;
+		}
+		
+		.grid-content {
+			border-radius: 4px;
+			min-height: 36px;
+		}
+		
+		.row-bg {
+			padding: 10px 0;
+			background-color: #f9fafc;
+		}
+	</style>
+
+	<body>
+		<div id="app" style="background-color: white;color:#F56C6C">
+			<el-row>
+				<el-col :span="12">
+					<h2>班组技工</h2>
+				</el-col>
+				<el-col :span="12" style="float: right;">
+					<el-input v-model="ss" size="small" style="width: 200px;font-size: 15px;">
+					</el-input>
+					<el-button style="background-color: white;color:#F56C6C">搜索</el-button>
+					<el-button style="background-color: white;color:#F56C6C">关闭</el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="2">
+					<el-button style="background-color: white;color:#F56C6C">增加员工</el-button>
+				</el-col>
+				<el-col :span="2">
+					<el-button style="background-color: white;color:#F56C6C">修改</el-button>
+				</el-col>
+				<el-col :span="2">
+					<el-button style="background-color: white;color:#F56C6C">删除</el-button>
+				</el-col>
+				<el-col :span="2">
+					<el-button style="background-color: white;color:#F56C6C">查询</el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="12">
+
+				</el-col>
+				<el-col :span="12" style="float: right;">
+					<template>
+						<el-table :data="persons" border style="background-color: white;color:#F56C6C;width: 100%;" max-height="300">
+							<el-table-column fixed prop="teid" label="班组编号" width="150">
+							</el-table-column>
+							<el-table-column prop="tename" label="班组名称" width="150">
+							</el-table-column>
+							<el-table-column prop="technicianno" label="技工编号" width="150">
+							</el-table-column>
+							<el-table-column prop="mename" label="技工姓名" width="150">
+							</el-table-column>
+							<el-table-column prop="mesex" label="性别" width="150">
+							</el-table-column>
+							<el-table-column prop="mephone" label="手机" width="150">
+							</el-table-column>
+							<el-table-column prop="meaddress" label="地址" width="150">
+							</el-table-column>
+							<el-table-column prop="mebirthday" label="出生日期" width="150">
+							</el-table-column>
+							<el-table-column prop="groupleader" label="组长" width="150">
+							</el-table-column>
+							<el-table-column prop="loginname" label="登录名" width="150">
+							</el-table-column>
+							<el-table-column prop="menumber" label="身份证号" width="150">
+							</el-table-column>
+							<el-table-column prop="accountaddress" label="户口地址" width="150">
+							</el-table-column>
+							<el-table-column prop="openbank" label="开户银行" width="150">
+							</el-table-column>
+							<el-table-column prop="bankaccount" label="银行账号" width="150">
+							</el-table-column>
+							<el-table-column prop="starrating" label="星级" width="150">
+							</el-table-column>
+							<el-table-column prop="repairwork" label="维修工种" width="150">
+							</el-table-column>
+							<el-table-column prop="repairbrand" label="维修品牌" width="150">
+							</el-table-column>
+						</el-table>
+					</template>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/index.js"></script>
+	<script>
+		var app = new Vue({
+			el: "#app",
+			data: {
+				ss:'',
+				persons: [{
+					teid: '1000',
+					tename: '机修1组',
+					technicianno: 'OEX0001',
+					mename: '哈哈哈',
+					mesex:'男',
+					mephone:'A1',
+					meaddress:'湖南',
+					mebirthday:'2020-1-1',
+					groupleader:'111',
+					loginname:'001',
+					menumber:'430281200209218023',
+					accountaddress:'湖南醴陵',
+					openbank:'11',
+					bankaccount:'11',
+					starrating:'11',
+					repairwork:'11',
+					repairbrand:'11'
+				}, {
+					teid: '1000',
+					tename: '机修1组',
+					technicianno: 'OEX0001',
+					mename: '哈哈哈',
+					mesex:'男',
+					mephone:'A1',
+					meaddress:'湖南',
+					mebirthday:'2020-1-1',
+					groupleader:'',
+					loginname:'001',
+					menumber:'430281200209218023',
+					accountaddress:'湖南醴陵',
+					openbank:'',
+					bankaccount:'',
+					starrating:'',
+					repairwork:'',
+					repairbrand:''
+				}, {
+					teid: '1000',
+					tename: '机修1组',
+					technicianno: 'OEX0001',
+					mename: '哈哈哈',
+					mesex:'男',
+					mephone:'A1',
+					meaddress:'湖南',
+					mebirthday:'2020-1-1',
+					groupleader:'',
+					loginname:'001',
+					menumber:'430281200209218023',
+					accountaddress:'湖南醴陵',
+					openbank:'',
+					bankaccount:'',
+					starrating:'',
+					repairwork:'',
+					repairbrand:''
+				}]
+			},
+			methods: {
+				
+			}
+		})
+	</script>
+
+</html>
