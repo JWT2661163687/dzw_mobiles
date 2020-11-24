@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="maintainapp">
+			<el-row>
+				<el-col>
+					<el-menu style="height: 550px;" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+						<el-submenu index="1">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>客户档案</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="1-1" @click="menuclick('客户资料','zsj1','/dzw_mobiles/view/zsj/UserList.html')">客户资料</el-menu-item>
+								<el-menu-item index="1-2" @click="menuclick('车辆资料','zsj2','/dzw_mobiles/view/zsj/UserVehicle.html')">车辆资料</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+
+						<el-submenu index="2">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>会员积分</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="2-1" @click="menuclick('会员管理','zsj3','/dzw_mobiles/view/zsj/member.html')">会员管理</el-menu-item>
+								<el-menu-item index="2-2">积分规则</el-menu-item>
+								<el-menu-item index="2-2">积分赠送</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+						
+						
+						<el-submenu index="3">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>客户回访</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="3-1">误工率统计</el-menu-item>
+								<el-menu-item index="3-2">返工率统计</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+						
+						<el-submenu index="3">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>微信营销</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="3-1">误工率统计</el-menu-item>
+								<el-menu-item index="3-2">返工率统计</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+					</el-menu>
+				</el-col>
+				
+			</el-row>
+		</div>
+	</body>
+<script type="text/javascript" src="/dzw_mobiles/js/commitjs.js" ></script>
+
+</html>
