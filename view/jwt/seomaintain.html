@@ -12,8 +12,13 @@
 	<body>
 		<div id="seomaintainapp">
 			<el-row>
-				<el-col>
+				<el-col :span="5">
 					<h1>站外维修</h1>
+				</el-col>
+				<el-col :span="10" :push="4">
+					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
+					<el-button type="success">生成维修单据</el-button>
+					<el-button type="primary" @click="table = true">维修车辆信息</el-button>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -59,7 +64,7 @@
 								<el-input></el-input>
 							</el-form-item>
 						</el-col>
-						
+
 						<el-col :span="6">
 							<el-form-item label="驾驶员">
 								<el-input></el-input>
@@ -104,12 +109,6 @@
 				</template>
 			</el-row>
 			<br />
-			<el-row>
-				<el-col :span="10" :push="9">
-					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
-					<el-button type="success">生成维修单据</el-button>
-				</el-col>
-			</el-row>
 
 			<el-dialog title="维修项目" :visible.sync="dialogTableVisible">
 				<el-row>
@@ -131,6 +130,44 @@
 					</el-col>
 				</el-row>
 			</el-dialog>
+			<el-drawer :visible.sync="table" direction="rtl" size="50%" title="维修车辆信息">
+				<el-col :span="5">
+					<h3>维修车辆信息</h3>
+				</el-col>
+				<el-col :span="10">
+					<el-select filterable placeholder="请选择">
+						<el-option>
+							正在维修
+						</el-option>
+						<el-option>
+							维修结束
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-table :data="weixiu">
+					<el-table-column property="" label="序号"></el-table-column>
+					<el-table-column property="" label="车牌号"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column label="操作">
+						<template slot-scope="scope">
+							<el-button size="mini" round>完成</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-row>
+					<el-col :span="5">
+						<h3>车辆维修项目详情</h3>
+					</el-col>
+				</el-row>
+				<el-table :data="weixiu">
+					<el-table-column property="" label="序号"></el-table-column>
+					<el-table-column property="" label="车牌号"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column property="" label="操作"></el-table-column>
+				</el-table>
+			</el-drawer>
 		</div>
 	</body>
 	<script type="text/javascript " src="/dzw_mobiles/js/jquery-1.12.4.js "></script>
@@ -156,6 +193,11 @@
 				}],
 				//维修项目模态框
 				dialogTableVisible: false,
+				//抽屉属性
+				table: false,
+				dialog: false,
+				//维修车辆信息数组
+				weixiu: []
 			},
 
 		})
