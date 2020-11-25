@@ -36,6 +36,9 @@
 				</el-col>			
 							<el-dialog title="项目新增" :visible.sync="dialogFormVisible">
 								<el-form :model="form">
+									<el-form-item label="车子类型" :label-width="formLabelWidth">
+										<el-input v-model="form.leixing" autocomplete="off"></el-input>
+									</el-form-item>
 									<el-form-item label="项目编号" :label-width="formLabelWidth">
 										<el-input v-model="form.bianhao" autocomplete="off"></el-input>
 									</el-form-item>
@@ -43,9 +46,9 @@
 										<el-input v-model="form.mingcheng" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="收入种类" :label-width="formLabelWidth">
-										<el-select v-model="form.zhonglei" placeholder="请选择活动区域">
-											<el-option label="种类一" value="shanghai"></el-option>
-											<el-option label="种类二" value="beijing"></el-option>
+										<el-select v-model="form.zhonglei" placeholder="请选择收入种类">
+											<el-option label="现金" value="shanghai"></el-option>
+											<el-option label="微信" value="beijing"></el-option>
 										</el-select>
 									</el-form-item>
 									<el-form-item label="标准价" :label-width="formLabelWidth">
@@ -54,8 +57,8 @@
 									<el-form-item label="会员价" :label-width="formLabelWidth">
 										<el-input v-model="form.huiyuan" autocomplete="off"></el-input>
 									</el-form-item>
-									<el-form-item label="备注" :label-width="formLabelWidth">
-										<el-input v-model="form.beizhu" autocomplete="off"></el-input>
+									<el-form-item label="售价" :label-width="formLabelWidth">
+										<el-input v-model="form.shoujia" autocomplete="off"></el-input>
 									</el-form-item>
 								</el-form>
 								<div slot="footer" class="dialog-footer">
@@ -77,7 +80,9 @@
 			
 					<template>
 							<el-table :data="tableData" border show-summary style="width: 100%">
-								<el-table-column prop="id" label="序号" width="100">
+								<!--<el-table-column prop="id" label="序号" width="100">
+								</el-table-column>-->
+								<el-table-column prop="leixing" label="车子类型">
 								</el-table-column>
 								<el-table-column prop="name" label="项目编号">
 								</el-table-column>
@@ -90,7 +95,7 @@
 								<el-table-column prop="huiyuan" label="会员价">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column prop="beizhu" label="备注">
+								<el-table-column prop="shoujia" label="售价">
 								</el-table-column>
 								<el-table-column prop="xiugai" label="修改">
 									<template slot-scope="scope">
@@ -116,12 +121,7 @@
 		</div>
 	</body>
 
-	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
-	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="js/index.js" ></script>
-	<script src="js/axios.min.js"></script>
-	<script src="js/axios_cfg.js"></script>
-
+	
 	<script>
 		new Vue({
 			el:"#weixiushowapp",
@@ -168,39 +168,47 @@
 	        },
 	        //新增模态框
 				form: {
+					leixing:'',
 					bianhao: '',
 					mingcheng: '',
 					zhonglei: '',
 					biaozhun: '',
 					huiyuan: '',
-					beizhu: '',
+					shoujia: '',
 				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
 				//表格填数据
-				 tableData: [{
-			          id: '12987122',
-			          name: '王小虎',
-			          mingcheng: '234',
-			          zhonglei: '3.2',
-			          biaozhun: 10,
-			          huiyuan:'现金',
-			          beizhu:'很好'
-			        }, {
+				 tableData: []
+				 /*, {
 			           id: '12987122',
+			            leixing:'上汽',
 			          name: '王小虎',
 			          mingcheng: '234',
 			          zhonglei: '3.2',
 			          biaozhun: 10,
 			          huiyuan:'微信',
-			          beizhu:'好'
-			        }]
+			          shoujia:'车型'
+			        }*/
 			},
 			 methods: {
-	      handleNodeClick(data) {
+	      handleNodeClick(data) { 
 	        console.log(data);
-	      }
-	    }
+	      },
+	      pageinfo(page1,page2,cid){
+	      	let _this=this;
+	      	axios.get(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/aa/${page1}/${page2}/${cid}`).then(function(resp) {
+							console.log("dkdkl"+resp.data);
+							_this.tableData = resp.data;
+					})
+	      		}
+	   		},
+	   		mounted(){
+	   			var page1=parseInt(1);
+	      	    var page2=parseInt(2);
+	      	    var cid=parseInt(1);
+	   			this.pageinfo(1,2,1);
+	   		}
 		})
 	</script>
 
