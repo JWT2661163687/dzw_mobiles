@@ -19,7 +19,7 @@
 			<el-row>
 				<el-form ref="form" label-width="80px">
 					<el-row>
-						<el-col :span="8">
+						<el-col :span="6">
 							<el-form-item label="车牌号">
 								<el-select filterable v-model="value" placeholder="请选择">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -27,7 +27,7 @@
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="6">
 							<el-form-item label="救援车辆">
 								<el-select filterable v-model="value" placeholder="请选择">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -35,7 +35,15 @@
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="6">
+							<el-form-item label="技工星级">
+								<el-select filterable v-model="value" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
 							<el-form-item label="技工">
 								<el-select filterable v-model="value" placeholder="请选择">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -51,18 +59,24 @@
 								<el-input></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item label="总里程">
-								<el-input></el-input>
-							</el-form-item>
-						</el-col>
+						
 						<el-col :span="6">
 							<el-form-item label="驾驶员">
 								<el-input></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
+							<el-form-item label="联系电话">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
 							<el-form-item label="维修备注">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="总里程">
 								<el-input></el-input>
 							</el-form-item>
 						</el-col>
