@@ -24,40 +24,40 @@
 			<el-row :span="24">
 				<el-col :span="10" :offset="2">
 					<el-form :inline="true" class="demo-form-inline">
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible2 = true">增加品牌</el-button>
-						<el-dialog title="添加品牌" :visible.sync="dialogFormVisible2">
-							<el-form :model="form2">
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addMakedialog()" >增加品牌</el-button>
+						<el-dialog :title="titleType2" :visible.sync="dialogFormVisible2" @close="resetForm('addmake')">
+							<el-form :model="addmake"  ref="addmake">
 								<el-row :span="24">
 									<div align="center">
 										<el-form-item label="品牌编号" :label-width="formLabelWidth2">
-											<el-input v-model="form2.name" autocomplete="off"></el-input>
+											<el-input v-model="addmake.makeid" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 								<el-row>
 									<div align="center">
 										<el-form-item label="品牌名称" :label-width="formLabelWidth2">
-											<el-input v-model="form2.name" autocomplete="off"></el-input>
+											<el-input v-model="addmake.makename" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 								<el-row>
 									<div align="center">
 										<el-form-item label="首字母" :label-width="formLabelWidth2">
-											<el-input v-model="form2.name" autocomplete="off"></el-input>
+											<el-input v-model="addmake.acronym" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 							</el-form>
 							<div slot="footer" class="dialog-footer" align="center">
 								<el-button @click="dialogFormVisible2 = false">取 消</el-button>
-								<el-button type="primary" @click="dialogFormVisible2 = false">确 定</el-button>
+								<el-button type="primary" @click="makedialogs(addmake)">确 定</el-button>
 							</div>
 						</el-dialog>
 						<el-form-item :push="4">
 							<el-input v-model="wenben1" placeholder="匹配 匹配编码/名称/首字母"></el-input>
 						</el-form-item>
-						<el-button type="primary" icon="el-icon-search">查询</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="SelectInput(wenben1)">查询</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -117,7 +117,7 @@
 							<el-input v-model="wenben" placeholder="匹配 匹配车型编码/车型名称"></el-input>
 						</el-form-item>
 
-						<el-button type="primary" icon="el-icon-search">查询</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="">查询</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -126,16 +126,17 @@
 				<el-col :span="11">
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
-							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="编码" align="center" header-align="center" width="150">
+							<el-table :data="make" style="width: 100%" :row-class-name="tableRowClassName">
+								<el-table-column prop="makeid" label="编码" align="center" header-align="center" width="150">
 								</el-table-column>
-								<el-table-column prop="name" label="品牌编号" align="center" header-align="center" width="150">
+								<el-table-column prop="makename" label="品牌编号" align="center" header-align="center" width="150">
 								</el-table-column>
-								<el-table-column prop="name" label="首字母" align="center" header-align="center" width="150">
+								<el-table-column prop="acronym" label="首字母" align="center" header-align="center" width="150">
 								</el-table-column>
 								<el-table-column label="操作" align="center" header-align="center">
 									<template slot-scope="scope">
-										<el-button size="mini" type="danger">删除</el-button>
+										<el-button size="mini" type="danger" @click="deleteById(scope.row.makeid)">删除</el-button>
+										<el-button size="mini" type="danger" @click="updateMakedialog()">编辑</el-button>
 										<el-button size="mini" type="danger">选择</el-button>
 									</template>
 								</el-table-column>
@@ -159,7 +160,7 @@
 								</el-table-column>
 								<el-table-column label="操作" align="center" header-align="center">
 									<template slot-scope="scope">
-										<el-button size="mini" type="danger" @click="updatedialog()">编辑</el-button>
+										<el-button size="mini" type="danger" @click="updatedialog(scope)">编辑</el-button>
 										<el-button size="mini" type="danger">删除</el-button>
 									</template>
 								</el-table-column>
@@ -174,6 +175,12 @@
 		var Vm = new Vue({
 			el: "#chexing",
 			data: {
+				addmake: {
+					makeid: '',
+					makename: '',
+					acronym: ''
+				},
+				make: [],
 				tableData: [{
 					date: '2016-05-02',
 					name: '王小虎',
@@ -218,9 +225,10 @@
 					desc: ''
 				},
 				formLabelWidth2: '100PX',
-				titleType:'',
-				wenben:"",
-				wenben1:""
+				titleType: '',
+				titleType2: '',
+				wenben: "",
+				wenben1: ""
 			},
 			methods: {
 				tableRowClassName({
@@ -234,17 +242,110 @@
 					}
 					return '';
 				},
-				adddialog(){
-					var _this=this;
-					_this.titleType="新增车型";
-					_this.dialogFormVisible=true;
+				adddialog() {
+					var _this = this;
+					_this.titleType = "新增车型";
+					_this.dialogFormVisible = true;
 				},
-				updatedialog(){
-					var _this=this;
-					_this.titleType="修改车型";
-					_this.dialogFormVisible=true;
+				addMakedialog() {
+					var _this = this;
+					_this.titleType2 = "添加品牌";
+					_this.dialogFormVisible2 = true;
+					_this.SelectById(id);
+				},
+				updatedialog() {
+					var _this = this;
+					_this.titleType = "修改车型";
+					_this.dialogFormVisible = true;
+				},
+				updateMakedialog() {
+					var _this = this;
+					_this.titleType2="修改品牌";
+					_this.dialogFormVisible2 = true;
+				},
+				makedialogs(make){
+					var _this = this;
+					if(_this.titleType2=="添加品牌"){
+						_this.SelectById(make.makeid);
+					}else{
+						updateById(make);
+					}
+				},
+				SelectMake() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`).then(function(res) {
+						console.log(res.data);
+						_this.make = res.data;
+					})
+				},
+				insertMake() {
+					var _this = this;
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`, _this.addmake).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '新增成功！',
+								type: 'success'
+							});
+							_this.dialogFormVisible2 = false;
+							_this.SelectMake();
+						}
+					})
+				},
+				deleteById(id) {
+					var _this = this;
+					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make/${id}`).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '删除成功！',
+								type: 'success'
+							});
+							_this.SelectMake();
+						}
+					})
+				},
+				resetForm(addmake) {
+					this.addmake={};
+				},
+				SelectById(id){
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make/${id}`).then(function(res) {
+						if(res.data.length>0){
+							_this.$message({
+								message: '品牌id重复，请重新输入',
+								type: 'warning'
+							});
+						}else{
+							_this.insertMake();
+						}
+					})
+				},
+				SelectInput(name){
+					var _this = this;
+					if(name!=""){
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/action/make/${name}`).then(function(res) {
+						_this.make = res.data;
+					})
+					}else{
+						_this.SelectMake();
+					}
+				},
+				updateById(){
+					var _this = this;
+					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`,_this.addmake).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '修改成功！',
+								type: 'success'
+							});
+							_this.dialogFormVisible2 = false;
+							_this.SelectMake();
+						}
+					})
 				}
 			},
+			mounted() {
+				this.SelectMake();
+			}
 
 		})
 	</script>
