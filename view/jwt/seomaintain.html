@@ -157,7 +157,7 @@
 						<h3>车辆维修项目详情</h3>
 					</el-col>
 				</el-row>
-				<el-table :data="weixiu">
+				<el-table :data="weixius">
 					<el-table-column property="" label="序号"></el-table-column>
 					<el-table-column property="" label="车牌号"></el-table-column>
 					<el-table-column property="" label="发动机"></el-table-column>
@@ -195,6 +195,7 @@
 				dialog: false,
 				//维修车辆信息数组
 				maintaincars: [],
+				weixius:[]
 				
 			},
 			methods:{
@@ -208,8 +209,10 @@
 				},
 				//维修项目详情
 				maintaincarschangge(currentRow, oldCurrentRow){
-					//查询所有项目
-					
+					//id查询所有项目
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${currentRow.maintainid}`).then(function(res){
+						seomaintainvue.maintaincars=res.data;
+					})
 				},
 				
 			}
