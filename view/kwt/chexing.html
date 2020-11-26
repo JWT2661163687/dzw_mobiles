@@ -6,7 +6,7 @@
 		<title></title>
 		<style>
 			body {
-				background-color: #f7f7f7
+				background-color: #f7f7f7;
 			}
 			
 			.el-table .warning-row {
@@ -17,16 +17,18 @@
 				background: #f0f9eb;
 			}
 		</style>
+
 	</head>
 
 	<body>
 		<div id="chexing">
-			<el-row :span="24">
+			<el-input></el-input>
+			<el-row>
 				<el-col :span="10" :offset="1">
 					<el-form :inline="true" class="demo-form-inline">
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addMakedialog()" >增加品牌</el-button>
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addMakedialog()">增加品牌</el-button>
 						<el-dialog :title="titleType2" :visible.sync="dialogFormVisible2" @close="resetForm('addmake')">
-							<el-form :model="addmake"  ref="addmake">
+							<el-form :model="addmake" ref="addmake">
 								<el-row :span="24">
 									<div align="center">
 										<el-form-item label="品牌编号" :label-width="formLabelWidth2">
@@ -122,11 +124,11 @@
 					</el-form>
 				</el-col>
 			</el-row>
-			<el-row :span="24">
+			<el-row>
 				<el-col :span="11">
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
-<<<<<<< HEAD
+
 							<el-table :data="make" style="width: 100%" :row-class-name="tableRowClassName">
 								<el-table-column prop="makeid" label="编码" align="center" header-align="center" width="150">
 								</el-table-column>
@@ -138,21 +140,23 @@
 									<template slot-scope="scope">
 										<el-button size="mini" type="danger" @click="deleteById(scope.row.makeid)">删除</el-button>
 										<el-button size="mini" type="danger" @click="updateMakedialog()">编辑</el-button>
-=======
-							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="编码" align="center" header-align="center" >
-								</el-table-column>
-								<el-table-column prop="name" label="品牌编号" align="center" header-align="center" >
-								</el-table-column>
-								<el-table-column prop="name" label="首字母" align="center" header-align="center" >
-								</el-table-column>
-								<el-table-column label="操作" align="center" header-align="center"  width="150">
-									<template slot-scope="scope" >
-										<el-button size="mini" type="danger">删除</el-button>
->>>>>>> 3786b7919dc3ec00ca3111b4c270cd9a97092653
-										<el-button size="mini" type="danger">选择</el-button>
+
+										<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+											<el-table-column prop="date" label="编码" align="center" header-align="center">
+											</el-table-column>
+											<el-table-column prop="name" label="品牌编号" align="center" header-align="center">
+											</el-table-column>
+											<el-table-column prop="name" label="首字母" align="center" header-align="center">
+											</el-table-column>
+											<el-table-column label="操作" align="center" header-align="center" width="150">
+												<template slot-scope="scope">
+													<el-button size="mini" type="danger">删除</el-button>
+
+													<el-button size="mini" type="danger">选择</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
 									</template>
-								</el-table-column>
 							</el-table>
 						</template>
 					</div>
@@ -161,15 +165,15 @@
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
 							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="车型ID" align="center" header-align="center" >
+								<el-table-column prop="date" label="车型ID" align="center" header-align="center">
 								</el-table-column>
-								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center" >
+								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌" >
+								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆名称" >
+								<el-table-column prop="address" align="center" header-align="center" label="车辆名称">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="参考价格" >
+								<el-table-column prop="address" align="center" header-align="center" label="参考价格">
 								</el-table-column>
 								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
@@ -181,12 +185,14 @@
 						</template>
 					</div>
 				</el-col>
+
 			</el-row>
 		</div>
 	</body>
+
 	<script type="text/javascript">
-		var Vm = new Vue({
-			el: "#chexing",
+		new Vue({
+			el: '#chexing',
 			data: {
 				addmake: {
 					makeid: '',
@@ -241,7 +247,7 @@
 				titleType: '',
 				titleType2: '',
 				wenben: "",
-				wenben1: ""
+				wenben1: "",
 			},
 			methods: {
 				tableRowClassName({
@@ -273,14 +279,14 @@
 				},
 				updateMakedialog() {
 					var _this = this;
-					_this.titleType2="修改品牌";
+					_this.titleType2 = "修改品牌";
 					_this.dialogFormVisible2 = true;
 				},
-				makedialogs(make){
+				makedialogs(make) {
 					var _this = this;
-					if(_this.titleType2=="添加品牌"){
+					if(_this.titleType2 == "添加品牌") {
 						_this.SelectById(make.makeid);
-					}else{
+					} else {
 						updateById(make);
 					}
 				},
@@ -317,34 +323,34 @@
 					})
 				},
 				resetForm(addmake) {
-					this.addmake={};
+					this.addmake = {};
 				},
-				SelectById(id){
+				SelectById(id) {
 					var _this = this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make/${id}`).then(function(res) {
-						if(res.data.length>0){
+						if(res.data.length > 0) {
 							_this.$message({
 								message: '品牌id重复，请重新输入',
 								type: 'warning'
 							});
-						}else{
+						} else {
 							_this.insertMake();
 						}
 					})
 				},
-				SelectInput(name){
+				SelectInput(name) {
 					var _this = this;
-					if(name!=""){
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/action/make/${name}`).then(function(res) {
-						_this.make = res.data;
-					})
-					}else{
+					if(name != "") {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/action/make/${name}`).then(function(res) {
+							_this.make = res.data;
+						})
+					} else {
 						_this.SelectMake();
 					}
 				},
-				updateById(){
+				updateById() {
 					var _this = this;
-					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`,_this.addmake).then(function(res) {
+					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`, _this.addmake).then(function(res) {
 						if(res.data.code = "200") {
 							_this.$message({
 								message: '修改成功！',
