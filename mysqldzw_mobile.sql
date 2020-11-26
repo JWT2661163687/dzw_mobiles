@@ -43,9 +43,9 @@ CREATE TABLE `client` (
   KEY `FK_CLIENT_REFERENCE_FORTHE` (`rId`),
   KEY `FK_CLIENT_REFERENCE_CLOSEANA` (`rNo`),
   KEY `FK_CLIENT_REFERENCE_MEMBER` (`mId`),
-  CONSTRAINT `FK_CLIENT_REFERENCE_MEMBER` FOREIGN KEY (`mId`) REFERENCES `member` (`mId`),
   CONSTRAINT `FK_CLIENT_REFERENCE_CLOSEANA` FOREIGN KEY (`rNo`) REFERENCES `closeanaccount` (`rNo`),
   CONSTRAINT `FK_CLIENT_REFERENCE_FORTHE` FOREIGN KEY (`rId`) REFERENCES `forthe` (`rId`),
+  CONSTRAINT `FK_CLIENT_REFERENCE_MEMBER` FOREIGN KEY (`mId`) REFERENCES `member` (`mId`),
   CONSTRAINT `FK_CLIENT_REFERENCE_VEHICLE` FOREIGN KEY (`vId`) REFERENCES `vehicle` (`vId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -138,8 +138,8 @@ CREATE TABLE `employee` (
   KEY `FK_EMPLOYEE_REFERENCE_STATE` (`stateid`),
   KEY `FK_EMPLOYEE_REFERENCE_DEPARTME` (`departmentid`),
   KEY `FK_EMPLOYEE_REFERENCE_POST` (`postid`),
-  CONSTRAINT `FK_EMPLOYEE_REFERENCE_POST` FOREIGN KEY (`postid`) REFERENCES `post` (`postid`),
   CONSTRAINT `FK_EMPLOYEE_REFERENCE_DEPARTME` FOREIGN KEY (`departmentid`) REFERENCES `department` (`departmentid`),
+  CONSTRAINT `FK_EMPLOYEE_REFERENCE_POST` FOREIGN KEY (`postid`) REFERENCES `post` (`postid`),
   CONSTRAINT `FK_EMPLOYEE_REFERENCE_PROPERTY` FOREIGN KEY (`propertyid`) REFERENCES `property` (`propertyid`),
   CONSTRAINT `FK_EMPLOYEE_REFERENCE_STATE` FOREIGN KEY (`stateid`) REFERENCES `state` (`stateid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -149,12 +149,14 @@ CREATE TABLE `employee` (
 /*Table structure for table `engine` */
 
 CREATE TABLE `engine` (
-  `engineid` int(11) NOT NULL,
+  `engineid` int(11) NOT NULL AUTO_INCREMENT,
   `enginename` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`engineid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `engine` */
+
+insert  into `engine`(`engineid`,`enginename`) values (1,'1231'),(2,'213213');
 
 /*Table structure for table `fadongji` */
 
@@ -220,11 +222,47 @@ CREATE TABLE `front` (
 
 /*Data for the table `front` */
 
+/*Table structure for table `maintaincar` */
+
+CREATE TABLE `maintaincar` (
+  `maintainid` int(11) NOT NULL AUTO_INCREMENT,
+  `receiptsid` int(11) DEFAULT NULL,
+  `teamid` int(11) DEFAULT NULL,
+  `id` int(11) DEFAULT NULL,
+  `departdate` datetime DEFAULT NULL,
+  `departaddress` varchar(200) DEFAULT NULL,
+  `constructiondate` datetime DEFAULT NULL,
+  `rescuevehicleaddress` varchar(200) DEFAULT NULL,
+  `accomplishdate` datetime DEFAULT NULL,
+  `maintainvehicleid` int(11) DEFAULT NULL,
+  `inside` int(11) DEFAULT NULL,
+  `mileage` int(11) DEFAULT NULL,
+  `counselorid` int(11) DEFAULT NULL,
+  `beizhu` varchar(200) DEFAULT NULL,
+  `maintainmoney` double DEFAULT NULL,
+  `drivername` varchar(20) DEFAULT NULL,
+  `maintainphone` varchar(20) DEFAULT NULL,
+  `licence` varchar(20) DEFAULT NULL,
+  `vehiclebrand` varchar(20) DEFAULT NULL,
+  `vehiclemodel` varchar(20) DEFAULT NULL,
+  `clearingfrom` int(11) DEFAULT NULL,
+  `enginename` varchar(20) DEFAULT NULL,
+  `vin` varchar(100) DEFAULT NULL,
+  `enginehao` varchar(100) DEFAULT NULL,
+  `carownername` varchar(100) DEFAULT NULL,
+  `carid` int(11) DEFAULT NULL,
+  `maintaindate` date DEFAULT NULL,
+  PRIMARY KEY (`maintainid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `maintaincar` */
+
 /*Table structure for table `maintainreceipts` */
 
 CREATE TABLE `maintainreceipts` (
   `receiptsid` int(11) NOT NULL,
   `receiptsname` varchar(20) DEFAULT NULL,
+  `acronym` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`receiptsid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
