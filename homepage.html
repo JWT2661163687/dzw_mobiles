@@ -50,11 +50,6 @@
 						<el-col :span="2" :push="6">
 
 							<i class="el-icon-s-check"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/lzj/maintain.html')">行政人事</span>
-
-
-
-
-
 						</el-col>
 						<el-col :span="2" :push="6">
 							<i class="el-icon-tickets"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/pjw/maintain.html')">基础数据</span>
@@ -71,7 +66,7 @@
 					<el-col :span="4">
 						<div id="divload" ></div>
 					</el-col>
-					<el-col :span="19">
+					<el-col :span="19" >
 						<div id="qiehuan">
 							<el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
 								<el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">

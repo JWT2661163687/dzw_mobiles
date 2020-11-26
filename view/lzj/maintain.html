@@ -45,6 +45,19 @@
 								<el-menu-item index="3-2">返工率统计</el-menu-item>
 							</el-menu-item-group>
 						</el-submenu>
+						
+						<el-submenu index="4">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>职工管理</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="4-1" @click="menuclick('离职登记','pjw3','/dzw_mobiles/view/pjw/lizhi.html')">离职登记</el-menu-item>
+								<el-menu-item index="4-2" @click="menuclick('通讯目录','pjw4','/dzw_mobiles/view/pjw/tongxun.html')">通讯目录</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+						
+						
 					</el-menu>
 				</el-col>
 				

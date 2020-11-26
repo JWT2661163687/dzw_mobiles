@@ -22,7 +22,7 @@
 	<body>
 		<div id="chexing">
 			<el-row :span="24">
-				<el-col :span="10" :offset="2">
+				<el-col :span="10" :offset="1">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible2 = true">增加品牌</el-button>
 						<el-dialog title="添加品牌" :visible.sync="dialogFormVisible2">
@@ -61,7 +61,7 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="10" :offset="2">
+				<el-col :span="10" :offset="3">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="adddialog()">增加车型</el-button>
 						<el-dialog :title="titleType" :visible.sync="dialogFormVisible">
@@ -127,14 +127,14 @@
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
 							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="编码" align="center" header-align="center" width="150">
+								<el-table-column prop="date" label="编码" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column prop="name" label="品牌编号" align="center" header-align="center" width="150">
+								<el-table-column prop="name" label="品牌编号" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column prop="name" label="首字母" align="center" header-align="center" width="150">
+								<el-table-column prop="name" label="首字母" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column label="操作" align="center" header-align="center">
-									<template slot-scope="scope">
+								<el-table-column label="操作" align="center" header-align="center"  width="150">
+									<template slot-scope="scope" >
 										<el-button size="mini" type="danger">删除</el-button>
 										<el-button size="mini" type="danger">选择</el-button>
 									</template>
@@ -147,17 +147,17 @@
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
 							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="车型ID" align="center" header-align="center" width="100">
+								<el-table-column prop="date" label="车型ID" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center" width="100">
+								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌" width="100">
+								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌" >
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆名称" width="100">
+								<el-table-column prop="address" align="center" header-align="center" label="车辆名称" >
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="参考价格" width="100">
+								<el-table-column prop="address" align="center" header-align="center" label="参考价格" >
 								</el-table-column>
-								<el-table-column label="操作" align="center" header-align="center">
+								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
 										<el-button size="mini" type="danger" @click="updatedialog()">编辑</el-button>
 										<el-button size="mini" type="danger">删除</el-button>

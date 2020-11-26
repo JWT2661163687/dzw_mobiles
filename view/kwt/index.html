@@ -56,31 +56,31 @@
 		<div id="kwt1" style="margin-top: 20px;">
 			<el-row :span="24">
 				<el-col :span="4" style="font-size: 35px;">
-				<span>发动机品牌</span>
-			</el-col>
-			<el-col :span="10" :push="4">
-				<el-form :inline="true" class="demo-form-inline">
-					<el-form-item label="分类名称" :push="4">
-						<el-input placeholder="分类名称"></el-input>
-					</el-form-item>
-					<el-button type="primary" icon="el-icon-circle-plus-outline">新增</el-button>
-					<el-button type="primary" icon="el-icon-search">查询</el-button>
-					<el-button type="primary" icon="el-icon-circle-close">关闭</el-button>
-					</el-form-item>
-				</el-form>
-			</el-col>
+					<span>发动机品牌</span>
+				</el-col>
+				<el-col :span="10" :push="4">
+					<el-form :inline="true" class="demo-form-inline">
+						<el-form-item label="分类名称" :push="4">
+							<el-input v-model="engine.enginename" placeholder="分类名称"></el-input>
+						</el-form-item>
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="insertEngine()">新增</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="SelectByName()">查询</el-button>
+						<el-button type="primary" icon="el-icon-circle-close">关闭</el-button>
+						</el-form-item>
+					</el-form>
+				</el-col>
 			</el-row>
 			<el-row :span="24">
 				<el-col :span="11" :push="8">
 					<template>
 						<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-							<el-table-column prop="date" label="日期" width="180" align="center"  header-align="center">
+							<el-table-column prop="engineid" label="分类编号" width="180" align="center" header-align="center">
 							</el-table-column>
-							<el-table-column prop="name" label="姓名" width="180" align="center"  header-align="center">
+							<el-table-column prop="enginename" label="分类名称" width="180" align="center" header-align="center">
 							</el-table-column>
-							<el-table-column label="操作" align="center"  header-align="center">
+							<el-table-column label="操作" align="center" header-align="center">
 								<template slot-scope="scope">
-									<el-button size="mini" type="danger">删除</el-button>
+									<el-button size="mini" @click="DeleteById(scope.row.engineid)" type="danger">删除</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -89,29 +89,14 @@
 			</el-row>
 		</div>
 	</body>
-	
 	<script>
 		var kwt1 = new Vue({
 			el: "#kwt1",
 			data: {
-				s: "",
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}]
+				tableData: [],
+				engine: {
+					enginename: ""
+				}
 			},
 			methods: {
 				tableRowClassName({
@@ -124,7 +109,56 @@
 						return 'success-row';
 					}
 					return '';
+				},
+				SelectPage() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine`).then(function(res) {
+						console.log(res.data);
+						_this.tableData = res.data;
+					})
+				},
+				insertEngine() {
+					var _this = this;
+					if(_this.engine.enginename==""){
+						_this.$message({
+								message: '文本框不能为空',
+								type: 'warning'
+							});
+							return
+					}
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine`, _this.engine).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '新增成功！',
+								type: 'success'
+							});
+							_this.SelectPage();
+						}
+					})
+				},
+				SelectByName() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine/${_this.engine.enginename}`).then(function(res) {
+						console.log(res.data);
+						_this.tableData = res.data;
+					})
+				},
+				DeleteById(id){
+					alert(id);
+					var _this=this;
+					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine/${id}`).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '删除成功！',
+								type: 'success'
+							});
+							_this.SelectPage();
+						}
+					})
 				}
+			},
+			mounted() {
+				this.SelectPage();
 			}
 		})
 	</script>
