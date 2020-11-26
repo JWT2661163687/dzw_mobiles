@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body {
+				background-color: #f7f7f7
+			}
+			
+			.el-table .warning-row {
+				background: oldlace;
+			}
+			
+			.el-table .success-row {
+				background: #f0f9eb;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="chexing">
+			<el-row :span="24">
+				<el-col :span="10" :offset="1">
+					<el-form :inline="true" class="demo-form-inline">
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="dialogFormVisible2 = true">增加品牌</el-button>
+						<el-dialog title="添加品牌" :visible.sync="dialogFormVisible2">
+							<el-form :model="form2">
+								<el-row :span="24">
+									<div align="center">
+										<el-form-item label="品牌编号" :label-width="formLabelWidth2">
+											<el-input v-model="form2.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row>
+									<div align="center">
+										<el-form-item label="品牌名称" :label-width="formLabelWidth2">
+											<el-input v-model="form2.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row>
+									<div align="center">
+										<el-form-item label="首字母" :label-width="formLabelWidth2">
+											<el-input v-model="form2.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+							</el-form>
+							<div slot="footer" class="dialog-footer" align="center">
+								<el-button @click="dialogFormVisible2 = false">取 消</el-button>
+								<el-button type="primary" @click="dialogFormVisible2 = false">确 定</el-button>
+							</div>
+						</el-dialog>
+						<el-form-item :push="4">
+							<el-input v-model="wenben1" placeholder="匹配 匹配编码/名称/首字母"></el-input>
+						</el-form-item>
+						<el-button type="primary" icon="el-icon-search">查询</el-button>
+						</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="10" :offset="3">
+					<el-form :inline="true" class="demo-form-inline">
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="adddialog()">增加车型</el-button>
+						<el-dialog :title="titleType" :visible.sync="dialogFormVisible">
+							<el-form :model="form">
+								<el-row :span="24">
+									<div align="center">
+										<el-form-item label="车型编号" :label-width="formLabelWidth">
+											<el-input v-model="form.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row>
+									<div align="center">
+										<el-form-item label="车型名称" :label-width="formLabelWidth">
+											<el-input v-model="form.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row :span="24">
+									<div align="center">
+										<el-form-item label="参考价格" :label-width="formLabelWidth">
+											<el-input v-model="form.name" autocomplete="off"></el-input>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row>
+									<div align="center">
+										<el-form-item label="车辆品牌" :label-width="formLabelWidth">
+											<el-select v-model="form.region" placeholder="请选择活动区域">
+												<el-option label="区域一" value="shanghai"></el-option>
+												<el-option label="区域二" value="beijing"></el-option>
+											</el-select>
+										</el-form-item>
+									</div>
+								</el-row>
+								<el-row>
+									<div align="center">
+										<el-form-item label="发动机品牌" :label-width="formLabelWidth">
+											<el-select v-model="form.region" placeholder="请选择活动区域">
+												<el-option label="区域一" value="shanghai"></el-option>
+												<el-option label="区域二" value="beijing"></el-option>
+											</el-select>
+										</el-form-item>
+									</div>
+								</el-row>
+							</el-form>
+							<div slot="footer" class="dialog-footer" align="center">
+								<el-button @click="dialogFormVisible = false">取 消</el-button>
+								<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+							</div>
+						</el-dialog>
+						<el-form-item :push="4">
+							<el-input v-model="wenben" placeholder="匹配 匹配车型编码/车型名称"></el-input>
+						</el-form-item>
+
+						<el-button type="primary" icon="el-icon-search">查询</el-button>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+			<el-row :span="24">
+				<el-col :span="11">
+					<div style="background-color: #FFFFFF; height: 500px;">
+						<template>
+							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+								<el-table-column prop="date" label="编码" align="center" header-align="center" >
+								</el-table-column>
+								<el-table-column prop="name" label="品牌编号" align="center" header-align="center" >
+								</el-table-column>
+								<el-table-column prop="name" label="首字母" align="center" header-align="center" >
+								</el-table-column>
+								<el-table-column label="操作" align="center" header-align="center"  width="150">
+									<template slot-scope="scope" >
+										<el-button size="mini" type="danger">删除</el-button>
+										<el-button size="mini" type="danger">选择</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+					</div>
+				</el-col>
+				<el-col :span="12" :offset="1">
+					<div style="background-color: #FFFFFF; height: 500px;">
+						<template>
+							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+								<el-table-column prop="date" label="车型ID" align="center" header-align="center" >
+								</el-table-column>
+								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center" >
+								</el-table-column>
+								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌" >
+								</el-table-column>
+								<el-table-column prop="address" align="center" header-align="center" label="车辆名称" >
+								</el-table-column>
+								<el-table-column prop="address" align="center" header-align="center" label="参考价格" >
+								</el-table-column>
+								<el-table-column label="操作" align="center" header-align="center" width="150">
+									<template slot-scope="scope">
+										<el-button size="mini" type="danger" @click="updatedialog()">编辑</el-button>
+										<el-button size="mini" type="danger">删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var Vm = new Vue({
+			el: "#chexing",
+			data: {
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄',
+				}, {
+					date: '2016-05-04',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄'
+				}, {
+					date: '2016-05-01',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄',
+				}, {
+					date: '2016-05-03',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄'
+				}],
+				dialogTableVisible: false,
+				dialogFormVisible: false,
+				form: {
+					name: '',
+					region: '',
+					date1: '',
+					date2: '',
+					delivery: false,
+					type: [],
+					resource: '',
+					desc: ''
+				},
+				formLabelWidth: '100PX',
+
+				dialogTableVisible2: false,
+				dialogFormVisible2: false,
+				form2: {
+					name: '',
+					region: '',
+					date1: '',
+					date2: '',
+					delivery: false,
+					type: [],
+					resource: '',
+					desc: ''
+				},
+				formLabelWidth2: '100PX',
+				titleType:'',
+				wenben:"",
+				wenben1:""
+			},
+			methods: {
+				tableRowClassName({
+					row,
+					rowIndex
+				}) {
+					if(rowIndex === 1) {
+						return 'warning-row';
+					} else if(rowIndex === 3) {
+						return 'success-row';
+					}
+					return '';
+				},
+				adddialog(){
+					var _this=this;
+					_this.titleType="新增车型";
+					_this.dialogFormVisible=true;
+				},
+				updatedialog(){
+					var _this=this;
+					_this.titleType="修改车型";
+					_this.dialogFormVisible=true;
+				}
+			},
+
+		})
+	</script>
+
+</html>

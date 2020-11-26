@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../../css/index.css" />
+		<style>
+			.el-input-group__prepend {
+				background-color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app1">
+			<el-row>
+				<template>
+					<el-radio-group v-model="radioTreaty" @change="agreeChange">
+						<el-radio label="1" border>现金支付</el-radio>
+						<el-radio label="2" border>余额支付</el-radio>
+					</el-radio-group>
+
+				</template>
+			</el-row>
+			<br />
+			<el-row>
+				<el-row>
+					<el-col :md="5">
+						<el-input disabled>
+							<template slot="prepend">客戶</template>
+						</el-input>
+					</el-col>
+					<el-col :md="5" :push="1">
+						<el-input disabled>
+							<template slot="prepend">维修单号</template>
+						</el-input>
+					</el-col>
+				</el-row>
+				<br />
+				<el-row>
+					<el-col :md="5">
+						<el-input disabled>
+							<template slot="prepend">收银员</template>
+						</el-input>
+					</el-col>
+					<el-col :md="5" :push="1">
+						<el-input disabled>
+							<template slot="prepend">应收金额</template>
+						</el-input>
+					</el-col>
+				</el-row>
+				<br />
+				<el-row>
+					<el-col :md="5">
+						<el-input disabled>
+							<template slot="prepend">实收金额</template>
+						</el-input>
+					</el-col>
+					<el-col :md="5" :push="1">
+						<el-input disabled>
+							<template slot="prepend">优惠</template>
+						</el-input>
+					</el-col>
+				</el-row>
+				<br />
+				<el-row v-show="play">
+					<el-col :md="5">
+						<el-input disabled>
+							<template slot="prepend">账号余额</template>
+						</el-input>
+					</el-col>
+				</el-row>
+				<br />
+				<el-row>
+					</el-input>
+					<div style="margin: 20px 0;">备注</div>
+					<el-col :md="5">
+						<el-input type="textarea" placeholder="请输入内容" v-model="textarea" maxlength="50" show-word-limit>
+						</el-input>
+					</el-col>
+				</el-row>
+			</el-row>
+			<br />
+			<el-button type="success">确认保存</el-button>
+			<el-button type="success">单据打印</el-button>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/index.js"></script>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/axios.min.js"></script>
+	<script type="text/javascript" src="../../js/axios_cfg.js"></script>
+	<script>
+		var app1 = new Vue({
+			el: "#app1",
+			data: {
+				textarea: '',
+				play: false,
+				radioTreaty: '1'
+			},
+			methods: {
+				play1() {
+					alert("a")
+				},
+				agreeChange(val){
+					if(val==1){
+						this.play=false;
+					}else{
+						this.play=true;
+					}
+				}
+			}
+		})
+	</script>
+
+</html>

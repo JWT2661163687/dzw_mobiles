@@ -1,10 +1,142 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<title></title>
+		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
+		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
+		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
 	</head>
+
 	<body>
-		<h1>竣工</h1>
+		<div id="completedmaintainapp">
+			<el-row>
+				<el-col :span="5">
+					<h1>竣工检查</h1>
+				</el-col>
+
+			</el-row>
+			<el-row>
+				<template>
+					<el-table :data="aa" stripe style="width: 100%">
+						<el-table-column prop="a" label="序号">
+						</el-table-column>
+						<el-table-column prop="a" label="车牌号">
+						</el-table-column>
+						<el-table-column prop="a" label="车型">
+						</el-table-column>
+						<el-table-column prop="a" label="车辆品牌">
+						</el-table-column>
+						<el-table-column prop="a" label="总金额">
+						</el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button size="mini" round @click="showjungong">竣工</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</template>
+			</el-row>
+			<el-dialog title="竣工" :visible.sync="dialogTableVisible">
+				<el-row>
+					<el-col :span="5" :push="8">
+						<el-radio v-model="radio" label="1" @change="radiochange">竣工</el-radio>
+					</el-col>
+					<el-col :span="5" :push="8">
+						<el-radio v-model="radio" label="2" @change="radiochange">返工</el-radio>
+					</el-col>
+				</el-row>
+				<br />
+				<el-row>
+					<el-col :span="10" :push="1">
+					<el-form ref="form"  label-width="80px">
+					<el-form-item label="完成时间">
+						<el-input ></el-input>
+					</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="10" :push="2">
+					<el-form ref="form"  label-width="80px">
+					<el-form-item label="处罚金额">
+						<el-input :disabled="disabled"></el-input>
+					</el-form-item>
+					</el-form>
+				</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="10" :push="1">
+					<el-form ref="form"  label-width="80px">
+					<el-form-item label="质检员">
+						<el-input ></el-input>
+					</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="10" :push="2">
+					<el-form ref="form"  label-width="80px">
+					<el-form-item label="返工原因">
+						<el-input :disabled="disabled"></el-input>
+					</el-form-item>
+					</el-form>
+				</el-col>
+				</el-row>
+				
+				
+				<el-row>
+					<el-col :span="10" :push="1">
+					<el-form ref="form"  label-width="80px">
+					<el-form-item label="责任人">
+						<el-input ></el-input>
+					</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="10" :push="4">
+					<el-button type="primary" >提交</el-button>
+				</el-col>
+				</el-row>
+				
+				
+			</el-dialog>
+		</div>
 	</body>
+	<script type="text/javascript " src="/dzw_mobiles/js/jquery-1.12.4.js "></script>
+	<script type="text/javascript " src="/dzw_mobiles/js/jq_ajax_config.js "></script>
+	<script type="text/javascript " src="/dzw_mobiles/js/axios.min.js "></script>
+	<script type="text/javascript " src="/dzw_mobiles/js/axios_cfg.js "></script>
+	<script>
+		var completedmaintainapp = new Vue({
+			el: '#completedmaintainapp',
+			data: {
+				//维修车辆成功表格
+				aa: [{
+					a: "ads"
+				}],
+				//模态框
+				dialogTableVisible: false,
+				//返工数据源
+				radio: "1",
+				disabled:false,
+			},
+			mounted: function() {
+				//加载竣工数据
+			},
+			methods: {
+				//点击竣工打开莫泰框
+				showjungong() {
+					this.dialogTableVisible = true;
+				},
+				//单选按钮改变事件
+				radiochange(){
+					if(this.radio=='1'){
+					this.disabled=false;
+					}else{
+						this.disabled=true;
+					}
+				}
+			}
+
+		})
+	</script>
+
 </html>

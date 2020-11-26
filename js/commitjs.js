@@ -1,4 +1,4 @@
-	var aavue = new Vue({
+	 new Vue({
 			el: "#maintainapp",
 			data: {
 				
@@ -13,6 +13,7 @@
 				},
 				//单击添加切换选项卡
 				menuclick(title, name, yemian) {
+					
 					//循环判断是否有此选项卡，有切换没有添加
 					for(var i=0;i<vueapp.editableTabs.length;i++){
 						if(title==vueapp.editableTabs[i].title){

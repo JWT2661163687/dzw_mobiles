@@ -11,7 +11,160 @@
 
 	<body>
 		<div id="seomaintainapp">
-			
+			<el-row>
+				<el-col :span="5">
+					<h1>站外维修</h1>
+				</el-col>
+				<el-col :span="10" :push="4">
+					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
+					<el-button type="success">生成维修单据</el-button>
+					<el-button type="primary" @click="maintaincarshow">维修车辆信息</el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-form ref="form" label-width="80px">
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="车牌号">
+								<el-select filterable v-model="value" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="救援车辆">
+								<el-select filterable v-model="value" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="技工星级">
+								<el-select filterable v-model="value" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="技工">
+								<el-select filterable v-model="value" placeholder="请选择">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+
+					</el-row>
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="车辆品牌">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+
+						<el-col :span="6">
+							<el-form-item label="驾驶员">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="联系电话">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="维修备注">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="总里程">
+								<el-input></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+
+				</el-form>
+			</el-row>
+			<el-row>
+				<template>
+					<el-table :data="weixiu" style="width: 100%">
+						<el-table-column prop="a" label="序号">
+						</el-table-column>
+						<el-table-column prop="a" label="维修项目">
+						</el-table-column>
+						<el-table-column prop="b" label="维修价格">
+						</el-table-column>
+						<el-table-column prop="c" label="会员价">
+						</el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button type="danger" icon="el-icon-delete" circle></el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</template>
+			</el-row>
+			<br />
+
+			<el-dialog title="维修项目" :visible.sync="dialogTableVisible">
+				<el-row>
+					<el-table :data="weixiu">
+						<el-table-column property="a" label="序号"></el-table-column>
+						<el-table-column property="b" label="维修项目"></el-table-column>
+						<el-table-column property="c" label="价格"></el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-checkbox></el-checkbox>
+							</template>
+						</el-table-column>
+					</el-table>
+				</el-row>
+				<br />
+				<el-row>
+					<el-col :span="5" :push="10">
+						<el-button type="success" round>确定维修项目</el-button>
+					</el-col>
+				</el-row>
+			</el-dialog>
+			<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
+				<el-col :span="5">
+					<h3>站内维修车辆信息</h3>
+				</el-col>
+				
+				</el-col>
+				<el-table :data="maintaincars"  max-height="250"  highlight-current-row @current-change="maintaincarschangge">
+					<el-table-column property="maintaindate" label="序号"  width="140" align="center"></el-table-column>
+					<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
+					<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclebrand" label="车辆品牌" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclemodel" label="车辆型号" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainmoney" label="维修金额" fixed="right" width="120" align="center"></el-table-column>
+					<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
+					<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
+					<el-table-column label="操作" fixed="right" align="center">
+						<template slot-scope="scope">
+							<el-button size="mini" round>完成</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-row>
+					<el-col :span="5">
+						<h3>车辆维修项目详情</h3>
+					</el-col>
+				</el-row>
+				<el-table :data="weixius">
+					<el-table-column property="" label="序号"></el-table-column>
+					<el-table-column property="" label="车牌号"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column property="" label="发动机"></el-table-column>
+					<el-table-column property="" label="操作"></el-table-column>
+				</el-table>
+			</el-drawer>
 		</div>
 	</body>
 	<script type="text/javascript " src="/dzw_mobiles/js/jquery-1.12.4.js "></script>
@@ -19,11 +172,51 @@
 	<script type="text/javascript " src="/dzw_mobiles/js/axios.min.js "></script>
 	<script type="text/javascript " src="/dzw_mobiles/js/axios_cfg.js "></script>
 	<script>
-		var seomaintainvue=new Vue({
-			el:"#seomaintainapp",
-			data:{
+		var seomaintainvue = new Vue({
+			el: "#seomaintainapp",
+			data: {
+				//车辆品牌对象
+				value: '',
+				options: [{
+					value: '选项1',
+					label: '黄金糕'
+				}],
+				//维修单数组
+				weixiu: [{
+					a: 'a',
+					b: 'b',
+					c: 'c',
+					d: 'd'
+				}],
+				//维修项目模态框
+				dialogTableVisible: false,
+				//抽屉属性
+				table: false,
+				dialog: false,
+				//维修车辆信息数组
+				maintaincars: [],
+				weixius:[]
 				
 			},
+			methods:{
+				//打开抽屉
+				maintaincarshow(){
+					//加载维修车辆信息
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/1`).then(function(res){
+						seomaintainvue.maintaincars=res.data;
+					})
+					this.table = true;
+				},
+				//维修项目详情
+				maintaincarschangge(currentRow, oldCurrentRow){
+					//id查询所有项目
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${currentRow.maintainid}`).then(function(res){
+						seomaintainvue.maintaincars=res.data;
+					})
+				},
+				
+			}
+
 		})
 	</script>
 
