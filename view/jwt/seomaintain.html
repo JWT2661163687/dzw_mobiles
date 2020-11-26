@@ -18,7 +18,7 @@
 				<el-col :span="10" :push="4">
 					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
 					<el-button type="success">生成维修单据</el-button>
-					<el-button type="primary" @click="table = true">维修车辆信息</el-button>
+					<el-button type="primary" @click="maintaincarshow">维修车辆信息</el-button>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -130,26 +130,23 @@
 					</el-col>
 				</el-row>
 			</el-dialog>
-			<el-drawer :visible.sync="table" direction="rtl" size="50%" title="维修车辆信息">
+			<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
 				<el-col :span="5">
-					<h3>维修车辆信息</h3>
+					<h3>站内维修车辆信息</h3>
 				</el-col>
-				<el-col :span="10">
-					<el-select filterable placeholder="请选择">
-						<el-option>
-							正在维修
-						</el-option>
-						<el-option>
-							维修结束
-						</el-option>
-					</el-select>
+				
 				</el-col>
-				<el-table :data="weixiu">
-					<el-table-column property="" label="序号"></el-table-column>
-					<el-table-column property="" label="车牌号"></el-table-column>
-					<el-table-column property="" label="发动机"></el-table-column>
-					<el-table-column property="" label="发动机"></el-table-column>
-					<el-table-column label="操作">
+				<el-table :data="maintaincars"  max-height="250"  highlight-current-row @current-change="maintaincarschangge">
+					<el-table-column property="maintaindate" label="序号"  width="140" align="center"></el-table-column>
+					<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
+					<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclebrand" label="车辆品牌" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclemodel" label="车辆型号" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainmoney" label="维修金额" fixed="right" width="120" align="center"></el-table-column>
+					<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
+					<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
+					<el-table-column label="操作" fixed="right" align="center">
 						<template slot-scope="scope">
 							<el-button size="mini" round>完成</el-button>
 						</template>
@@ -197,8 +194,25 @@
 				table: false,
 				dialog: false,
 				//维修车辆信息数组
-				weixiu: []
+				maintaincars: [],
+				
 			},
+			methods:{
+				//打开抽屉
+				maintaincarshow(){
+					//加载维修车辆信息
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/1`).then(function(res){
+						seomaintainvue.maintaincars=res.data;
+					})
+					this.table = true;
+				},
+				//维修项目详情
+				maintaincarschangge(currentRow, oldCurrentRow){
+					//查询所有项目
+					
+				},
+				
+			}
 
 		})
 	</script>

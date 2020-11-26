@@ -253,9 +253,11 @@ CREATE TABLE `maintaincar` (
   `carid` int(11) DEFAULT NULL,
   `maintaindate` date DEFAULT NULL,
   PRIMARY KEY (`maintainid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `maintaincar` */
+
+insert  into `maintaincar`(`maintainid`,`receiptsid`,`teamid`,`id`,`departdate`,`departaddress`,`constructiondate`,`rescuevehicleaddress`,`accomplishdate`,`maintainvehicleid`,`inside`,`mileage`,`counselorid`,`beizhu`,`maintainmoney`,`drivername`,`maintainphone`,`licence`,`vehiclebrand`,`vehiclemodel`,`clearingfrom`,`enginename`,`vin`,`enginehao`,`carownername`,`carid`,`maintaindate`) values (1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-11-26');
 
 /*Table structure for table `maintainreceipts` */
 
@@ -432,10 +434,22 @@ CREATE TABLE `weixiu` (
   `XMhuiyuan` int(11) DEFAULT NULL,
   `cid` int(11) DEFAULT NULL,
   `Fid` int(11) DEFAULT NULL,
+  `maintainno` int(11) DEFAULT NULL,
   PRIMARY KEY (`XMid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `weixiu` */
+
+/*Table structure for table `weixiuxiangmu` */
+
+CREATE TABLE `weixiuxiangmu` (
+  `weixiuxiangmuid` int(11) NOT NULL AUTO_INCREMENT,
+  `maintaincarno` int(11) DEFAULT NULL,
+  `weixiuno` int(11) DEFAULT NULL,
+  PRIMARY KEY (`weixiuxiangmuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `weixiuxiangmu` */
 
 /*Table structure for table `xiaolei` */
 
