@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
 	</head>
+
 	<body>
 		<div id="fieldvehiclesapp" style="background-color: white;color:#F56C6C">
 			<el-row :gutter="20">
 				<el-col :span="16">
-					<div ><h3>外勤车辆</h3></div>
+					<div>
+						<h3>外勤车辆</h3></div>
 				</el-col>
 				<el-col :span="8">
 					<div>
@@ -19,8 +22,8 @@
 			<br/>
 			<div style="background-color: white;color:#F56C6C">
 				<el-row :span="10">
-					<el-col :md="1" :push="18" >
-						 <el-button style="background-color: white;color:#F56C6C">保存</el-button>
+					<el-col :md="1" :push="18">
+						<el-button style="background-color: white;color:#F56C6C">保存</el-button>
 					</el-col>
 					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
@@ -32,67 +35,81 @@
 			</div>
 			<div style="background-color: white;color:#F56C6C">
 				车牌号
-				<el-input v-model="cp" size="small" placeholder="请输入内容" style="width: 150px;">
+				<el-input v-model="addfieldvehicles.carnumber" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
 
 				品牌
-				<el-input v-model="pp" size="small" placeholder="请输入内容" style="width: 150px;">
+				<el-input v-model="addfieldvehicles.fbrand" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
 				车型
-				<el-input v-model="cx" size="small" placeholder="请输入内容" style="width: 150px;">
+				<el-input v-model="addfieldvehicles.fmodel" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
 				当前里程
-				<el-input v-model="dqlc" size="small" placeholder="请输入内容" style="width: 150px;">
+				<el-input v-model="addfieldvehicles.currentmileage" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
 				班组
-				<el-input v-model="bz" size="small" placeholder="请输入内容" style="width: 150px;">
-				</el-input>
+				<template>
+					<el-select v-model="value" placeholder="请选择">
+						<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+						</el-option>
+					</el-select>
+				</template>
 			</div>
-			<el-table ref="singleTable" :data="persons" highlight-current-row style="background-color: white;color:#F56C6C">
-				<el-table-column property="carnumber" label="车牌号">
+			<el-table ref="singleTable" :data="fieldvehicles" highlight-current-row style="background-color: white;color:#F56C6C" @current-change="fuzhi">
+				<el-table-column prop="carnumber" label="车牌号">
 				</el-table-column>
-				<el-table-column property="fbrand" label="品牌">
+				<el-table-column prop="fbrand" label="品牌">
 				</el-table-column>
-				<el-table-column property="fmodel" label="车型">
+				<el-table-column prop="fmodel" label="车型">
 				</el-table-column>
-				<el-table-column property="currentmileage" label="当前里程">
+				<el-table-column prop="currentmileage" label="当前里程">
 				</el-table-column>
-				<el-table-column property="ascriptionteam" label="归属班组">
+				<el-table-column prop="tename" label="归属班组">
 				</el-table-column>
 			</el-table>
 		</div>
 	</body>
-
 	<script>
-	new Vue({
+		new Vue({
 			el: "#fieldvehiclesapp",
 			data: {
-				cp:'',
-				pp:'',
-				cx:'',
-				dqlc:'',
-				bz:'',
-				persons: [{
-					carnumber: '湘B8820',
-					fbrand: '111',
-					fmodel: '111',
-					currentmileage: '111',
-					ascriptionteam:'湖南队'
-				}, {
-					carnumber: '湘B8820',
-					fbrand: '111',
-					fmodel: '111',
-					currentmileage: '111',
-					ascriptionteam:'湖南队'
-				}, {
-					carnumber: '湘B8820',
-					fbrand: '111',
-					fmodel: '111',
-					currentmileage: '111',
-					ascriptionteam:'湖南队'
-				}]
+				addfieldvehicles: {
+					carnumber: '',
+					fbrand: '',
+					fmodel: '',
+					currentmileage: '',
+				},
+				fieldvehicles: [],
+				Team: [],
+				value: ''
 			},
-			methods: {}
-		})
+			mounted() {
+				this.goToPage();
+				this.queryTeam();
+			},
+			methods: {
+				fuzhi(currentRow,oldCurrenRow){
+					fieldvehiclesapp.addfieldvehicles.carnumber=currentRow.carnumber;
+					fieldvehiclesapp.addfieldvehicles.fbrand=currentRow.fbrand;
+					fieldvehiclesapp.addfieldvehicles.fmodel=currentRow.fmodel;
+					fieldvehiclesapp.addfieldvehicles.currentmileage=currentRow.currentmileage;
+				},
+				goToPage() {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/query`).then(function(resp) {
+							_this.fieldvehicles = resp.data;
+						}).catch(function(e) {
+							console.info(e);
+						});
+					},
+				queryTeam(){
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {
+							_this.Team = resp.data;
+						})
+				}
+			}
+		});
 	</script>
+
 </html>
