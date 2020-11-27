@@ -20,23 +20,23 @@
 			</el-row>
 			<el-row>
 				<template>
-					<el-table :data="aa" stripe style="width: 100%">
-						<el-table-column prop="a" label="序号">
-						</el-table-column>
-						<el-table-column prop="a" label="车牌号">
-						</el-table-column>
-						<el-table-column prop="a" label="车型">
-						</el-table-column>
-						<el-table-column prop="a" label="车辆品牌">
-						</el-table-column>
-						<el-table-column prop="a" label="总金额">
-						</el-table-column>
-						<el-table-column label="操作">
+					<el-table :data="maintaincars" highlight-current-row>
+						<el-table-column property="maintaindate" label="序号" align="center"></el-table-column>
+						<el-table-column property="licence" label="车牌号" align="center"></el-table-column>
+						<el-table-column property="drivername" label="驾驶员" align="center"></el-table-column>
+						<el-table-column property="maintainphone" label="联系电话" align="center"></el-table-column>
+						<el-table-column property="vehiclebrand" label="车辆品牌" align="center"></el-table-column>
+						<el-table-column property="vehiclemodel" label="车辆型号" align="center"></el-table-column>
+						<el-table-column property="maintainmoney" label="维修金额" align="center"></el-table-column>
+						<el-table-column property="maintaindate" label="单据时间" align="center"></el-table-column>
+						<el-table-column property="accomplishdate" label="完成时间" align="center"></el-table-column>
+						<el-table-column label="操作" align="center">
 							<template slot-scope="scope">
-								<el-button size="mini" round @click="showjungong">竣工</el-button>
+								<el-button size="mini" round @click="showjungong(scope.row.accomplishdate)">竣工</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
+
 				</template>
 			</el-row>
 			<el-dialog title="竣工" :visible.sync="dialogTableVisible">
@@ -51,52 +51,50 @@
 				<br />
 				<el-row>
 					<el-col :span="10" :push="1">
-					<el-form ref="form"  label-width="80px">
-					<el-form-item label="完成时间">
-						<el-input ></el-input>
-					</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="10" :push="2">
-					<el-form ref="form"  label-width="80px">
-					<el-form-item label="处罚金额">
-						<el-input :disabled="disabled"></el-input>
-					</el-form-item>
-					</el-form>
-				</el-col>
+						<el-form ref="form" label-width="80px">
+							<el-form-item label="完成时间">
+								<el-input></el-input>
+							</el-form-item>
+						</el-form>
+					</el-col>
+					<el-col :span="10" :push="2">
+						<el-form ref="form" label-width="80px">
+							<el-form-item label="处罚金额">
+								<el-input :disabled="disabled"></el-input>
+							</el-form-item>
+						</el-form>
+					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="10" :push="1">
-					<el-form ref="form"  label-width="80px">
-					<el-form-item label="质检员">
-						<el-input ></el-input>
-					</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="10" :push="2">
-					<el-form ref="form"  label-width="80px">
-					<el-form-item label="返工原因">
-						<el-input :disabled="disabled"></el-input>
-					</el-form-item>
-					</el-form>
-				</el-col>
+						<el-form ref="form" label-width="80px">
+							<el-form-item label="质检员">
+								<el-input></el-input>
+							</el-form-item>
+						</el-form>
+					</el-col>
+					<el-col :span="10" :push="2">
+						<el-form ref="form" label-width="80px">
+							<el-form-item label="返工原因">
+								<el-input :disabled="disabled"></el-input>
+							</el-form-item>
+						</el-form>
+					</el-col>
 				</el-row>
-				
-				
+
 				<el-row>
 					<el-col :span="10" :push="1">
-					<el-form ref="form"  label-width="80px">
-					<el-form-item label="责任人">
-						<el-input ></el-input>
-					</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="10" :push="4">
-					<el-button type="primary" >提交</el-button>
-				</el-col>
+						<el-form ref="form" label-width="80px">
+							<el-form-item label="责任人">
+								<el-input></el-input>
+							</el-form-item>
+						</el-form>
+					</el-col>
+					<el-col :span="10" :push="4">
+						<el-button type="primary" @click="completedclick">提交</el-button>
+					</el-col>
 				</el-row>
-				
-				
+
 			</el-dialog>
 		</div>
 	</body>
@@ -109,32 +107,53 @@
 			el: '#completedmaintainapp',
 			data: {
 				//维修车辆成功表格
-				aa: [{
-					a: "ads"
-				}],
+				maintaincars: [],
 				//模态框
 				dialogTableVisible: false,
 				//返工数据源
 				radio: "1",
-				disabled:false,
+				disabled: false,
+				//新增竣工表对象
+				completed:{
+					completiondate:'',
+					penalty:'',
+					inspector:'',
+					rework:'',
+					personid:''
+				}
 			},
 			mounted: function() {
 				//加载竣工数据
+				this.gotoload();
 			},
 			methods: {
 				//点击竣工打开莫泰框
-				showjungong() {
+				showjungong(completiondate) {
 					this.dialogTableVisible = true;
+					this.completed.completiondate=completiondate;
 				},
 				//单选按钮改变事件
-				radiochange(){
-					if(this.radio=='1'){
-					this.disabled=false;
-					}else{
-						this.disabled=true;
+				radiochange() {
+					if(this.radio == '1') {
+						this.disabled = false;
+					} else {
+						this.disabled = true;
 					}
+				},
+				//查询维修完成
+				gotoload() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar`).then(function(res) {
+						completedmaintainapp.maintaincars = res.data;
+					})
+				},
+				//竣工表新增
+				completedclick(){
+					
 				}
-			}
+				
+				
+				
+			},
 
 		})
 	</script>

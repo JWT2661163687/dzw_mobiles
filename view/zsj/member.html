@@ -14,15 +14,15 @@
 			<br />
 			<el-row>
 				<el-col :md="5" :push="8">
-					<el-input>
+					<el-input v-model="kahao">
 						<template slot="prepend">会员卡号</template>
 					</el-input>
 				</el-col>
 				<el-col :md="2" :push="9">
-					<el-button type="success">搜索</el-button>
+					<el-button type="success" @click="queryMember(1,2)">搜索</el-button>
 				</el-col>
 				<el-col :md="2" :push="15">
-					<el-button type="info" @click="dialogTableVisible = true">新增会员</el-button>
+					<el-button type="info" @click="queryclient">新增会员</el-button>
 				</el-col>
 			</el-row>
 			<br />
@@ -30,27 +30,30 @@
 				<el-dialog title="成为会员" :visible.sync="dialogTableVisible">
 					<el-row>
 						<el-col :md="9" :push="5">
-							<el-input>
+							<el-input v-model="BianHao">
 								<template slot="prepend">客户编号</template>
 							</el-input>
 						</el-col>
 						<el-col :md="2" :push="6">
-							<el-button type="success">搜索</el-button>
+							<el-button type="success" @click="queryclient">搜索</el-button>
 						</el-col>
 					</el-row>
 					<br />
 					<el-row>
 						<template>
-							<el-table :data="tableData" height="250" border style="width: 100%">
-								<el-table-column prop="date" label="客户编号" width="180">
+							<el-table :data="client" height="250" border style="width: 100%">
+								<el-table-column prop="cid" label="客户编号" width="180">
 								</el-table-column>
-								<el-table-column prop="name" label="客户姓名" width="180">
+								<el-table-column prop="cname" label="客户姓名" width="180">
 								</el-table-column>
-								<el-table-column prop="address" label="客户等级">
+								<el-table-column label="客户等级">
+									<template slot-scope="scope">
+										<span>普通会员</span>
+									</template>
 								</el-table-column>
 								<el-table-column label="操作">
 									<template slot-scope="scope">
-										<el-button type="success" @click="dialogVisible=true">成为会员</el-button>
+										<el-button type="success" @click="addClient(scope.row)">成为会员</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -61,45 +64,45 @@
 			<el-row>
 				<el-dialog title="会员设置" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 					<el-row>
-						<el-input>
+						<el-input v-model="kh">
 							<template slot="prepend">会员卡号</template>
 						</el-input>
 					</el-row>
 					<br />
 					<el-row>
-						<el-input>
+						<el-input v-model="pass">
 							<template slot="prepend">会员密码</template>
 						</el-input>
 					</el-row>
 					<span slot="footer" class="dialog-footer">
     					<el-button @click="dialogVisible = false">取 消</el-button>
-    					<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    					<el-button type="primary" @click="insertMember">确 定</el-button>
   					</span>
 				</el-dialog>
 			</el-row>
 			<el-row>
 				<template>
 					<el-col :md="15" :push="5">
-						<el-table :data="tableData" style="width: 100%">
-							<el-table-column label="序号" width="180">
+						<el-table :data="member.list" style="width: 100%">
+							<el-table-column label="编号" width="180">
 								<template slot-scope="scope">
-									<span style="margin-left: 10px">{{ scope.$index+1 }}</span>
-								</template>
-							</el-table-column>
-							<el-table-column label="客户名" width="180">
-								<template slot-scope="scope">
-									<el-popover trigger="hover" placement="top">
-										<p>会员密码: {{ scope.row.name }}</p>
-										<p>会员余额: {{ scope.row.address }}</p>
-										<div slot="reference" class="name-wrapper">
-											<el-tag size="medium">{{ scope.row.name }}</el-tag>
-										</div>
-									</el-popover>
+									<span style="margin-left: 10px">{{ scope.row.mid }}</span>
 								</template>
 							</el-table-column>
 							<el-table-column label="会员卡号" width="180">
 								<template slot-scope="scope">
-									<span style="margin-left: 10px">{{ scope.$index+1 }}</span>
+									<el-popover trigger="hover" placement="top">
+										<p>会员密码: {{ scope.row.mpass }}</p>
+										<p>会员余额: {{ scope.row.mbalance }}</p>
+										<div slot="reference" class="name-wrapper">
+											<el-tag size="medium">{{ scope.row.mcardnumber }}</el-tag>
+										</div>
+									</el-popover>
+								</template>
+							</el-table-column>
+							<el-table-column label="客户姓名" width="180">
+								<template slot-scope="scope">
+									<span style="margin-left: 10px">{{ scope.row.cname }}</span>
 								</template>
 							</el-table-column>
 							<el-table-column label="操作">
@@ -111,11 +114,17 @@
 						</el-table>
 					</el-col>
 				</template>
+			</el-row><br />
+			<el-row>
+				<el-col :md="5" :push="10">
+					<el-pagination small layout="prev, pager, next" @current-change="dianji" :total="member.pages"  :page-size="1">
+					</el-pagination>
+				</el-col>
 			</el-row>
 			<br />
 		</div>
 	</body>
-	
+
 	<script>
 		var app2 = new Vue({
 			el: "#app2",
@@ -138,12 +147,20 @@
 					date: '2016-05-03',
 					name: '王小虎',
 					address: '上海市普陀区金沙江路 1516 弄'
-				}]
+				}],
+				kahao:'',
+				member:{},
+				BianHao:'',
+				client:[],
+				client1:{},
+				kh:'',
+				pass:''
 			},
 			methods: {
 				goBack() {},
 					handleEdit(index, row) {
-						this.$prompt('请输入充值金额', '用户1充值', {
+						let _this = this;
+						this.$prompt('请输入充值金额', `用户${row.mid}充值`, {
 							confirmButtonText: '确定',
 							cancelButtonText: '取消'
 						}).then(({
@@ -151,8 +168,14 @@
 						}) => {
 							this.$message({
 								type: 'success',
-								message: '你的邮箱是: ' + value
+								message: '充值: ' + value+'元'
 							});
+							axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/member1/${value}/${row.mid}`).then(function(resp){
+								if(resp.data.code=="200"){
+									_this.$alert("充值成功!");
+									_this.queryMember(1,2);	
+								}
+							})
 						}).catch(() => {
 							this.$message({
 								type: 'info',
@@ -161,7 +184,13 @@
 						});
 					},
 					handleDelete(index, row) {
-						console.log(index, row);
+						let _this = this;
+						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/members/member/${row.mid}/${row.cid}`).then(function(resp){
+							if(resp.data.code=="200"){
+								_this.$alert("删除成功!");
+								_this.queryMember(1,2);
+							}
+						})
 					},
 					handleClose(done) {
 						this.$confirm('确认关闭？')
@@ -169,7 +198,60 @@
 								done();
 							})
 							.catch(_ => {});
+					},
+					//根据条件查询会员
+					queryMember(p,s){
+						let _this = this;
+						var kahao1 = 0;
+						if(this.kahao!=""){
+							kahao1 = this.kahao;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${kahao1}/${p}/${s}`).then(function(resp){
+							_this.member = resp.data;
+						})
+					},
+					//根据条件查询所有不是会员的用户
+					queryclient(){
+						this.dialogTableVisible = true;
+						var BianHao1 = 0;
+						let _this = this;
+						if(_this.BianHao!=""){
+							BianHao1 = _this.BianHao;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${BianHao1}`).then(function(resp){
+							_this.client = resp.data;
+						})
+					},
+					//点击成为会员保存点击用户的数据
+					addClient(row){
+						this.dialogVisible=true;
+						this.client1 = row;
+					},
+					//把普通用户变为会员用户
+					insertMember(){
+						let _this = this;
+						this.dialogVisible = false;
+						var member = {};
+						member["mcardnumber"] = this.kh;
+						member["mpass"] = this.pass;
+						member["cid"] = this.client1.cid;
+						member["cname"] = this.client1.cname;
+						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/members/member`,member).then(function(resp){
+							if(resp.data.code=="200"){
+								_this.$alert("新增成功!");
+								_this.queryclient();
+								_this.queryMember(1,2);
+								_this.kh = "";
+								_this.pass = "";
+							}
+						})
+					},
+					dianji(val){
+						this.queryMember(val,this.member.pageSize)
 					}
+			},
+			mounted(){
+				this.queryMember(1,2);
 			}
 		})
 	</script>

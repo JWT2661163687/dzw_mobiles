@@ -58,14 +58,13 @@
 				<el-col :span="4" style="font-size: 35px;">
 					<span>发动机品牌</span>
 				</el-col>
-				<el-col :span="10" :push="4">
+				<el-col :span="10" :push="5">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-form-item label="分类名称" :push="4">
 							<el-input v-model="engine.enginename" placeholder="分类名称"></el-input>
 						</el-form-item>
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="insertEngine()">新增</el-button>
 						<el-button type="primary" icon="el-icon-search" @click="SelectByName()">查询</el-button>
-						<el-button type="primary" icon="el-icon-circle-close">关闭</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
