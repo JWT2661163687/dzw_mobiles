@@ -18,7 +18,7 @@
 				<el-col :span="10" :push="4">
 					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
 					<el-button type="success">生成维修单据</el-button>
-					<el-button type="primary" @click="table = true">维修车辆信息</el-button>
+					<el-button type="primary" @click="maintaincarshow(1)">维修车辆信息</el-button>
 
 				</el-col>
 			</el-row>
@@ -76,44 +76,48 @@
 						</el-col>
 
 					</el-row>
-					<el-drawer :visible.sync="table" direction="rtl" size="50%" title="维修车辆信息">
-						<el-col :span="5">
-							<h3>维修车辆信息</h3>
-						</el-col>
-						<el-col :span="10">
-							<el-select filterable placeholder="请选择">
-								<el-option>
-									正在维修
-								</el-option>
-								<el-option>
-									维修结束
-								</el-option>
-							</el-select>
-						</el-col>
-						<el-table :data="weixiu">
-							<el-table-column property="" label="序号"></el-table-column>
-							<el-table-column property="" label="车牌号"></el-table-column>
-							<el-table-column property="" label="发动机"></el-table-column>
-							<el-table-column property="" label="发动机"></el-table-column>
-							<el-table-column label="操作">
-								<template slot-scope="scope">
-									<el-button size="mini" round>完成</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-						<el-row>
-							<el-col :span="5">
-								<h3>车辆维修项目详情</h3>
-							</el-col>
-						</el-row>
-						<el-table :data="weixiu">
-							<el-table-column property="" label="序号"></el-table-column>
-							<el-table-column property="" label="车牌号"></el-table-column>
-							<el-table-column property="" label="发动机"></el-table-column>
-							<el-table-column property="" label="发动机"></el-table-column>
-							<el-table-column property="" label="操作"></el-table-column>
-						</el-table>
-					</el-drawer>
+					<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
+				<el-col :span="5">
+					<h3>站内维修车辆信息</h3>
+				</el-col>
+				<el-col :span="10" :push="4">
+					<template>
+						<el-select v-model="maintainreceiptsvalues" placeholder="请选择" @change="selectchange">
+							<el-option v-for="item in maintainreceipts" :key="item.receiptsid" :label="item.receiptsname" :value="item.receiptsid">
+							</el-option>
+						</el-select>
+					</template>
+				</el-col>
+				<el-table :data="maintaincars"  max-height="250"  highlight-current-row @current-change="maintaincarschangge">
+					<el-table-column property="maintaindate" label="序号"  width="140" align="center"></el-table-column>
+					<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
+					<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclebrand" label="车辆品牌" width="140" align="center"></el-table-column>
+					<el-table-column property="vehiclemodel" label="车辆型号" width="140" align="center"></el-table-column>
+					<el-table-column property="maintainmoney" label="维修金额" fixed="right" width="120" align="center"></el-table-column>
+					<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
+					<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
+					<el-table-column label="操作" fixed="right" align="center">
+						<template slot-scope="scope">
+							<el-button size="mini" round @click="jungong(scope.row.maintainid)">完成</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<el-row>
+					<el-col :span="5">
+						<h3>车辆维修项目详情</h3>
+					</el-col>
+				</el-row>
+				<el-table :data="weixius">
+					<el-table-column property="" label="序号"></el-table-column>
+					<el-table-column property="xmmingcheng" label="项目名称"></el-table-column>
+					<el-table-column property="xmshoujia" label="售价类型"></el-table-column>
+					<el-table-column property="xmbiaozhun" label="标准价"></el-table-column>
+					<el-table-column property="xmhuiyuan" label="会员价"></el-table-column>
+					
+				</el-table>
+			</el-drawer>
 				</el-form>
 			</el-row>
 			<el-row>
@@ -180,14 +184,89 @@
 					c: 'c',
 					d: 'd'
 				}],
+				//维修单
+				maintaincar: {
+					licence:'',//车辆品牌
+					//技工编号
+					teamid:'',//技工id
+					vehiclebrand:'',//车辆品牌
+					drivername:'',//驾驶员
+					maintainphone:'',//联系电话
+					beizhu:'',//备注
+				},
 				//维修项目模态框
 				dialogTableVisible: false,
 				//抽屉属性
 				table: false,
 				dialog: false,
 				//维修车辆信息数组
-				weixiu: []
+				maintaincars: [],
+				weixius:[],
+				//维修状态下拉框
+				maintainreceipts: [],
+				maintainreceiptsvalues:''
 			},
+			methods:{
+				//打开抽屉
+				maintaincarshow(maintainreceiptsid){
+					//加载维修车辆信息
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${maintainreceiptsid}/1`).then(function(res){
+						instationmaintainapp.maintaincars=res.data;
+					})
+					this.table = true;
+				},
+				//维修项目详情
+				maintaincarschangge(currentRow, oldCurrentRow){
+					if(this.maintaincars.length==0){
+						return;
+					}
+					//id查询所有项目
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarxiangmu/${currentRow.maintainid}`).then(function(res){
+						instationmaintainapp.weixius=res.data;
+						//判断是否返工
+						if(this.maintainreceiptsvalues=='4'){
+							instationmaintainapp.maintaincar=currentRow;
+						}
+						
+					})
+					
+				},
+				//修理完成,修改状态
+				jungong(maintainid){
+					//alert(maintainid)
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}`).then(function(res){
+						if(res.data.code="200"){
+							instationmaintainapp.$message({
+								message: '竣工完成',
+								type: 'success'
+							});
+							//加载维修车辆信息
+							instationmaintainapp.weixius=[];
+							instationmaintainapp.maintaincarshow();
+						}else{
+							instationmaintainapp.$message({
+								message: '竣工失败',
+								type: 'success'
+							});
+						}
+						
+					})
+				},
+				//下拉框改变
+				selectchange(){
+					this.maintaincarshow(this.maintainreceiptsvalues);
+				}
+				
+			},
+			mounted: function() {
+				//加载竣工数据
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintainreceipts`).then(function(res){
+					instationmaintainapp.maintainreceipts=res.data;
+					instationmaintainapp.maintainreceiptsvalues=instationmaintainapp.maintainreceipts[0].receiptsid;
+				})
+			}
+			
+			
 
 		})
 	</script>

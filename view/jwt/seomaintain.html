@@ -18,7 +18,7 @@
 				<el-col :span="10" :push="4">
 					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
 					<el-button type="success">生成维修单据</el-button>
-					<el-button type="primary" @click="maintaincarshow">维修车辆信息</el-button>
+					<el-button type="primary" @click="maintaincarshow(1)">维修车辆信息</el-button>
 				</el-col>
 			</el-row>
 			<el-row>
@@ -132,12 +132,18 @@
 			</el-dialog>
 			<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
 				<el-col :span="5">
-					<h3>站内维修车辆信息</h3>
+					<h3>站外维修车辆信息</h3>
 				</el-col>
-				
+				<el-col :span="10" :push="4">
+					<template>
+						<el-select v-model="maintainreceiptsvalues" placeholder="请选择" @change="selectchange">
+							<el-option v-for="item in maintainreceipts" :key="item.receiptsid" :label="item.receiptsname" :value="item.receiptsid">
+							</el-option>
+						</el-select>
+					</template>
 				</el-col>
-				<el-table :data="maintaincars"  max-height="250"  highlight-current-row @current-change="maintaincarschangge">
-					<el-table-column property="maintaindate" label="序号"  width="140" align="center"></el-table-column>
+				<el-table :data="maintaincars" max-height="250" highlight-current-row @current-change="maintaincarschangge">
+					<el-table-column property="maintaindate" label="序号" width="140" align="center"></el-table-column>
 					<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
 					<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
 					<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
@@ -163,7 +169,7 @@
 					<el-table-column property="xmshoujia" label="售价类型"></el-table-column>
 					<el-table-column property="xmbiaozhun" label="标准价"></el-table-column>
 					<el-table-column property="xmhuiyuan" label="会员价"></el-table-column>
-					
+
 				</el-table>
 			</el-drawer>
 		</div>
@@ -196,51 +202,65 @@
 				dialog: false,
 				//维修车辆信息数组
 				maintaincars: [],
-				weixius:[]
-				
+				weixius: [],
+				//维修状态下拉框
+				maintainreceipts: [],
+				maintainreceiptsvalues:''
+
 			},
-			methods:{
+			methods: {
+				
 				//打开抽屉
-				maintaincarshow(){
+				maintaincarshow(maintainreceiptsid) {
 					//加载维修车辆信息
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/1`).then(function(res){
-						seomaintainvue.maintaincars=res.data;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${maintainreceiptsid}/0`).then(function(res) {
+						seomaintainvue.maintaincars = res.data;
 					})
 					this.table = true;
 				},
 				//维修项目详情
-				maintaincarschangge(currentRow, oldCurrentRow){
-					if(this.maintaincars.length==0){
+				maintaincarschangge(currentRow, oldCurrentRow) {
+					if(this.maintaincars.length == 0) {
 						return;
 					}
 					//id查询所有项目
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarxiangmu/${currentRow.maintainid}`).then(function(res){
-						seomaintainvue.weixius=res.data;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarxiangmu/${currentRow.maintainid}`).then(function(res) {
+						seomaintainvue.weixius = res.data;
 					})
 				},
 				//修理完成,修改状态
-				jungong(maintainid){
+				jungong(maintainid) {
 					//alert(maintainid)
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}`).then(function(res){
-						if(res.data.code="200"){
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}`).then(function(res) {
+						if(res.data.code = "200") {
 							seomaintainvue.$message({
 								message: '竣工完成',
 								type: 'success'
 							});
 							//加载维修车辆信息
-							seomaintainvue.weixius=[];
-						seomaintainvue.maintaincarshow();
-						}else{
+							seomaintainvue.weixius = [];
+							seomaintainvue.maintaincarshow();
+						} else {
 							seomaintainvue.$message({
 								message: '竣工失败',
 								type: 'success'
 							});
 						}
-						
+
 					})
-					
 				},
-				
+				//下拉框改变
+				selectchange(){
+					this.maintaincarshow(this.maintainreceiptsvalues);
+				}
+
+			},
+			mounted: function() {
+				//加载竣工数据
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintainreceipts`).then(function(res){
+					seomaintainvue.maintainreceipts=res.data;
+					seomaintainvue.maintainreceiptsvalues=seomaintainvue.maintainreceipts[0].receiptsid;
+				})
 			}
 
 		})
