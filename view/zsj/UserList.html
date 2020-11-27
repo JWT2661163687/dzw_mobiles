@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
+
 		<style>
 			a {
 				text-decoration: none;
@@ -21,40 +21,31 @@
 				<el-col :push="14" :md="2" style="margin-top: 10px;"><a href="#">查询内容</a></el-col>
 				<el-col :md="6" :push="14">
 					<el-col :md="15">
-						<el-input placeholder="用户编号/用户姓名/手机" v-model="aa"></el-input>
+						<el-input placeholder="用户编号" v-model="sel"></el-input>
 					</el-col>
-					<el-button type="primary" icon="el-icon-search" @click="queryVehicle" style="margin-left: 5px;">搜索</el-button>
+					<el-button type="primary" icon="el-icon-search" @click="queryClient" style="margin-left: 5px;">搜索</el-button>
 				</el-col>
 			</el-row>
 			<br />
 			<el-dialog title="用户添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
-					<el-form-item label="客户编号" prop="name">
-						<el-input v-model="formInline.user" placeholder="客户编号"></el-input>
+					<el-form-item label="客户名称">
+						<el-input v-model="formInline.cname" placeholder="客户名称"></el-input>
 					</el-form-item>
-					<el-form-item label="客户名称" prop="name1">
-						<el-input v-model="formInline.user" placeholder="客户名称"></el-input>
+					<el-form-item label="客户手机">
+						<el-input v-model="formInline.cphone" placeholder="客户手机"></el-input>
 					</el-form-item>
-					<el-form-item label="手机号码">
-						<el-input v-model="formInline.user" placeholder="手机号码"></el-input>
+					<el-form-item label="联系人">
+						<el-input v-model="phoneName" placeholder="联系人"></el-input>
 					</el-form-item>
-					<el-form-item label="用户地址">
-						<el-input v-model="formInline.user" placeholder="用户地址"></el-input>
+					<el-form-item label="额度">
+						<el-input v-model="formInline.climit" placeholder="额度"></el-input>
 					</el-form-item>
-					<el-form-item label="接待人员" prop="brand">
-						<el-select v-model="formInline.region" placeholder="接待人员">
-							<el-option label="区域一" value="shanghai"></el-option>
-							<el-option label="区域二" value="beijing"></el-option>
-						</el-select>
+					<el-form-item label="积分">
+						<el-input v-model="formInline.cintegral" placeholder="积分"></el-input>
 					</el-form-item>
-					<el-form-item label="用户级别">
-						<el-input v-model="formInline.user" placeholder="用户级别" disabled="disabled"></el-input>
-					</el-form-item>
-					<el-form-item label="注册地址">
-						<el-input v-model="formInline.user" placeholder="注册地址"></el-input>
-					</el-form-item>
-					<el-form-item label="用户备注">
-						<textarea style="width: 300px;height: 100px;" placeholder="请输入备注"></textarea>
+					<el-form-item label="备注">
+						<el-input v-model="formInline.cremark" placeholder="备注"></el-input>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -62,69 +53,68 @@
     				<el-button type="primary" @click="add('formInline')">确 定</el-button>
   				</span>
 			</el-dialog>
-			<el-dialog title="用户添加" :visible.sync="dialogVisible1" width="50%" :before-close="handleClose">
-				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
-					<el-form-item label="客户编号" prop="name">
-						<el-input v-model="formInline.user" placeholder="客户编号"></el-input>
+			<el-dialog title="用户修改" :visible.sync="dialogVisible1" width="50%" :before-close="handleClose">
+				<el-form :inline="true" :model="client1" ref="formInline" :rules="rules" class="demo-form-inline">
+					<el-form-item label="客户名称">
+						<el-input v-model="client1.cname" placeholder="客户名称"></el-input>
 					</el-form-item>
-					<el-form-item label="客户名称" prop="name1">
-						<el-input v-model="formInline.user" placeholder="客户名称"></el-input>
+					<el-form-item label="客户手机">
+						<el-input v-model="client1.cphone" placeholder="客户手机"></el-input>
 					</el-form-item>
-					<el-form-item label="手机号码">
-						<el-input v-model="formInline.user" placeholder="手机号码"></el-input>
+					<el-form-item label="联系人">
+						<el-input v-model="client1.cname" placeholder="联系人"></el-input>
 					</el-form-item>
-					<el-form-item label="用户地址">
-						<el-input v-model="formInline.user" placeholder="用户地址"></el-input>
+					<el-form-item label="额度">
+						<el-input v-model="client1.climit" placeholder="额度"></el-input>
 					</el-form-item>
-					<el-form-item label="接待人员" prop="brand">
-						<el-select v-model="formInline.region" placeholder="接待人员">
-							<el-option label="区域一" value="shanghai"></el-option>
-							<el-option label="区域二" value="beijing"></el-option>
-						</el-select>
+					<el-form-item label="积分">
+						<el-input v-model="client1.cintegral" placeholder="积分"></el-input>
 					</el-form-item>
-					<el-form-item label="用户级别">
-						<el-input v-model="formInline.user" placeholder="用户级别" disabled="disabled"></el-input>
-					</el-form-item>
-					<el-form-item label="注册地址">
-						<el-input v-model="formInline.user" placeholder="注册地址"></el-input>
-					</el-form-item>
-					<el-form-item label="用户备注">
-						<textarea style="width: 300px;height: 100px;" placeholder="请输入备注"></textarea>
+					<el-form-item label="备注">
+						<el-input v-model="client1.cremark" placeholder="备注"></el-input>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
     				<el-button @click="dialogVisible1 = false">取 消</el-button>
-    				<el-button type="primary" @click="add('formInline')">确 定</el-button>
+    				<el-button type="primary" @click="update('formInline')">确 定</el-button>
   				</span>
 			</el-dialog>
 			<el-row :span="24">
 				<template>
-					<el-table :data="tableData" height="250" border style="width: 100%">
+					<el-table :data="client" height="250" border style="width: 100%" @row-dblclick="vehicle">
 						<el-table-column prop="" label="序号">
 							<template slot-scope="scope">
 								<span>{{scope.$index+1}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="name" label="客户编号">
+						<el-table-column prop="cid" label="客户编号">
 						</el-table-column>
-						<el-table-column prop="address" label="客户名称">
+						<el-table-column prop="cname" label="客户名称">
 						</el-table-column>
-						<el-table-column prop="date" label="手机号">
+						<el-table-column prop="cphone" label="手机号">
 						</el-table-column>
-						<el-table-column prop="" label="创建时间">
+						<el-table-column prop="createdate" label="创建时间" width="200">
 						</el-table-column>
-						<el-table-column prop="" label="客户等级">
+						<el-table-column label="客户等级">
+							<template slot-scope="scope">
+								<span v-if="scope.row.cgrade==1">
+									普通用户
+								</span>
+								<span v-if="scope.row.cgrade==2">
+									会员用户
+								</span>
+							</template>
 						</el-table-column>
-						<el-table-column prop="" label="用户额度">
+						<el-table-column prop="climit" label="用户额度">
 						</el-table-column>
-						<el-table-column prop="" label="积分">
+						<el-table-column prop="cintegral" label="积分">
 						</el-table-column>
-						<el-table-column prop="" label="备注">
+						<el-table-column prop="cremark" label="备注">
 						</el-table-column>
 						<el-table-column prop="" label="操作" width="180">
 							<template slot-scope="scope">
-								<el-button type="success" icon="el-icon-edit" @click="dialogVisible1=true" title="修改"></el-button>
-								<el-button type="primary" icon="el-icon-delete" title="删除"></el-button>
+								<el-button type="success" icon="el-icon-edit" @click="updateClient(scope.row)" title="修改"></el-button>
+								<el-button type="primary" icon="el-icon-delete" @click="deleteClient(scope.row.cid)" title="删除"></el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -133,40 +123,35 @@
 			</el-row>
 			<br />
 			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
 			<el-row>
 				<el-tabs type="border-card">
-					<el-tab-pane label="用户管理">
+					<el-tab-pane label="车辆管理">
 						<template>
-							<el-table :data="tableData" height="250" border style="width: 100%;">
+							<el-table :data="vehicle1" height="250" border style="width: 100%;" v-if="vehicle!=null">
 								<el-table-column prop="" label="序号">
 									<template slot-scope="scope">
 										<span>{{scope.$index+1}}</span>
 									</template>
 								</el-table-column>
-								<el-table-column prop="name" label="客户编号">
+								<el-table-column prop="cid" label="客户编号">
 								</el-table-column>
-								<el-table-column prop="address" label="驾驶员">
+								<el-table-column prop="vdriver" label="驾驶员">
 								</el-table-column>
-								<el-table-column prop="date" label="车牌号码">
+								<el-table-column prop="vlicense" label="车牌号码">
 								</el-table-column>
-								<el-table-column prop="" label="车辆品牌">
+								<el-table-column prop="vbrand" label="车辆品牌">
 								</el-table-column>
-								<el-table-column prop="" label="车辆型号">
+								<el-table-column prop="vmodel" label="车辆型号">
 								</el-table-column>
-								<el-table-column prop="" label="联系电话">
+								<el-table-column prop="vphone" label="联系电话">
 								</el-table-column>
-								<el-table-column prop="" label="车辆归属">
+								<el-table-column prop="vaffiliation" label="车辆归属">
 								</el-table-column>
-								<el-table-column prop="" label="里程(km)">
+								<el-table-column prop="vmileage" label="里程(km)">
 								</el-table-column>
-								<el-table-column prop="" label="上牌日期">
+								<el-table-column prop="registereddate" label="上牌日期" width="200">
 								</el-table-column>
-								<el-table-column prop="" label="购买日期">
+								<el-table-column prop="purchasedate" label="购买日期" width="200">
 								</el-table-column>
 							</el-table>
 						</template>
@@ -175,14 +160,14 @@
 			</el-row>
 		</div>
 	</body>
-	
+
 	<script>
 		var UserListApp = new Vue({
 			el: "#UserListApp",
 			data: {
 				dialogVisible:false,
 				dialogVisible1:false,
-				aa: "",
+				sel: "",
 				tableData: [{
 					date: '2016-05-03',
 					name: '王小虎',
@@ -230,8 +215,11 @@
 					}]
 				},
 				formInline: {
-					user: '',
-					region: ''
+					cname: '',
+					cphone: '',
+					climit: '',
+					cintegral: '',
+					cremark: ''
 				},
 				value2:'',
 				pickerOptions: {
@@ -258,11 +246,13 @@
 								picker.$emit('pick', date);
 							}
 						}]
-				}
+				},
+				client:[],
+				vehicle1:[],
+				phoneName:'',
+				client1:{}
 			},
 			methods: {
-				//查询车辆信息
-				queryVehicle() {},
 				handleClose(done) {
 					this.$confirm('确认关闭？')
 						.then(_ => {
@@ -277,13 +267,73 @@
 				add(a){
 					this.$refs[a].validate((valid) => {
 							if (valid) {
-								
+								let _this = this;
+								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`,this.formInline).then(function(resp){
+									if(resp.data.code=="200"){
+										_this.$alert("新增成功!");
+										_this.queryClient();
+										_this.dialogVisible = false;
+									}
+								})
 							} else {
 								console.log('error submit!!');
 								return false;
 							}
 					});
+				},
+				//根据条件查询用户信息
+				queryClient(){
+					var sel1 = 0;
+					if(this.sel!=""){
+						sel1 = this.sel;
+					}
+					let _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/${sel1}`).then(function(resp){
+						_this.client = resp.data;
+					})
+				},
+				//双击指定用户显示对应的车辆信息
+				vehicle(row){
+					let _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/client1/${row.cid}`).then(function(resp){
+						_this.vehicle1 = resp.data;
+					})
+				},
+				//打开修改页面模态框
+				updateClient(row){
+					this.dialogVisible1=true;
+					this.client1 = row;
+				},
+				//修改客户信息
+				update(a){
+					this.$refs[a].validate((valid) => {
+							if (valid) {
+								let _this = this;
+								axios.put(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`,this.client1).then(function(resp){
+									if(resp.data.code=="200"){
+										_this.$alert("修改成功!");
+										_this.queryClient();
+										_this.dialogVisible1 = false;
+									}
+								})
+							} else {
+								console.log('error submit!!');
+								return false;
+							}
+					});
+				},
+				deleteClient(cid){
+					let _this = this;
+					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/clients/client/${cid}`).then(function(resp){
+						if(resp.data.code=="200"){
+							_this.$alert("删除成功!");
+							_this.queryClient();
+						}
+					})
 				}
+			},
+			mounted(){
+				this.queryClient();
 			}
 		})
 	</script>
