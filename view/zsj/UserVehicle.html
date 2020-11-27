@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
+
 		<style>
 			a {
 				text-decoration: none;
@@ -21,7 +21,7 @@
 				<el-col :push="14" :md="2" style="margin-top: 10px;"><a href="#">查询内容</a></el-col>
 				<el-col :md="6" :push="14">
 					<el-col :md="15">
-						<el-input placeholder="用户编号/用户姓名/手机" v-model="aa"></el-input>
+						<el-input placeholder="车辆编号" v-model="veh"></el-input>
 					</el-col>
 					<el-button type="primary" icon="el-icon-search" @click="queryVehicle" style="margin-left: 5px;">搜索</el-button>
 				</el-col>
@@ -29,55 +29,55 @@
 			<br />
 			<el-dialog title="车辆添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
-					<el-form-item label="车主" prop="name">
-						<el-input v-model="formInline.user" placeholder="车主"></el-input>
+					<el-form-item label="客户编号">
+						<el-input v-model="formInline.user" placeholder="客户编号"></el-input>
 					</el-form-item>
-					<el-form-item label="驾驶员" prop="name1">
+					<el-form-item label="驾驶员">
 						<el-input v-model="formInline.user" placeholder="驾驶员"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input v-model="formInline.user" placeholder="车牌号码"></el-input>
+						<el-select v-model="formInline.region" placeholder="请选择">
+							<el-option label="区域一" value="shanghai"></el-option>
+							<el-option label="区域二" value="beijing"></el-option>
+						</el-select>
 					</el-form-item>
-					<el-form-item label="联系电话" prop="phone">
+					<el-form-item label="车辆品牌">
+						<el-select v-model="formInline.region" placeholder="请选择">
+							<el-option label="区域一" value="shanghai"></el-option>
+							<el-option label="区域二" value="beijing"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="车辆型号">
+						<!--<el-select v-model="formInline.region" placeholder="车辆型号">
+							<el-option label="区域一" value="shanghai"></el-option>
+							<el-option label="区域二" value="beijing"></el-option>
+						</el-select>-->
+						<el-input v-model="formInline.user" placeholder="车辆型号" disabled></el-input>
+					</el-form-item>
+					<el-form-item label="联系电话">
 						<el-input v-model="formInline.user" placeholder="联系电话"></el-input>
 					</el-form-item>
-					<el-form-item label="车辆品牌" prop="brand">
-						<el-select v-model="formInline.region" placeholder="车辆品牌">
-							<el-option label="区域一" value="shanghai"></el-option>
-							<el-option label="区域二" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="车辆型号" prop="model">
-						<el-select v-model="formInline.region" placeholder="车辆型号">
-							<el-option label="区域一" value="shanghai"></el-option>
-							<el-option label="区域二" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="车辆归属">
-						<el-select v-model="formInline.region" placeholder="车辆型号">
-							<el-option label="个人车" value="shanghai"></el-option>
-							<el-option label="公司车" value="beijing"></el-option>
-							<el-option label="租赁车" value="beijing"></el-option>
+					<el-form-item label="归属">
+						<el-select v-model="formInline.region" placeholder="请选择">
+							<el-option label="个人车" value="1"></el-option>
+							<el-option label="公司车" value="2"></el-option>
+							<el-option label="租赁车" value="3"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="里程">
 						<el-input v-model="formInline.user" placeholder="里程"></el-input>
 					</el-form-item>
 					<el-form-item label="上牌日期">
-						<template>
-							<div class="block">
-								<el-date-picker v-model="value2" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions">
-								</el-date-picker>
-							</div>
-						</template>
+						<div class="block">
+							<el-date-picker v-model="formInline.user" type="date" placeholder="选择日期">
+							</el-date-picker>
+						</div>
 					</el-form-item>
 					<el-form-item label="购买日期">
-						<template>
-							<div class="block">
-								<el-date-picker v-model="value2" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions">
-								</el-date-picker>
-							</div>
-						</template>
+						<div class="block">
+							<el-date-picker v-model="formInline.user" type="date" placeholder="选择日期">
+							</el-date-picker>
+						</div>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
@@ -145,31 +145,33 @@
 			</el-dialog>
 			<el-row :span="24">
 				<template>
-					<el-table :data="tableData" height="250" border style="width: 100%;">
+					<el-table :data="vehicle" height="250" border style="width: 100%;" @row-dblclick="client">
 						<el-table-column prop="" label="序号">
 							<template slot-scope="scope">
 								<span>{{scope.$index+1}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="name" label="客户编号">
+						<el-table-column prop="vid" label="车辆编号">
 						</el-table-column>
-						<el-table-column prop="address" label="驾驶员">
+						<el-table-column prop="cid" label="客户编号">
 						</el-table-column>
-						<el-table-column prop="date" label="车牌号码">
+						<el-table-column prop="vdriver" label="驾驶员">
 						</el-table-column>
-						<el-table-column prop="" label="车辆品牌">
+						<el-table-column prop="vlicense" label="车牌号码">
 						</el-table-column>
-						<el-table-column prop="" label="车辆型号">
+						<el-table-column prop="vbrand" label="车辆品牌">
 						</el-table-column>
-						<el-table-column prop="" label="联系电话">
+						<el-table-column prop="vmodel" label="车辆型号">
 						</el-table-column>
-						<el-table-column prop="" label="车辆归属">
+						<el-table-column prop="vphone" label="联系电话">
 						</el-table-column>
-						<el-table-column prop="" label="里程(km)">
+						<el-table-column prop="vaffiliation" label="车辆归属">
 						</el-table-column>
-						<el-table-column prop="" label="上牌日期">
+						<el-table-column prop="vmileage" label="里程(km)">
 						</el-table-column>
-						<el-table-column prop="" label="购买日期">
+						<el-table-column prop="registereddate" label="上牌日期" width="200">
+						</el-table-column>
+						<el-table-column prop="purchasedate" label="购买日期" width="200">
 						</el-table-column>
 						<el-table-column prop="" label="操作" width="180">
 							<template slot-scope="scope">
@@ -182,36 +184,35 @@
 			</el-row>
 			<br />
 			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
 			<el-row>
 				<el-tabs type="border-card">
 					<el-tab-pane label="用户管理">
 						<template>
-							<el-table :data="tableData" height="250" border style="width: 100%">
+							<el-table :data="client1" height="250" border style="width: 100%">
 								<el-table-column prop="" label="序号">
 									<template slot-scope="scope">
 										<span>{{scope.$index+1}}</span>
 									</template>
 								</el-table-column>
-								<el-table-column prop="name" label="客户编号">
+								<el-table-column prop="cid" label="客户编号">
 								</el-table-column>
-								<el-table-column prop="address" label="客户名称">
+								<el-table-column prop="cname" label="客户名称">
 								</el-table-column>
-								<el-table-column prop="date" label="手机">
+								<el-table-column prop="cphone" label="手机号">
 								</el-table-column>
-								<el-table-column prop="" label="创建时间">
+								<el-table-column prop="createdate" label="创建时间">
 								</el-table-column>
-								<el-table-column prop="" label="客户等级">
+								<el-table-column label="客户等级">
+									<template slot-scope="scope">
+										<span v-if="scope.row.cgrade==1">普通用户</span>
+										<span v-if="scope.row.cgrade==2">会员用户</span>
+									</template>
 								</el-table-column>
-								<el-table-column prop="" label="用户额度">
+								<el-table-column prop="climit" label="用户额度">
 								</el-table-column>
-								<el-table-column prop="" label="积分">
+								<el-table-column prop="cintegral" label="积分">
 								</el-table-column>
-								<el-table-column prop="" label="备注">
+								<el-table-column prop="cremark" label="备注">
 								</el-table-column>
 
 							</el-table>
@@ -225,9 +226,9 @@
 		var UserVehicleApp = new Vue({
 			el: "#UserVehicleApp",
 			data: {
-				dialogVisible1:false,
+				dialogVisible1: false,
 				dialogVisible: false,
-				aa: "",
+				veh: "",
 				tableData: [{
 					date: '2016-05-03',
 					name: '王小虎',
@@ -313,32 +314,54 @@
 						message: '请输入联系电话',
 						trigger: 'blur'
 					}]
-				}
+				},
+				vehicle:[],
+				client1:[]
 			},
 			methods: {
 				//查询车辆信息
 				queryVehicle() {},
-				handleClose(done) {
-					this.$confirm('确认关闭？')
-						.then(_ => {
-							done();
-							this.$message({
-								message: '关闭成功!',
-								type: 'success'
-							});
-						})
-						.catch(_ => {});
-				},
-				add(a){
-					this.$refs[a].validate((valid) => {
+					handleClose(done) {
+						this.$confirm('确认关闭？')
+							.then(_ => {
+								done();
+								this.$message({
+									message: '关闭成功!',
+									type: 'success'
+								});
+							})
+							.catch(_ => {});
+					},
+					add(a) {
+						this.$refs[a].validate((valid) => {
 							if (valid) {
-								
 							} else {
 								console.log('error submit!!');
 								return false;
 							}
 						});
-				}
+					},
+					//根据条件查询车辆信息
+					queryVehicle(){
+						var veh1 = 0;
+						let _this = this;
+						if(this.veh!=""){
+							veh1 = this.veh;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/${veh1}`).then(function(resp){
+							_this.vehicle = resp.data;
+						})
+					},
+					//双击车辆显示对应的客户信息
+					client(row){
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/client/${row.cid}`).then(function(resp){
+							_this.client1 = resp.data;
+						})
+					}
+			},
+			mounted(){
+				this.queryVehicle();
 			}
 		})
 	</script>
