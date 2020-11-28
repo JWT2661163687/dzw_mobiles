@@ -23,13 +23,13 @@
 			<div style="background-color: white;color:#F56C6C">
 				<el-row :span="10">
 					<el-col :md="1" :push="18">
-						<el-button style="background-color: white;color:#F56C6C">保存</el-button>
+						<el-button style="background-color: white;color:#F56C6C" @click="updatefieldvehicles">保存</el-button>
 					</el-col>
 					<el-col :md="1" :push="18" style="margin-left: 20px;">
 						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
 					</el-col>
 					<el-col :md="1" :push="18" style="margin-left: 20px;">
-						<el-button style="background-color: white;color:#F56C6C">新增</el-button>
+						<el-button style="background-color: white;color:#F56C6C" @click="insertfieldvehicles">新增</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -55,7 +55,7 @@
 					</el-select>
 				</template>
 			</div>
-			<el-table ref="singleTable" :data="fieldvehicles" highlight-current-row style="background-color: white;color:#F56C6C" @current-change="fuzhi">
+			<el-table ref="singleTable" @current-change="fuzhi" :data="fieldvehicles" highlight-current-row style="background-color: white;color:#F56C6C">
 				<el-table-column prop="carnumber" label="车牌号">
 				</el-table-column>
 				<el-table-column prop="fbrand" label="品牌">
@@ -70,14 +70,17 @@
 		</div>
 	</body>
 	<script>
-		new Vue({
+		var fieldvehiclesapp=new Vue({
 			el: "#fieldvehiclesapp",
 			data: {
 				addfieldvehicles: {
+					id:0,
 					carnumber: '',
 					fbrand: '',
 					fmodel: '',
 					currentmileage: '',
+					tename:'',
+					teamid:0
 				},
 				fieldvehicles: [],
 				Team: [],
@@ -89,10 +92,21 @@
 			},
 			methods: {
 				fuzhi(currentRow,oldCurrenRow){
+					if(currentRow==null){
+						return;
+					}
 					fieldvehiclesapp.addfieldvehicles.carnumber=currentRow.carnumber;
 					fieldvehiclesapp.addfieldvehicles.fbrand=currentRow.fbrand;
 					fieldvehiclesapp.addfieldvehicles.fmodel=currentRow.fmodel;
 					fieldvehiclesapp.addfieldvehicles.currentmileage=currentRow.currentmileage;
+					fieldvehiclesapp.addfieldvehicles.tename=currentRow.tename;
+					fieldvehiclesapp.addfieldvehicles.id=currentRow.id;
+					for(var i=0;i<this.Team.length;i++){
+						if(currentRow.tename==this.Team[i].tename){
+							this.value=this.Team[i].teamid;
+							break;
+						}
+					}
 				},
 				goToPage() {
 						let _this = this;
@@ -102,6 +116,27 @@
 							console.info(e);
 						});
 					},
+				insertfieldvehicles() {
+					this.addfieldvehicles.teamid=parseInt(this.value);
+					axios.post("http://127.0.0.1:8080/dzw_moblie/api/fiel/insert", this.addfieldvehicles).then(function(resp) {
+						if(resp.data.code == "200") {
+							alert('新增成功');
+							fieldvehiclesapp.goToPage();
+						}
+					}).catch(function(e) {});
+				},
+				updatefieldvehicles() {
+					alert(this.addfieldvehicles.id);
+					
+					this.addfieldvehicles.teamid=parseInt(this.value);
+					alert(this.addfieldvehicles.teamid);
+					axios.put("http://127.0.0.1:8080/dzw_moblie/api/fiel/update", this.addfieldvehicles).then(function(resp) {
+						if(resp.data.code == "200") {
+							alert('更新成功');
+							fieldvehiclesapp.goToPage();
+						}
+					}).catch(function(e) {});
+				},
 				queryTeam(){
 						let _this = this;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {

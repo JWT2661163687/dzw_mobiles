@@ -35,7 +35,7 @@
 			</div>
 			<div style="background-color: white;color:#F56C6C">
 				等级编码：
-				<el-input v-model="addmechanicstar.meid" size="small" placeholder="请输入内容" style="width: 100px;">
+				<el-input  v-model="addmechanicstar.meid" size="small" placeholder="请输入内容" style="width: 100px;">
 				</el-input>
 
 				星级：
@@ -63,7 +63,6 @@
 			</el-table>
 		</div>
 	</body>
-	<script type="text/javascript" src="../../js/dialog.js" ></script>
 	<script>
 		var mechanicstarapp = new Vue({
 			el: "#mechanicstarapp",
@@ -74,7 +73,8 @@
 					starrating:'',
 					grade:'',
 					weight:''
-				}
+				},
+				disabled:true,
 			},
 			mounted() {
 				this.goToPage();
@@ -89,6 +89,9 @@
 					});
 				},
 				fuzhi(currentRow,oldCurrenRow){
+					if(currentRow==null){
+						return;
+					}
 					mechanicstarapp.addmechanicstar.meid=currentRow.meid;
 					mechanicstarapp.addmechanicstar.starrating=currentRow.starrating;
 					mechanicstarapp.addmechanicstar.grade=currentRow.grade;
@@ -103,8 +106,6 @@
 					}).catch(function(e) {});
 				},
 				updateMechanicstar() {
-					//let id = sessionStorage.getItem("id");
-					//this.person.id=id;
 					axios.put("http://127.0.0.1:8080/dzw_moblie/api/mech/update", this.addmechanicstar).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('更新成功');
@@ -117,7 +118,7 @@
 					if(window.confirm('是否移除？')) {
 						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/mech/mechs/${meid}`).then(function(resp) {
 							if(resp.data.code == "200") {
-								showAlertDialog('移除成功');
+								alert('移除成功');
 								mechanicstarapp.goToPage();
 							}
 						}).catch(function(e) {});

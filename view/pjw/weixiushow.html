@@ -29,7 +29,7 @@
 					<el-input v-model="neirong" placeholder="请输入内容" style="width: 200px;"></el-input>
 				</el-col>
 				<el-col :span="2" :push="3">
-					<el-button icon="el-icon-search" circle></el-button>
+					<el-button icon="el-icon-search" circle @click="pageinfo(1,3)"></el-button>
 				</el-col>
 				<el-col :span="2" :push="3">
 					<el-button type="button" @click="dialogFormVisible = true">新增</el-button>
@@ -37,32 +37,32 @@
 							<el-dialog title="项目新增" :visible.sync="dialogFormVisible">
 								<el-form :model="form">
 									<el-form-item label="车子类型" :label-width="formLabelWidth">
-										<el-input v-model="form.leixing" autocomplete="off"></el-input>
+										<el-input v-model="form.xmleixing" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="项目编号" :label-width="formLabelWidth">
-										<el-input v-model="form.bianhao" autocomplete="off"></el-input>
+										<el-input v-model="form.xmbianma" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="项目名称" :label-width="formLabelWidth">
-										<el-input v-model="form.mingcheng" autocomplete="off"></el-input>
+										<el-input v-model="form.xmmingcheng" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="收入种类" :label-width="formLabelWidth">
-										<el-select v-model="form.zhonglei" placeholder="请选择收入种类">
-											<el-option label="现金" value="shanghai"></el-option>
-											<el-option label="微信" value="beijing"></el-option>
+										<el-select v-model="form.xmzhonglei" placeholder="请选择收入种类">
+											<el-option label="工时费" value="工时费"></el-option>
+											<el-option label="日结" value="日结"></el-option>
 										</el-select>
 									</el-form-item>
 									<el-form-item label="标准价" :label-width="formLabelWidth">
-										<el-input v-model="form.biaozhun" autocomplete="off"></el-input>
+										<el-input v-model="form.xmbiaozhun" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="会员价" :label-width="formLabelWidth">
-										<el-input v-model="form.huiyuan" autocomplete="off"></el-input>
+										<el-input v-model="form.xmhuiyuan" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="售价" :label-width="formLabelWidth">
-										<el-input v-model="form.shoujia" autocomplete="off"></el-input>
+										<el-input v-model="form.xmshoujia" autocomplete="off"></el-input>
 									</el-form-item>
 								</el-form>
 								<div slot="footer" class="dialog-footer">
-									<el-button type="primary" @click="dialogFormVisible = false">新增</el-button>
+									<el-button type="primary" @click="chickinsert()">新增</el-button>
 									<el-button @click="dialogFormVisible = false">关闭</el-button>
 								</div>
 							</el-dialog>
@@ -79,42 +79,79 @@
 			</el-row></br>
 			
 					<template>
-							<el-table :data="tableData" border show-summary style="width: 100%">
-								<!--<el-table-column prop="id" label="序号" width="100">
-								</el-table-column>-->
-								<el-table-column prop="leixing" label="车子类型">
+							<el-table :data="tableData.list"  style="width: 100%">
+								<el-table-column prop="xmid" label="序号" width="70">
 								</el-table-column>
-								<el-table-column prop="name" label="项目编号">
+								<el-table-column prop="xmleixing" label="车子类型">
 								</el-table-column>
-								<el-table-column prop="mingcheng" label="项目名称">
+								<el-table-column prop="xmbianma" label="项目编号">
 								</el-table-column>
-								<el-table-column prop="zhonglei" label="收入种类">
+								<el-table-column prop="xmmingcheng" label="项目名称">
 								</el-table-column>
-								<el-table-column prop="biaozhun" label="标准价">
+								<el-table-column prop="xmzhonglei" label="收入种类">
 								</el-table-column>
-								<el-table-column prop="huiyuan" label="会员价">
+								<el-table-column prop="xmbiaozhun" label="标准价">
+								</el-table-column>
+								<el-table-column prop="xmhuiyuan" label="会员价">
 								</el-table-column>
 								</el-table-column>
-								<el-table-column prop="shoujia" label="售价">
+								<el-table-column prop="xmshoujia" label="售价">
 								</el-table-column>
 								<el-table-column prop="xiugai" label="修改">
 									<template slot-scope="scope">
-       									<i class="el-icon-edit"></i>
+       									<el-button type="primary" @click="update(scope.row)" icon="el-icon-edit" circle ></el-button>
+       									<el-dialog title="项目修改" :visible.sync="dialogFormVisible1">
+								<el-form :model="form1">
+									<el-form-item label="车子类型" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmleixing" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="项目编号" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmbianma" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="项目名称" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmmingcheng" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="收入种类" :label-width="formLabelWidth1">
+										<el-select v-model="form1.xmzhonglei" placeholder="请选择收入种类">
+											<el-option label="工时费" value="工时费"></el-option>
+											<el-option label="日结" value="日结"></el-option>
+										</el-select>
+									</el-form-item>
+									<el-form-item label="标准价" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmbiaozhun" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="会员价" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmhuiyuan" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="售价" :label-width="formLabelWidth1">
+										<el-input v-model="form1.xmshoujia" autocomplete="off"></el-input>
+									</el-form-item>
+								</el-form>
+								<div slot="footer" class="dialog-footer">
+									<el-button type="primary" @click="chickupdate()">修改</el-button>
+									<el-button @click="dialogFormVisible1 = false">关闭</el-button>
+								</div>
+							</el-dialog>
      								 </template>
 								</el-table-column>
 								<el-table-column prop="shanchu" label="删除">
 									<template slot-scope="scope">
-       									<i class="el-icon-delete"></i>
+       									 <el-button type="danger" @click="chickdelete(scope.row)" icon="el-icon-delete" circle></el-button>
      								 </template>
 								</el-table-column>
 							</el-table>
 						</template>
-			
-			<el-pagination class="el-col-push-5"
-			  background
-			  layout="prev, pager, next"
-			  :total="1000">
-			</el-pagination>
+						<el-row>
+							<el-col :span="3" :push="6">
+								<el-button type="primary" @click="pageinfo(tableData.prePage,3)">上一页</el-button>
+							</el-col>
+							<el-col :span="3" :push="10">
+								<el-button type="primary" @click="pageinfo(tableData.nextPage,3)">下一页</el-button>							
+							</el-col>
+							
+						</el-row>
+						
+				
 		</el-col>
 		</el-row>
 		
@@ -148,19 +185,6 @@
 	              label: '三级 2-2-1'
 	            }]
 	          }]
-	        }, {
-	          label: '一级 3',
-	          children: [{
-	            label: '二级 3-1',
-	            children: [{
-	              label: '三级 3-1-1'
-	            }]
-	          }, {
-	            label: '二级 3-2',
-	            children: [{
-	              label: '三级 3-2-1'
-	            }]
-	          }]
 	        }],
 	        defaultProps: {
 	          children: 'children',
@@ -168,46 +192,97 @@
 	        },
 	        //新增模态框
 				form: {
-					leixing:'',
-					bianhao: '',
-					mingcheng: '',
-					zhonglei: '',
-					biaozhun: '',
-					huiyuan: '',
-					shoujia: '',
+					cid:'1',
+					xmleixing:'',
+					xmbianma: '',
+					xmmingcheng: '',
+					xmzhonglei: '',
+					xmbiaozhun: '',
+					xmhuiyuan: '',
+					xmshoujia: '',
 				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
+				//修改模态框
+				form1: {},
+				formLabelWidth1: '120px',
+				dialogFormVisible1: false,
 				//表格填数据
 				 tableData: []
-				 /*, {
-			           id: '12987122',
-			            leixing:'上汽',
-			          name: '王小虎',
-			          mingcheng: '234',
-			          zhonglei: '3.2',
-			          biaozhun: 10,
-			          huiyuan:'微信',
-			          shoujia:'车型'
-			        }*/
 			},
 			 methods: {
 	      handleNodeClick(data) { 
 	        console.log(data);
 	      },
-	      pageinfo(page1,page2,cid){
+	      pageinfo(page1,page2){			//分页方法
 	      	let _this=this;
-	      	axios.get(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/aa/${page1}/${page2}/${cid}`).then(function(resp) {
+	      	var cid=parseInt(1);
+	      	var sousuo;
+	      	if(this.neirong==""){
+	      		sousuo="-1";	
+	      		alert("a"+sousuo);
+	      	}else{
+				sousuo=this.neirong;
+				alert("b"+sousuo);
+	      	}
+	      	axios.get(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/aa/${page1}/${page2}/${cid}/${sousuo}`).then(function(resp) {
 							console.log("dkdkl"+resp.data);
 							_this.tableData = resp.data;
 					})
-	      		}
+	      	},
+	      	update(gai){					//点击修改图标		
+	      		//alert(gai.xmmingcheng);
+	      		this.dialogFormVisible1 = true;		//弹出模态框
+	      		this.form1=gai;
+	      	},
+	      	chickupdate(){					//点击修改按钮
+	      		let _this=this;
+	      		dialogFormVisible = false ;
+	      		axios.put(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/update`,_this.form1).then(function(resp) {
+							console.log("11111"+resp.data);
+							if(resp.data.code=="200"){
+									_this.$message({
+									message: '修改成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}							
+					})	      	
+	      	},
+	      	chickinsert(){				//新增
+	      		let _this=this;
+	      		dialogFormVisible = false ;
+	      		axios.post(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/insert`,_this.form).then(function(resp) {
+								if(resp.data.code=="200"){
+									_this.$message({
+									message: '新增成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}							
+					})	  
+	      	},
+	      	chickdelete(shan){			//删除
+	      		alert(shan.xmid);
+	      		let _this=this;
+	      		axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/d/${shan.xmid}`).then(function(resp) {
+								if(resp.data.code=="200"){
+									_this.$message({
+									message: '删除成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}							
+					})	  
+	      		
+	      	}
+	      	
 	   		},
 	   		mounted(){
-	   			var page1=parseInt(1);
-	      	    var page2=parseInt(2);
-	      	    var cid=parseInt(1);
-	   			this.pageinfo(1,2,1);
+	   			/*var page1=parseInt(1);
+	      	    var page2=parseInt(2);*/
+	      	   
+	   			this.pageinfo(1,3);
 	   		}
 		})
 	</script>
