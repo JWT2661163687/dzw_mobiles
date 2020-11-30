@@ -26,7 +26,7 @@ CREATE TABLE `chexing` (
 /*Table structure for table `client` */
 
 CREATE TABLE `client` (
-  `cId` int(11) NOT NULL,
+  `cId` int(11) NOT NULL AUTO_INCREMENT,
   `vId` int(11) DEFAULT NULL,
   `rId` int(11) DEFAULT NULL,
   `rNo` int(11) DEFAULT NULL,
@@ -47,9 +47,11 @@ CREATE TABLE `client` (
   CONSTRAINT `FK_CLIENT_REFERENCE_FORTHE` FOREIGN KEY (`rId`) REFERENCES `forthe` (`rId`),
   CONSTRAINT `FK_CLIENT_REFERENCE_MEMBER` FOREIGN KEY (`mId`) REFERENCES `member` (`mId`),
   CONSTRAINT `FK_CLIENT_REFERENCE_VEHICLE` FOREIGN KEY (`vId`) REFERENCES `vehicle` (`vId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client` */
+
+insert  into `client`(`cId`,`vId`,`rId`,`rNo`,`mId`,`cName`,`cPhone`,`createDate`,`cLimit`,`cIntegral`,`cRemark`,`cGrade`) values (1,NULL,NULL,NULL,NULL,'1','1','2020-11-27 11:05:01',1,1,'1',1);
 
 /*Table structure for table `closeanaccount` */
 
@@ -73,7 +75,7 @@ CREATE TABLE `closeanaccount` (
 /*Table structure for table `completed` */
 
 CREATE TABLE `completed` (
-  `completionid` int(11) NOT NULL,
+  `completionid` int(11) NOT NULL AUTO_INCREMENT,
   `completiondate` datetime DEFAULT NULL,
   `completiontdate` datetime DEFAULT NULL,
   `inspector` varchar(20) DEFAULT NULL,
@@ -83,10 +85,15 @@ CREATE TABLE `completed` (
   `personname` varchar(20) DEFAULT NULL,
   `delaytext` varchar(100) DEFAULT NULL,
   `completiontype` int(11) DEFAULT NULL,
+  `mainid` int(11) DEFAULT NULL,
+  `compdate` datetime DEFAULT NULL,
+  `maintainling` int(11) DEFAULT NULL,
   PRIMARY KEY (`completionid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `completed` */
+
+insert  into `completed`(`completionid`,`completiondate`,`completiontdate`,`inspector`,`penalty`,`rework`,`personid`,`personname`,`delaytext`,`completiontype`,`mainid`,`compdate`,`maintainling`) values (14,NULL,NULL,'',NULL,'',0,'',NULL,NULL,32,NULL,NULL),(15,NULL,NULL,'',NULL,'',0,'',NULL,NULL,32,NULL,NULL),(16,'2020-11-30 09:21:31',NULL,'',NULL,'',0,'',NULL,NULL,33,NULL,NULL);
 
 /*Table structure for table `dalei` */
 
@@ -111,7 +118,7 @@ CREATE TABLE `department` (
 /*Table structure for table `employee` */
 
 CREATE TABLE `employee` (
-  `employeeid` int(11) NOT NULL,
+  `employeeid` int(11) NOT NULL AUTO_INCREMENT,
   `propertyid` int(11) DEFAULT NULL,
   `stateid` int(11) DEFAULT NULL,
   `departmentid` int(11) DEFAULT NULL,
@@ -133,18 +140,12 @@ CREATE TABLE `employee` (
   `entrytimes` date DEFAULT NULL,
   `lztimes` date DEFAULT NULL,
   `brithtimes` date DEFAULT NULL,
-  PRIMARY KEY (`employeeid`),
-  KEY `FK_EMPLOYEE_REFERENCE_PROPERTY` (`propertyid`),
-  KEY `FK_EMPLOYEE_REFERENCE_STATE` (`stateid`),
-  KEY `FK_EMPLOYEE_REFERENCE_DEPARTME` (`departmentid`),
-  KEY `FK_EMPLOYEE_REFERENCE_POST` (`postid`),
-  CONSTRAINT `FK_EMPLOYEE_REFERENCE_DEPARTME` FOREIGN KEY (`departmentid`) REFERENCES `department` (`departmentid`),
-  CONSTRAINT `FK_EMPLOYEE_REFERENCE_POST` FOREIGN KEY (`postid`) REFERENCES `post` (`postid`),
-  CONSTRAINT `FK_EMPLOYEE_REFERENCE_PROPERTY` FOREIGN KEY (`propertyid`) REFERENCES `property` (`propertyid`),
-  CONSTRAINT `FK_EMPLOYEE_REFERENCE_STATE` FOREIGN KEY (`stateid`) REFERENCES `state` (`stateid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`employeeid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `employee` */
+
+insert  into `employee`(`employeeid`,`propertyid`,`stateid`,`departmentid`,`postid`,`empname`,`esex`,`emplogenid`,`emplogepasword`,`education`,`graduationschool`,`major`,`crrdID`,`address`,`newaddress`,`empphone`,`emergencyphone`,`molphone`,`email`,`entrytimes`,`lztimes`,`brithtimes`) values (1,NULL,NULL,NULL,1,NULL,NULL,'admin','123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,NULL,NULL,NULL,2,NULL,NULL,'张三','123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,3,NULL,NULL,'李四','123',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `engine` */
 
@@ -152,11 +153,11 @@ CREATE TABLE `engine` (
   `engineid` int(11) NOT NULL AUTO_INCREMENT,
   `enginename` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`engineid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `engine` */
 
-insert  into `engine`(`engineid`,`enginename`) values (1,'1231'),(2,'213213');
+insert  into `engine`(`engineid`,`enginename`) values (12,'发动机1'),(13,'发动机2'),(14,'发动机3'),(15,'发动机4');
 
 /*Table structure for table `fadongji` */
 
@@ -177,7 +178,6 @@ CREATE TABLE `fieldvehicles` (
   `fbrand` varchar(50) DEFAULT NULL,
   `fmodel` varchar(50) DEFAULT NULL,
   `currentmileage` varchar(50) DEFAULT NULL,
-  `ascriptionteam` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_FIELDVEH_REFERENCE_TEAM` (`teamid`),
   CONSTRAINT `FK_FIELDVEH_REFERENCE_TEAM` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`)
@@ -222,6 +222,20 @@ CREATE TABLE `front` (
 
 /*Data for the table `front` */
 
+/*Table structure for table `functiontable` */
+
+CREATE TABLE `functiontable` (
+  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `codenumber` varchar(20) DEFAULT NULL,
+  `fname` varchar(20) DEFAULT NULL,
+  `fpid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`fid`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+/*Data for the table `functiontable` */
+
+insert  into `functiontable`(`fid`,`codenumber`,`fname`,`fpid`) values (1,'wx001','维修救援',0),(2,'zw001','站外维修接车',1),(3,'zn001','站内维修接车',1),(4,'jg003','竣工检查',1),(5,'bx004','保险对价',1),(6,'qt001','前台结算',0),(7,'js001','结算中心',6),(8,'ks002','快速修道',6),(9,'cc003','出厂放行',6),(10,'kh001','客户档案',0),(11,'zl001','客户资料',10),(12,'cl002','车辆资料',10),(13,'hy001','会员积分',0),(14,'hygl001','会员管理',13),(15,'jfgz002','积分规则',13),(16,'jfzs003','积分赠送',13),(17,'jggl001','技工管理',0),(18,'jgxj001','技工星级',17),(19,'bzjg002','班组技工',17),(20,'wqcl003','外请车辆',17),(21,'zggl001','职工管理',0),(22,'lzdj001','离职登记',21),(23,'txml002','通讯目录',21),(24,'zsj001','主数据',0),(25,'wxxm001','维修项目',24),(26,'spzl002','商品资料',24),(27,'fdj003','发动机品牌',24),(28,'cxda004','车型档案',24);
+
 /*Table structure for table `maintaincar` */
 
 CREATE TABLE `maintaincar` (
@@ -252,12 +266,13 @@ CREATE TABLE `maintaincar` (
   `carownername` varchar(100) DEFAULT NULL,
   `carid` int(11) DEFAULT NULL,
   `maintaindate` date DEFAULT NULL,
+  `maintainling` int(11) DEFAULT NULL,
   PRIMARY KEY (`maintainid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 /*Data for the table `maintaincar` */
 
-insert  into `maintaincar`(`maintainid`,`receiptsid`,`teamid`,`id`,`departdate`,`departaddress`,`constructiondate`,`rescuevehicleaddress`,`accomplishdate`,`maintainvehicleid`,`inside`,`mileage`,`counselorid`,`beizhu`,`maintainmoney`,`drivername`,`maintainphone`,`licence`,`vehiclebrand`,`vehiclemodel`,`clearingfrom`,`enginename`,`vin`,`enginehao`,`carownername`,`carid`,`maintaindate`) values (1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-11-26');
+insert  into `maintaincar`(`maintainid`,`receiptsid`,`teamid`,`id`,`departdate`,`departaddress`,`constructiondate`,`rescuevehicleaddress`,`accomplishdate`,`maintainvehicleid`,`inside`,`mileage`,`counselorid`,`beizhu`,`maintainmoney`,`drivername`,`maintainphone`,`licence`,`vehiclebrand`,`vehiclemodel`,`clearingfrom`,`enginename`,`vin`,`enginehao`,`carownername`,`carid`,`maintaindate`,`maintainling`) values (32,4,NULL,NULL,'2020-11-29 11:44:14',NULL,NULL,NULL,'2020-11-29 11:56:34',1,1,NULL,NULL,'好好修',100,'王五','123','12345','a3',NULL,NULL,NULL,NULL,NULL,'',3,'2020-11-29',2),(33,3,NULL,NULL,'2020-11-30 09:20:38',NULL,NULL,NULL,'2020-11-30 09:21:31',2,1,NULL,NULL,'123',100,'王五','321','54321','b2',NULL,NULL,NULL,NULL,NULL,'',3,'2020-11-30',1);
 
 /*Table structure for table `maintaincarxiangmu` */
 
@@ -273,31 +288,38 @@ CREATE TABLE `maintaincarxiangmu` (
   `XMbiaozhun` int(11) DEFAULT NULL,
   `XMhuiyuan` int(11) DEFAULT NULL,
   `mainno` int(11) DEFAULT NULL,
+  `maintainling` int(11) DEFAULT NULL,
   PRIMARY KEY (`XMid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 /*Data for the table `maintaincarxiangmu` */
+
+insert  into `maintaincarxiangmu`(`XMid`,`Fid`,`cid`,`XMleixing`,`XMbianma`,`XMmingcheng`,`XMshoujia`,`XMzhonglei`,`XMbiaozhun`,`XMhuiyuan`,`mainno`,`maintainling`) values (23,0,1,'类型2','1','喷漆','100','工时费',100,80,32,1),(24,0,1,'类型2','1','喷漆','100','工时费',100,80,32,2),(25,0,1,'类型2','1','喷漆','100','工时费',100,80,33,1);
 
 /*Table structure for table `maintainreceipts` */
 
 CREATE TABLE `maintainreceipts` (
-  `receiptsid` int(11) NOT NULL,
+  `receiptsid` int(11) NOT NULL AUTO_INCREMENT,
   `receiptsname` varchar(20) DEFAULT NULL,
-  `acronym` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`receiptsid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `maintainreceipts` */
+
+insert  into `maintainreceipts`(`receiptsid`,`receiptsname`) values (1,'维修中'),(2,'待竣工'),(3,'待结算'),(4,'返工'),(5,'已结算');
 
 /*Table structure for table `make` */
 
 CREATE TABLE `make` (
   `makeid` int(11) NOT NULL,
   `makename` varchar(50) DEFAULT NULL,
+  `acronym` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`makeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `make` */
+
+insert  into `make`(`makeid`,`makename`,`acronym`) values (1,'奥迪','A'),(2,'宝马','B'),(3,'奔驰','B'),(4,'凯迪拉克','K');
 
 /*Table structure for table `mechanicstar` */
 
@@ -311,32 +333,73 @@ CREATE TABLE `mechanicstar` (
 
 /*Data for the table `mechanicstar` */
 
+insert  into `mechanicstar`(`meid`,`starrating`,`grade`,`weight`) values (1,'一星',NULL,NULL),(2,'二星',NULL,NULL),(3,'三星',NULL,NULL);
+
 /*Table structure for table `member` */
 
 CREATE TABLE `member` (
-  `mId` int(11) NOT NULL,
+  `mId` int(11) NOT NULL AUTO_INCREMENT,
   `mCardNumber` varchar(50) DEFAULT NULL,
   `mPass` varchar(50) DEFAULT NULL,
   `cId` int(11) DEFAULT NULL,
   `cName` varchar(50) DEFAULT NULL,
   `mBalance` int(11) DEFAULT NULL,
   PRIMARY KEY (`mId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
+
+/*Table structure for table `motorcycle` */
+
+CREATE TABLE `motorcycle` (
+  `motorcycleid` int(11) NOT NULL AUTO_INCREMENT COMMENT '车型id',
+  `engineid` int(11) DEFAULT NULL COMMENT '发动机品牌编号',
+  `productionid` int(11) DEFAULT NULL COMMENT '产地id',
+  `makeid` int(11) DEFAULT NULL COMMENT '汽车品牌id',
+  `motorcyclename` varchar(20) DEFAULT NULL COMMENT '车型名称',
+  `makename` varchar(20) DEFAULT NULL COMMENT '车辆品牌名称',
+  `productionname` varchar(50) DEFAULT NULL COMMENT '产地名称',
+  `price` double DEFAULT NULL COMMENT '参考价格',
+  `yearprice` double DEFAULT NULL COMMENT '车辆年款',
+  `power` double DEFAULT NULL COMMENT '功率',
+  `Fuellabel` int(11) DEFAULT NULL COMMENT '燃油标号',
+  `load` double DEFAULT NULL COMMENT '载重',
+  PRIMARY KEY (`motorcycleid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+/*Data for the table `motorcycle` */
+
+insert  into `motorcycle`(`motorcycleid`,`engineid`,`productionid`,`makeid`,`motorcyclename`,`makename`,`productionname`,`price`,`yearprice`,`power`,`Fuellabel`,`load`) values (1,1,1,1,'奥迪a3','a','',NULL,NULL,NULL,NULL,NULL),(2,2,2,1,'奥迪a4','a',NULL,NULL,NULL,NULL,NULL,NULL),(3,3,1,1,'奥迪a6','a',NULL,NULL,NULL,NULL,NULL,NULL),(4,1,1,2,'宝马x1','a',NULL,NULL,NULL,NULL,NULL,NULL),(5,2,1,2,'宝马x3','a',NULL,NULL,NULL,NULL,NULL,NULL),(6,3,1,2,'宝马x5','a',NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `post` */
 
 CREATE TABLE `post` (
-  `postid` int(11) NOT NULL,
+  `postid` int(11) NOT NULL AUTO_INCREMENT,
   `departmentid` int(11) DEFAULT NULL,
   `postname` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`postid`),
-  KEY `FK_POST_REFERENCE_DEPARTME` (`departmentid`),
-  CONSTRAINT `FK_POST_REFERENCE_DEPARTME` FOREIGN KEY (`departmentid`) REFERENCES `department` (`departmentid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `rcode` varchar(20) DEFAULT NULL,
+  `rstatus` int(11) DEFAULT NULL,
+  `createdate` date DEFAULT NULL,
+  `createby` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`postid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `post` */
+
+insert  into `post`(`postid`,`departmentid`,`postname`,`rcode`,`rstatus`,`createdate`,`createby`) values (1,NULL,'超级管理员','g001',1,'2020-11-29',NULL),(2,NULL,'部门经理','g002',2,'2020-11-29',NULL),(3,NULL,'销售员','g003',3,'2020-11-29',NULL);
+
+/*Table structure for table `postmiddle` */
+
+CREATE TABLE `postmiddle` (
+  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `rid` int(11) DEFAULT NULL,
+  `fid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+/*Data for the table `postmiddle` */
+
+insert  into `postmiddle`(`pid`,`rid`,`fid`) values (4,2,2),(5,2,3),(6,2,4),(7,3,8),(8,3,9),(9,1,22),(10,1,23),(11,1,25);
 
 /*Table structure for table `production` */
 
@@ -367,6 +430,8 @@ CREATE TABLE `shangpin` (
   `SPdalei` varchar(50) DEFAULT NULL,
   `SPxiaolei` varchar(50) DEFAULT NULL,
   `SPshoujia` varchar(50) DEFAULT NULL,
+  `cid` int(11) DEFAULT NULL,
+  `fid` int(11) DEFAULT NULL,
   PRIMARY KEY (`SPid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -385,18 +450,20 @@ CREATE TABLE `state` (
 /*Table structure for table `team` */
 
 CREATE TABLE `team` (
-  `teamid` int(11) NOT NULL,
+  `teamid` int(11) NOT NULL AUTO_INCREMENT,
   `tename` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`teamid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `team` */
+
+insert  into `team`(`teamid`,`tename`) values (1,'湖南1'),(2,'湖南2'),(3,'湖南3');
 
 /*Table structure for table `teamtechnician` */
 
 CREATE TABLE `teamtechnician` (
   `tename` varchar(20) DEFAULT NULL,
-  `technicianno` int(11) NOT NULL,
+  `technicianno` int(11) NOT NULL AUTO_INCREMENT,
   `teamid` int(11) DEFAULT NULL,
   `meid` int(11) DEFAULT NULL,
   `mename` varchar(100) DEFAULT NULL,
@@ -412,19 +479,46 @@ CREATE TABLE `teamtechnician` (
   `starrating` varchar(10) DEFAULT NULL,
   `repairwork` varchar(50) DEFAULT NULL,
   `repairbrand` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`technicianno`),
-  KEY `FK_TEAMTECH_REFERENCE_TEAM` (`teamid`),
-  KEY `FK_TEAMTECH_REFERENCE_MECHANIC` (`meid`),
-  CONSTRAINT `FK_TEAMTECH_REFERENCE_MECHANIC` FOREIGN KEY (`meid`) REFERENCES `mechanicstar` (`meid`),
-  CONSTRAINT `FK_TEAMTECH_REFERENCE_TEAM` FOREIGN KEY (`teamid`) REFERENCES `team` (`teamid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`technicianno`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `teamtechnician` */
+
+insert  into `teamtechnician`(`tename`,`technicianno`,`teamid`,`meid`,`mename`,`mesex`,`mephone`,`meaddress`,`mebirthday`,`groupleader`,`menumber`,`accountaddress`,`openbank`,`bankaccount`,`starrating`,`repairwork`,`repairbrand`) values ('湖南1',1,1,1,'张小三','男','123','213','2020-11-27',NULL,NULL,NULL,NULL,NULL,'一星',NULL,NULL),('湖南2',2,2,2,'李小是','男','213','321','2020-11-27',NULL,NULL,NULL,NULL,NULL,'二星',NULL,NULL),('湖南3',3,3,3,'女大有','女','132','321','2020-11-27',NULL,NULL,NULL,NULL,NULL,'三星',NULL,NULL);
+
+/*Table structure for table `teamtechniciantwo` */
+
+CREATE TABLE `teamtechniciantwo` (
+  `tename` varchar(20) DEFAULT NULL,
+  `technicianno` int(11) NOT NULL AUTO_INCREMENT,
+  `teamid` int(11) DEFAULT NULL,
+  `meid` int(11) DEFAULT NULL,
+  `mename` varchar(100) DEFAULT NULL,
+  `mesex` varchar(100) DEFAULT NULL,
+  `mephone` varchar(100) DEFAULT NULL,
+  `meaddress` varchar(100) DEFAULT NULL,
+  `mebirthday` date DEFAULT NULL,
+  `groupleader` int(11) DEFAULT NULL,
+  `menumber` varchar(100) DEFAULT NULL,
+  `accountaddress` varchar(100) DEFAULT NULL,
+  `openbank` varchar(100) DEFAULT NULL,
+  `bankaccount` varchar(100) DEFAULT NULL,
+  `starrating` varchar(10) DEFAULT NULL,
+  `repairwork` varchar(50) DEFAULT NULL,
+  `repairbrand` varchar(50) DEFAULT NULL,
+  `maintainid` int(11) DEFAULT NULL,
+  `maintainling` int(11) DEFAULT NULL,
+  PRIMARY KEY (`technicianno`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+/*Data for the table `teamtechniciantwo` */
+
+insert  into `teamtechniciantwo`(`tename`,`technicianno`,`teamid`,`meid`,`mename`,`mesex`,`mephone`,`meaddress`,`mebirthday`,`groupleader`,`menumber`,`accountaddress`,`openbank`,`bankaccount`,`starrating`,`repairwork`,`repairbrand`,`maintainid`,`maintainling`) values ('湖南1',28,NULL,1,'张小三','男','123','213','2020-11-27',0,'','','','','一星','','',32,1),('湖南1',29,NULL,1,'张小三','男','123','213','2020-11-27',0,'','','','','一星','','',32,2),('湖南1',30,NULL,1,'张小三','男','123','213','2020-11-27',0,'','','','','一星','','',33,1);
 
 /*Table structure for table `vehicle` */
 
 CREATE TABLE `vehicle` (
-  `vId` int(11) NOT NULL,
+  `vId` int(11) NOT NULL AUTO_INCREMENT,
   `cId` int(11) DEFAULT NULL,
   `vDriver` varchar(50) DEFAULT NULL,
   `vLicense` varchar(50) DEFAULT NULL,
@@ -436,9 +530,11 @@ CREATE TABLE `vehicle` (
   `registeredDate` datetime DEFAULT NULL,
   `purchaseDate` datetime DEFAULT NULL,
   PRIMARY KEY (`vId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vehicle` */
+
+insert  into `vehicle`(`vId`,`cId`,`vDriver`,`vLicense`,`vBrand`,`vModel`,`vPhone`,`vAffiliation`,`vMileage`,`registeredDate`,`purchaseDate`) values (1,3,'王五','12345','a3','aa3','123','个人车',10,'2020-11-26 20:26:54','2020-11-26 20:26:57'),(2,3,'王五','54321','b2','bb2','321','公司车',10,'2020-11-26 20:27:35','2020-11-26 20:27:37'),(3,2,'李四','123','aa','aa','123','租赁车',10,'2020-11-26 20:30:10','2020-11-26 20:30:12');
 
 /*Table structure for table `weixiu` */
 
@@ -455,9 +551,11 @@ CREATE TABLE `weixiu` (
   `Fid` int(11) DEFAULT NULL,
   `maintainno` int(11) DEFAULT NULL,
   PRIMARY KEY (`XMid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `weixiu` */
+
+insert  into `weixiu`(`XMid`,`XMleixing`,`XMbianma`,`XMmingcheng`,`XMshoujia`,`XMzhonglei`,`XMbiaozhun`,`XMhuiyuan`,`cid`,`Fid`,`maintainno`) values (1,'类型2','1','喷漆','100','工时费',100,80,1,NULL,NULL),(2,'类型1','2','换轮胎','120','工时费',120,100,NULL,13,NULL),(3,'类型3','3','包养','110','工时费',110,90,NULL,NULL,NULL);
 
 /*Table structure for table `xiaolei` */
 
