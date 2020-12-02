@@ -4,27 +4,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<script type="text/javascript" src="/dzw_mobiles/js/commitjs.js" ></script>
 	</head>
-
+	
 	<body>
 		<div id="maintainapp">
 			<el-row>
 				<el-col>
 					<el-menu style="height: 550px;" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-						<!--<el-submenu index="4">
-							<template slot="title">
-								<i class="el-icon-location"></i>
-								<span>主数据</span>
-							</template>
-							<el-menu-item-group>
-								<el-menu-item index="4-1" @click="menuclick('维修项目','pjw1','/dzw_mobiles/view/pjw/weixiushow.html')">维修项目</el-menu-item>
-								<el-menu-item index="4-2" @click="menuclick('商品资料','pjw2','/dzw_mobiles/view/pjw/shangpinshow.html')">商品资料</el-menu-item>
-								<el-menu-item index="4-3" @click="menuclick('发动机品牌','kwt1','/dzw_mobiles/view/kwt/index.html')">发动机品牌</el-menu-item>
-								<el-menu-item index="4-4" @click="menuclick('车型档案','kwt2','/dzw_mobiles/view/kwt/chexing.html')">车型档案</el-menu-item>
-							</el-menu-item-group>
-						</el-submenu>-->
-						<el-submenu :index=`${index}` v-for="(item,index) in trees" v-if="item.text=='主数据' ">
-							<template slot="title">
+						
+						<el-submenu :index=`${index}` v-for="(item,index) in trees" v-if="item.text=='权限控制' ">
+							<template slot="title" >
 								<i class="el-icon-location"></i>
 								<span>{{item.text}}</span>
 							</template>
@@ -36,7 +26,7 @@
 						<!--<el-submenu index="2">
 							<template slot="title">
 								<i class="el-icon-location"></i>
-								<span>商品资料</span>
+								<span>三包索赔</span>
 							</template>
 							<el-menu-item-group>
 								<el-menu-item index="2-1">索赔申报</el-menu-item>
@@ -61,6 +51,5 @@
 			</el-row>
 		</div>
 	</body>
-<script type="text/javascript" src="/dzw_mobiles/js/commitjs.js" ></script>
-
+	
 </html>
