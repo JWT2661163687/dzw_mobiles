@@ -230,11 +230,11 @@ CREATE TABLE `functiontable` (
   `fname` varchar(20) DEFAULT NULL,
   `fpid` int(11) DEFAULT NULL,
   PRIMARY KEY (`fid`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 /*Data for the table `functiontable` */
 
-insert  into `functiontable`(`fid`,`codenumber`,`fname`,`fpid`) values (1,'wx001','维修救援',0),(2,'zw001','站外维修接车',1),(3,'zn001','站内维修接车',1),(4,'jg003','竣工检查',1),(5,'bx004','保险对价',1),(6,'qt001','前台结算',0),(7,'js001','结算中心',6),(8,'ks002','快速修道',6),(9,'cc003','出厂放行',6),(10,'kh001','客户档案',0),(11,'zl001','客户资料',10),(12,'cl002','车辆资料',10),(13,'hy001','会员积分',0),(14,'hygl001','会员管理',13),(15,'jfgz002','积分规则',13),(16,'jfzs003','积分赠送',13),(17,'jggl001','技工管理',0),(18,'jgxj001','技工星级',17),(19,'bzjg002','班组技工',17),(20,'wqcl003','外请车辆',17),(21,'zggl001','职工管理',0),(22,'lzdj001','离职登记',21),(23,'txml002','通讯目录',21),(24,'zsj001','主数据',0),(25,'wxxm001','维修项目',24),(26,'spzl002','商品资料',24),(27,'fdj003','发动机品牌',24),(28,'cxda004','车型档案',24);
+insert  into `functiontable`(`fid`,`codenumber`,`fname`,`fpid`) values (1,'wx001','维修救援',0),(2,'zw001','站外维修接车',1),(3,'zn002','站内维修接车',1),(4,'jg003','竣工检查',1),(5,'bx004','保险对价',1),(6,'qt001','前台结算',0),(7,'js001','结算中心',6),(8,'ks002','快速修道',6),(9,'cc003','出厂放行',6),(10,'kh001','客户档案',0),(11,'zl001','客户资料',10),(12,'cl002','车辆资料',10),(13,'hy001','会员积分',0),(14,'hygl001','会员管理',13),(15,'jfgz002','积分规则',13),(16,'jfzs003','积分赠送',13),(17,'jggl001','技工管理',0),(18,'jgxj001','技工星级',17),(19,'bzjg002','班组技工',17),(20,'wqcl003','外请车辆',17),(21,'zggl001','职工管理',0),(22,'lzdj001','离职登记',21),(23,'txml002','通讯目录',21),(24,'zsj001','主数据',0),(25,'wxxm001','维修项目',24),(26,'spzl002','商品资料',24),(27,'fdj003','发动机品牌',24),(28,'cxda004','车型档案',24),(29,'qxkz001','权限控制',0),(30,'jssq001','角色授权',29),(31,'bmgl001','部门管理',0),(32,'gwgl001','岗位管理',31),(33,'rygl002','人员管理',31),(34,NULL,NULL,NULL);
 
 /*Table structure for table `maintaincar` */
 
@@ -395,11 +395,11 @@ CREATE TABLE `postmiddle` (
   `rid` int(11) DEFAULT NULL,
   `fid` int(11) DEFAULT NULL,
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 
 /*Data for the table `postmiddle` */
 
-insert  into `postmiddle`(`pid`,`rid`,`fid`) values (4,2,2),(5,2,3),(6,2,4),(7,3,8),(8,3,9),(9,1,22),(10,1,23),(11,1,25);
+insert  into `postmiddle`(`pid`,`rid`,`fid`) values (7,3,8),(8,3,9),(45,1,2),(46,1,3),(47,1,4),(48,1,7),(49,1,8),(50,1,30),(85,2,2),(86,2,3),(87,2,4),(88,2,7),(89,2,8),(90,2,9),(91,2,15),(92,2,18),(93,2,19);
 
 /*Table structure for table `production` */
 
