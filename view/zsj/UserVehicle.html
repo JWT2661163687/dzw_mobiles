@@ -381,6 +381,7 @@
 	</body>
 	<script>
 		var aa = {};
+		var bb = {};
 		var i = 0;
 		var j = 0;
 		var c = 0;
@@ -593,7 +594,7 @@
 							} else {
 								_this.queryMoto(0);
 							}
-							_this.formInline["vbrand"] = resp.data[0].makename;
+							bb["vbrand"] = resp.data[0].makename;
 						})
 					},
 					//根据品牌id查询车型
@@ -601,7 +602,7 @@
 						let _this = this;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/moto1/${id}`).then(function(resp) {
 							_this.moto = resp.data;
-							_this.formInline["vmodel"] = resp.data[0].motorcyclename;
+							bb["vmodel"] = resp.data[0].motorcyclename;
 						})
 					},
 					//点击搜索时查询车型
@@ -664,6 +665,10 @@
 							this.formInline["vbrand"] = aa["pName"];
 							i=0;
 						} 
+						if(i==0 && j==0){
+							this.formInline["vmodel"] = bb["vmodel"];
+							this.formInline["vbrand"] = bb["vbrand"];
+						}
 						
 					},
 					tiao(row){

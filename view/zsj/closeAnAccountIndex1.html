@@ -54,12 +54,12 @@
 				<el-row>
 					<el-col :md="5">
 						<el-input disabled>
-							<template slot="prepend">实收金额</template>
+							<template slot="prepend">优惠</template>
 						</el-input>
 					</el-col>
 					<el-col :md="5" :push="1">
 						<el-input disabled>
-							<template slot="prepend">优惠</template>
+							<template slot="prepend">实收金额</template>
 						</el-input>
 					</el-col>
 				</el-row>
@@ -97,7 +97,8 @@
 			data: {
 				textarea: '',
 				play: false,
-				radioTreaty: '1'
+				radioTreaty: '1',
+				aa:2
 			},
 			methods: {
 				play1() {

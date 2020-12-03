@@ -12,23 +12,23 @@
 				<template>
 					<el-tabs v-model="activeName" @tab-click="handleClick">
 						<el-tab-pane label="维修结算" disabled name="first"></el-tab-pane>
-						<el-tab-pane label="待结算" name="second">
+						<el-tab-pane label="待结算" name="second" @tab-click="queryCar">
 							<br />
 							<div>
 								<el-col :md="5" :push="5">
-									<el-input>
-										<template slot="prepend">订单号</template>
+									<el-input v-model="id">
+										<template slot="prepend">维修id</template>
 									</el-input>
 								</el-col>
 								<el-col :md="7" :push="7">
 									<el-row :span="24">
 										<el-col :md="16">
-											<el-input>
-												<template slot="prepend">客户</template>
+											<el-input v-model="no">
+												<template slot="prepend">客户编号</template>
 											</el-input>
 										</el-col>
 										<el-col :md="8" :push="2">
-											<el-button type="primary" icon="el-icon-search">搜索</el-button>
+											<el-button type="primary" icon="el-icon-search" @click="queryCar">搜索</el-button>
 										</el-col>
 									</el-row>
 								</el-col>
@@ -38,58 +38,67 @@
 								<br />
 								<el-row>
 									<template>
-										<el-table :data="tableData" height="250" border style="width: 100%;">
+										<el-table :data="car" height="250" border style="width: 100%;">
 											<el-table-column prop="" label="序号">
 												<template slot-scope="scope">
 													<span>{{scope.$index+1}}</span>
 												</template>
 											</el-table-column>
-											<el-table-column prop="name" label="单据序号">
+											<el-table-column prop="maintainid" label="维修编号">
 											</el-table-column>
-											<el-table-column prop="address" label="单据类型">
+											<el-table-column prop="tename" label="维修班组名">
 											</el-table-column>
-											<el-table-column prop="date" label="单据状态">
+											<el-table-column prop="departdate" label="开单出发时间" width="200">
 											</el-table-column>
-											<el-table-column prop="" label="客户名称">
+											<el-table-column prop="departaddress" label="出发地址">
 											</el-table-column>
-											<el-table-column prop="" label="车牌号">
+											<el-table-column prop="constructiondate" label="施工时间" width="200">
 											</el-table-column>
-											<el-table-column prop="" label="手机号">
+											<el-table-column prop="rescuevehicleaddress" label="救援时间" width="200">
 											</el-table-column>
-											<el-table-column prop="" label="开单时间">
+											<el-table-column prop="accomplishdate" label="完成时间" width="200">
 											</el-table-column>
-											<el-table-column prop="" label="预计完工">
+											<el-table-column prop="maintainvehicleid" label="维修车辆id">
 											</el-table-column>
-											<el-table-column prop="" label="接待备注">
+											<el-table-column prop="inside" label="站内站外">
+											</el-table-column>
+											<el-table-column prop="mileage" label="总里程">
+											</el-table-column>
+											<el-table-column prop="maintainmoney" label="维修金额">
+											</el-table-column>
+											<el-table-column prop="maintainphone" label="联系电话">
+											</el-table-column>
+											<el-table-column prop="licence" label="车牌号">
+											</el-table-column>
+											<el-table-column prop="carownername" label="车主名">
 											</el-table-column>
 											<el-table-column prop="" label="操作" width="180">
 												<template slot-scope="scope">
-													<el-button type="success" icon="el-icon-edit" @click="dialogVisible=true" title="编辑2"></el-button>
+													<el-button type="success" icon="el-icon-edit" @click="addCou(scope.row)" title="编辑2"></el-button>
 												</template>
 											</el-table-column>
 										</el-table>
 									</template>
 								</el-row>
-								<el-dialog title="结算中心" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+								<el-dialog title="结算中心" :visible.sync="dialogVisible" width="50%" >
 									<el-row>
 										<template>
 											<el-radio-group v-model="radioTreaty" @change="agreeChange">
 												<el-radio label="1" border>现金支付</el-radio>
 												<el-radio label="2" border>余额支付</el-radio>
 											</el-radio-group>
-
 										</template>
 									</el-row>
 									<br />
 									<el-row>
 										<el-row>
 											<el-col :md="8">
-												<el-input disabled>
+												<el-input disabled v-model="cou.cid">
 													<template slot="prepend">客戶</template>
 												</el-input>
 											</el-col>
 											<el-col :md="8" :push="1">
-												<el-input disabled>
+												<el-input disabled v-model="cou.maintainid">
 													<template slot="prepend">维修单号</template>
 												</el-input>
 											</el-col>
@@ -97,12 +106,12 @@
 										<br />
 										<el-row>
 											<el-col :md="8">
-												<el-input disabled>
+												<el-input disabled v-model="cou.rcashier">
 													<template slot="prepend">收银员</template>
 												</el-input>
 											</el-col>
 											<el-col :md="8" :push="1">
-												<el-input disabled>
+												<el-input disabled v-model="cou.maintainmoney">
 													<template slot="prepend">应收金额</template>
 												</el-input>
 											</el-col>
@@ -110,22 +119,28 @@
 										<br />
 										<el-row>
 											<el-col :md="8">
-												<el-input disabled>
+												<el-input disabled v-model="cou.routofpocket">
 													<template slot="prepend">实收金额</template>
 												</el-input>
 											</el-col>
 											<el-col :md="8" :push="1">
-												<el-input disabled>
-													<template slot="prepend">优惠</template>
+												<el-input disabled v-model="cou.rdiscounts">
+													<template slot="prepend">优惠金额</template>
 												</el-input>
 											</el-col>
 										</el-row>
 										<br />
-										<el-row v-show="play">
+										<el-row>
 											<el-col :md="8">
-												<el-input disabled>
+												<el-input disabled v-model="jine">
+													<template slot="prepend">已付</template>
+												</el-input>
+											</el-col>
+											<el-col :md="8" :push="1" v-show="play">
+												<el-input disabled v-model="cou.cbalance">
 													<template slot="prepend">账号余额</template>
 												</el-input>
+												<a @click="aa" style="margin-top: 20px;">余额抵扣</a>
 											</el-col>
 										</el-row>
 										<br />
@@ -143,34 +158,29 @@
 									<el-button type="success">单据打印</el-button>
 									<span slot="footer" class="dialog-footer">
     									<el-button @click="dialogVisible = false">取 消</el-button>
-    									<el-button type="primary" @click="add('formInline')">确 定</el-button>
+    									<el-button type="primary" @click="add()">确 定</el-button>
   									</span>
 								</el-dialog>
 								<br />
-								<el-row :span="24">
-									<el-col :md="13" :push="6">
-										<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[3, 5, 10, 20]" :page-size="5" layout="total, sizes, prev, pager, next, jumper" :total="100">
-									</el-col>
-								</el-row>
 							</div>
 						</el-tab-pane>
-						<el-tab-pane label="已结算" name="third">
+						<el-tab-pane label="已结算" name="third" @tab-click="queryCount">
 							<br />
 							<div>
 								<el-col :md="5" :push="5">
-									<el-input>
+									<el-input v-model="id1">
 										<template slot="prepend">订单号</template>
 									</el-input>
 								</el-col>
 								<el-col :md="7" :push="7">
 									<el-row :span="24">
 										<el-col :md="16">
-											<el-input>
+											<el-input v-model="cid1">
 												<template slot="prepend">客户</template>
 											</el-input>
 										</el-col>
 										<el-col :md="8" :push="2">
-											<el-button type="primary" icon="el-icon-search">搜索</el-button>
+											<el-button type="primary" icon="el-icon-search" @click="queryCount">搜索</el-button>
 										</el-col>
 									</el-row>
 								</el-col>
@@ -180,44 +190,51 @@
 								<br />
 								<el-row>
 									<template>
-										<el-table :data="tableData" height="250" border style="width: 100%;">
+										<el-table :data="counts" height="250" border style="width: 100%;">
 											<el-table-column prop="" label="序号">
 												<template slot-scope="scope">
 													<span>{{scope.$index+1}}</span>
 												</template>
 											</el-table-column>
-											<el-table-column prop="name" label="单据序号">
+											<el-table-column prop="rno" label="单据编号">
 											</el-table-column>
-											<el-table-column prop="address" label="单据类型">
+											<el-table-column prop="cid" label="客户编号">
 											</el-table-column>
-											<el-table-column prop="date" label="单据状态">
+											<el-table-column prop="cname" label="客户名称">
 											</el-table-column>
-											<el-table-column prop="" label="客户名称">
+											<el-table-column prop="" label="支付方式">
+												<template slot-scope="scope">
+													<span v-if="scope.row.rway==1">
+														现金支付
+													</span>
+													<span v-if="scope.row.rway==2">
+														微信支付
+													</span>
+												</template>
 											</el-table-column>
-											<el-table-column prop="" label="车牌号">
+											<el-table-column prop="cbalance" label="客户余额">
 											</el-table-column>
-											<el-table-column prop="" label="手机号">
+											<el-table-column prop="rcashier" label="收银员">
 											</el-table-column>
-											<el-table-column prop="" label="开单时间">
+											<el-table-column prop="rdealwith" label="应付金额">
 											</el-table-column>
-											<el-table-column prop="" label="预计完工">
+											<el-table-column prop="routofpocket" label="实付金额">
 											</el-table-column>
-											<el-table-column prop="" label="接待备注">
+											<el-table-column prop="rdiscounts" label="优惠金额">
+											</el-table-column>
+											<el-table-column prop="rCreateDate" label="结算时间" width="200">
+											</el-table-column>
+											<el-table-column prop="remark" label="备注">
 											</el-table-column>
 											<el-table-column prop="" label="操作" width="180">
 												<template slot-scope="scope">
-													<el-button type="success" icon="el-icon-edit" title="编辑1"></el-button>
+													<el-button type="success" icon="el-icon-edit" title="编辑"></el-button>
 												</template>
 											</el-table-column>
 										</el-table>
 									</template>
 								</el-row>
 								<br />
-								<el-row :span="24">
-									<el-col :md="13" :push="6">
-										<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[3, 5, 10, 20]" :page-size="5" layout="total, sizes, prev, pager, next, jumper" :total="100">
-									</el-col>
-								</el-row>
 							</div>
 						</el-tab-pane>
 					</el-tabs>
@@ -228,6 +245,7 @@
 	</body>
 
 	<script>
+	var as = 0;
 		var jieSuan = new Vue({
 			el: "#jieSuan",
 			data: {
@@ -265,7 +283,20 @@
 				dialogVisible: false,
 				textarea: '',
 				play: false,
-				radioTreaty: '1'
+				radioTreaty: '1',
+				car:[],
+				id:"",
+				no:"",
+				id1:"",
+				cid1:"",
+				counts:[],
+				cou:{
+					routofpocket:"",
+					rdiscounts:"",
+					cbalance:""
+				},
+				jine:0,
+				mainid:0
 			},
 			methods: {
 				handleClick(tab, event) {
@@ -289,8 +320,98 @@
 						} else {
 							this.play = true;
 						}
+					},
+					//查询待结算的数据信息
+					queryCar(){
+						let _this = this;
+						var id = 0;
+						var no = 0;
+						if(this.id!=""){
+							id = this.id;
+						}
+						if(this.no!=""){
+							no = this.no;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/car/${id}/${no}`).then(function(resp){
+							_this.car = resp.data;
+						})
+					},
+					//查询所有已结算的数据信息
+					queryCount(){
+						var id1 = 0;
+						var cid1 = 0;
+						let _this =this;
+						if(this.id1!=""){
+							id1 = this.id1;
+						}
+						if(this.cid1!=""){
+							cid1 = this.cid1;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/count/${id1}/${cid1}`).then(function(resp){
+							_this.counts = resp.data;
+						})
+					},
+					addCou(row){
+						let _this = this;
+						this.dialogVisible=true;
+						this.cou["cid"] = row.carid;
+						this.cou["maintainid"] = row.maintainid;
+						this.cou["maintainmoney"] = row.maintainmoney;
+						this.cou["rcashier"] = "张三";
+						this.cou["cname"] = row.carownername;
+						this.mainid = row.maintainid;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp){
+							if(resp.data==""){
+								axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/emp/${_this.cou.cid}`).then(function(resp1){
+									if(resp1.data==""){
+										_this.cou.routofpocket = Math.ceil(row.maintainmoney);
+									}else{
+										_this.cou.routofpocket = Math.ceil(row.maintainmoney*0.8);
+									}
+								})
+							}else{
+								_this.cou.routofpocket = Math.ceil(row.maintainmoney*0.9);
+								_this.cou.cbalance = Math.ceil(resp.data.mbalance);
+							}
+							_this.cou.rdiscounts = Math.ceil(row.maintainmoney-_this.cou.routofpocket);
+						})
+						
+					},
+					add(){
+						let _this = this;
+						if(this.play == true){
+							this.cou["rway"] = 2;
+							if(this.cou.cbalance<this.cou.routofpocket){
+								this.$alert("余额不够!");	
+								as = 2;
+								return;
+							}else{
+								as = 1;
+							}
+						}else{
+							this.cou["rway"] = 1;
+						}
+						this.cou["rdealwith"] = this.cou.maintainmoney;
+						this.cou["rdiscounts"] = this.cou.rdiscounts;
+						this.cou["remark"] = this.textarea;
+						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${this.cou.cid}/${this.cou.routofpocket}/${as}/${this.jine}/${this.mainid}`,this.cou).then(function(resp){
+							if(resp.data.code=="200"){
+								_this.$alert("结算成功");
+								_this.dialogVisible = false;
+								_this.queryCar();
+								_this.queryCount();
+							}
+						})
+					},
+					aa(){
+						this.jine = this.cou.cbalance;
+						this.cou.cbalance = 0;
 					}
-			}
+				},
+				mounted(){
+					this.queryCar();
+					this.queryCount();
+				}
 		})
 	</script>
 
