@@ -43,116 +43,108 @@
 
 	<body>
 		<div id="app" style="background-color: white;color:#F56C6C">
-			<el-row :gutter="20">
-				<el-col :span="16">
-					<h2>技工资料</h2>
-				</el-col>
-				<el-col :span="8">
-					
-						<el-button size="mini" style="float: right; font-size: 15px;background-color: white;color:#F56C6C">关闭</el-button>
-					
-				</el-col>
-			</el-row>
 			<el-row>
-				<el-col :span="8">
-					技工编号
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					技工姓名
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					性别
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					所在班组
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					手机
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					登录账号
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					地址
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					出生日期
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="8">
-					微信号
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					身份证号
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="12">
-					户口地址
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					开户银行
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-				<el-col :span="12">
-					银行账号
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="24">
-					等级编码
-					<el-input size="small" style="width: 200px;">
-					</el-input>
+				<el-dialog title="修改" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
+					<div style="background-color: white;color:#F56C6C">
+						<el-row :gutter="20">
+							<el-col :span="16">
+								<h2>技工资料</h2>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								技工编号
+								<el-input v-model="updateteamtechnician.technicianno" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								技工姓名
+								<el-input v-model="updateteamtechnician.mename" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								性别
+								<el-input v-model="updateteamtechnician.mesex" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								班组
+								<template>
+									<el-select v-model="value" placeholder="请选择">
+										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+										</el-option>
+									</el-select>
+								</template>
+							</el-col>
+							<el-col :span="8">
+								手机
+								<el-input v-model="updateteamtechnician.mephone" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								地址
+								<el-input v-model="updateteamtechnician.meaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								出生日期
+								<el-input v-model="updateteamtechnician.mebirthday" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								身份证号
+								<el-input v-model="updateteamtechnician.menumber" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								户口地址
+								<el-input v-model="updateteamtechnician.accountaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								开户银行
+								<el-input v-model="updateteamtechnician.openbank" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								银行账号
+								<el-input v-model="updateteamtechnician.bankaccount" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								星级
+								<el-input v-model="updateteamtechnician.starrating" size="small" style="width: 200px;">
+								</el-input>
+								维修工种
+								<el-input v-model="updateteamtechnician.repairwork" size="small" style="width: 200px;">
+								</el-input>
 
-					星级
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-
-					等级
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-
-					维修工种
-					<el-input size="small" style="width: 200px;">
-					</el-input>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="24">
-					维修品牌
-					<el-input size="small" style="width: 600px;">
-					</el-input>
-				</el-col>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								维修品牌
+								<el-input v-model="updateteamtechnician.repairbrand" size="small" style="width: 600px;">
+								</el-input>
+							</el-col>
+						</el-row>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisible = false">取 消</el-button>
+						<el-button @click="insertTeamtechnician" type="primary" @click="dialogVisible = false">确 定</el-button>
+						<el-button @click="updateTeam" type="primary" @click="dialogVisible = false">保 存</el-button>
+					</span>
+				</el-dialog>
 			</el-row>
 
 		</div>

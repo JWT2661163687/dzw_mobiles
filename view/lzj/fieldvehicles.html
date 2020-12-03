@@ -11,25 +11,21 @@
 			<el-row :gutter="20">
 				<el-col :span="16">
 					<div>
-						<h3>外勤车辆</h3></div>
+						<h1>外勤车辆</h1></div>
 				</el-col>
-				<el-col :span="8">
-					<div>
-						<el-button size="mini" style="float: right;background-color: white;color:#F56C6C;font-size: 15px;">关闭</el-button>
-					</div>
-				</el-col>
+				
 			</el-row>
 			<br/>
-			<div style="background-color: white;color:#F56C6C">
+			<div>
 				<el-row :span="10">
-					<el-col :md="1" :push="18">
-						<el-button style="background-color: white;color:#F56C6C" @click="updatefieldvehicles">保存</el-button>
+					<el-col :md="1" :push="2">
+						<el-button type="primary" round @click="updatefieldvehicles">保存</el-button>
 					</el-col>
-					<el-col :md="1" :push="18" style="margin-left: 20px;">
-						<el-button style="background-color: white;color:#F56C6C">删除</el-button>
+					<el-col :md="1" :push="3" style="margin-left: 20px;">
+						<el-button type="success" round @click="deletefieldvehicles(addfieldvehicles.id)">删除</el-button>
 					</el-col>
-					<el-col :md="1" :push="18" style="margin-left: 20px;">
-						<el-button style="background-color: white;color:#F56C6C" @click="insertfieldvehicles">新增</el-button>
+					<el-col :md="1" :push="4" style="margin-left: 20px;">
+						<el-button type="danger" round @click="insertfieldvehicles">新增</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -37,7 +33,6 @@
 				车牌号
 				<el-input v-model="addfieldvehicles.carnumber" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
-
 				品牌
 				<el-input v-model="addfieldvehicles.fbrand" size="small" placeholder="请输入内容" style="width: 150px;">
 				</el-input>
@@ -55,7 +50,8 @@
 					</el-select>
 				</template>
 			</div>
-			<el-table ref="singleTable" @current-change="fuzhi" :data="fieldvehicles" highlight-current-row style="background-color: white;color:#F56C6C">
+			<template>
+				<el-table :data="fieldvehicles" height="200" border style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
 				<el-table-column prop="carnumber" label="车牌号">
 				</el-table-column>
 				<el-table-column prop="fbrand" label="品牌">
@@ -67,6 +63,7 @@
 				<el-table-column prop="tename" label="归属班组">
 				</el-table-column>
 			</el-table>
+			</template>
 		</div>
 	</body>
 	<script>
@@ -91,6 +88,22 @@
 				this.queryTeam();
 			},
 			methods: {
+				
+				deletefieldvehicles(id) {
+					if (this.value == '') {
+							alert("请选择车辆在删除！")
+							return;
+						}
+					let _this = this;
+					if(window.confirm('是否移除？')) {
+						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/fiel/fiels/${id}`).then(function(resp) {
+							if(resp.data.code == "200") {
+								alert('移除成功');
+								fieldvehiclesapp.goToPage();
+							}
+						}).catch(function(e) {});
+					}
+				},
 				fuzhi(currentRow,oldCurrenRow){
 					if(currentRow==null){
 						return;
@@ -117,6 +130,10 @@
 						});
 					},
 				insertfieldvehicles() {
+					if (this.value == '') {
+							alert("请选择车辆在新增！")
+							return;
+						}
 					this.addfieldvehicles.teamid=parseInt(this.value);
 					axios.post("http://127.0.0.1:8080/dzw_moblie/api/fiel/insert", this.addfieldvehicles).then(function(resp) {
 						if(resp.data.code == "200") {
@@ -125,11 +142,13 @@
 						}
 					}).catch(function(e) {});
 				},
+				
 				updatefieldvehicles() {
-					alert(this.addfieldvehicles.id);
-					
+					if (this.value == '') {
+							alert("请选择车辆在更新！")
+							return;
+						}
 					this.addfieldvehicles.teamid=parseInt(this.value);
-					alert(this.addfieldvehicles.teamid);
 					axios.put("http://127.0.0.1:8080/dzw_moblie/api/fiel/update", this.addfieldvehicles).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('更新成功');
@@ -137,14 +156,15 @@
 						}
 					}).catch(function(e) {});
 				},
+				
 				queryTeam(){
 						let _this = this;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {
 							_this.Team = resp.data;
-						})
-				}
+					})
 			}
-		});
+		}
+	});
 	</script>
 
 </html>
