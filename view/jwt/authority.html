@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
+		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
+		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
+		<link rel="stylesheet" href="/dzw_mobiles/css/element.css" />
+		<script type="text/javascript" src="/dzw_mobiles/js/menu_const.js"></script>
+		<style>
+			.text {
+				font-size: 14px;
+			}
+			
+			.item {
+				margin-bottom: 18px;
+			}
+			
+			.clearfix:before,
+			.clearfix:after {
+				display: table;
+				content: "";
+			}
+			
+			.clearfix:after {
+				clear: both
+			}
+			
+			.box-card {
+				width: 320px;
+				height: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="authorityapp">
+			<el-row>
+				<el-col :span="3">
+					<div style=" box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);height: 50px;" v-for="(item,index) in posts">
+						<div style="line-height: 50px;margin: 0px auto;" @click="showpost(index,item.postid)">{{item.postname}}</div>
+					</div>
+				</el-col>
+				<el-col :span="21">
+					<el-col :span="8" v-for="(item,index) in functiontable">
+						<el-card class="box-card">
+							<div slot="header" class="clearfix">
+								<el-col :span="12" :push="8"><span>{{item.fname}}</span>
+									<el-switch v-model="item.value" @change="swchange(index)" active-color="#13ce66" inactive-color="#ff4949">
+									</el-switch>
+								</el-col>
+							</div>
+							<el-col :span="12" v-for="item2 in item.functionlist">
+								<div :key="item2.fid" class="text item" style="line-height: 40px;">
+									{{item2.fname}}
+									<el-switch v-model="item2.value"  active-color="#13ce66" inactive-color="#ff4949">
+									</el-switch>
+								</div>
+							</el-col>
+						</el-card>
+					</el-col>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-button @click="addpostmidd">保存权限</el-button>
+			</el-row>
+		</div>
+	</body>
+	<script type="text/javascript" src="/dzw_mobiles/js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="/dzw_mobiles/js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="/dzw_mobiles/js/axios.min.js"></script>
+	<script type="text/javascript" src="/dzw_mobiles/js/axios_cfg.js"></script>
+	<script type="text/javascript" src="/dzw_mobiles/js/echarts.min.js"></script>
+	<script>
+		var authorityapp = new Vue({
+			el: "#authorityapp",
+			data: {
+				functiontable: [],
+				//岗位功能数据源
+				posts: [],
+				//新增
+				postmidd: [],
+				rid: 0
+			},
+			mounted: function() {
+				this.loadgongneng();
+				this.loadpost();
+			},
+			methods: {
+				//查询所有功能
+				loadgongneng() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/loginjurisdiction/getfunctiontable`).then(function(res) {
+						authorityapp.functiontable = res.data;
+						//添加开关属性value
+						for(var i = 0; i < authorityapp.functiontable.length; i++) {
+							for(var j = 0; j < authorityapp.functiontable[i].functionlist.length; j++) {
+								authorityapp.$set(authorityapp.functiontable[i].functionlist[j], 'value', true);
+							}
+							authorityapp.$set(authorityapp.functiontable[i], 'value', true);
+						}
+					})
+				},
+				//查询所有岗位和改岗位功能
+				loadpost() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/loginjurisdiction/postAll`).then(function(res) {
+						authorityapp.posts = res.data;
+					})
+				},
+				//查看岗位权限
+				showpost(index, rid) {
+					this.rid = rid;
+					for(var i = 0; i<this.functiontable.length; i++) {
+						for(var j = 0; j < this.functiontable[i].functionlist.length; j++) {
+							for(var k = 0; k < this.posts[index].postmiddles.length; k++) {
+								if(this.posts[index].postmiddles[k].fid == this.functiontable[i].functionlist[j].fid) {
+									this.functiontable[i].functionlist[j].value = true;
+									break;
+								} else {
+									this.functiontable[i].functionlist[j].value = false;
+								}
+							}
+						}
+					}
+				},
+				//保存权限
+				addpostmidd() {
+					this.postmidd = [];
+					for(var i = 0; i < this.functiontable.length; i++) {
+						for(var j = 0; j < this.functiontable[i].functionlist.length; j++) {
+							if(this.functiontable[i].functionlist[j].value) {
+								this.postmidd.push({
+									rid: this.rid,
+									fid: this.functiontable[i].functionlist[j].fid
+								});
+							}
+						}
+					}
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/loginjurisdiction/postmidd`, this.postmidd).then(function(res) {
+						if(res.data.code == "200") {
+							const loading = authorityapp.$loading({
+								lock: true,
+								text: 'Loading',
+								spinner: 'el-icon-loading',
+								background: 'rgba(0, 0, 0, 0.7)'
+							});
+							setTimeout(() => {
+								loading.close();
+								authorityapp.$message('权限修改成功');
+							}, 2000);
+
+						}
+					})
+				},
+				swchange(index){
+					if(this.functiontable[index].value){
+						for(var i=0;i<this.functiontable[index].functionlist.length;i++){
+							this.functiontable[index].functionlist[i].value=true;
+						}
+					}else{
+						for(var i=0;i<this.functiontable[index].functionlist.length;i++){
+							this.functiontable[index].functionlist[i].value=false;
+						}
+					}
+				},
+			}
+
+		})
+	</script>
+
+</html>

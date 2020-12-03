@@ -1,0 +1,27 @@
+//页面菜单映射【自行维护】
+var menuMapping = {
+	"zw001": "/dzw_mobiles/view/jwt/instationmaintain.html",
+	"zn002": "/dzw_mobiles/view/jwt/seomaintain.html",
+	"jg003": "/dzw_mobiles/view/jwt/completedmaintain.html",
+	"bx004": "<h1>暂无数据<h1>",
+	"js001": "/dzw_mobiles/view/zsj/closeAnAccountIndex.html",
+	"ks002": "",
+	"cc003": "",
+	"zl001": "/dzw_mobiles/view/zsj/UserList.html",
+	"cl002": "/dzw_mobiles/view/zsj/UserVehicle.html",
+	"hygl001": "/dzw_mobiles/view/zsj/member.html",
+	"jfgz002": "",
+	"jfzs003": "",
+	"jgxj001": "/dzw_mobiles/view/lzj/mechanicstar.html",
+	"bzjg002": "/dzw_mobiles/view/lzj/teamArtisanss.html",
+	"wqcl003": "/dzw_mobiles/view/lzj/fieldvehicles.html",
+	"lzdj001": "/dzw_mobiles/view/pjw/lizhi.html",
+	"txml002": "/dzw_mobiles/view/pjw/tongxun.html",
+	"wxxm001": "/dzw_mobiles/view/pjw/weixiushow.html",
+	"spzl002": "/dzw_mobiles/view/pjw/shangpinshow.html",
+	"fdj003": "/dzw_mobiles/view/kwt/index.html",
+	"cxda004": "/dzw_mobiles/view/kwt/chexing.html",
+	"jssq001":"/dzw_mobiles/view/jwt/authority.html",
+	"gwgl001":"/dzw_mobiles/view/jwt/instationmaintain.html",
+	"rygl002":"/dzw_mobiles/view/jwt/instationmaintain.html"
+}

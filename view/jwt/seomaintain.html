@@ -231,7 +231,7 @@
 				//修理完成,修改状态
 				jungong(maintainid) {
 					//alert(maintainid)
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}`).then(function(res) {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}/2`).then(function(res) {
 						if(res.data.code = "200") {
 							seomaintainvue.$message({
 								message: '竣工完成',

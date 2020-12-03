@@ -11,7 +11,25 @@
 			<el-row>
 				<el-col>
 					<el-menu style="height: 550px;" default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-						<el-submenu index="1">
+						<el-submenu :index=`${index}` v-for="(item,index) in trees" v-if="item.text=='客户档案' ">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>{{item.text}}</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item :index=`${index}-${index2}` v-for="(item2,index2) in item.children" @click="menuclick(item2.text,item2.id,item2.id)">{{item2.text}}</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+						<el-submenu :index=`${index}` v-for="(item,index) in trees" v-if="item.text=='会员积分' ">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span>{{item.text}}</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item :index=`${index}-${index2}` v-for="(item2,index2) in item.children" @click="menuclick(item2.text,item2.id,item2.id)">{{item2.text}}</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+						<!--<el-submenu index="1">
 							<template slot="title">
 								<i class="el-icon-location"></i>
 								<span>客户档案</span>
@@ -56,7 +74,7 @@
 								<el-menu-item index="3-2">返工率统计</el-menu-item>
 							</el-menu-item-group>
 						</el-submenu>
-					</el-menu>
+					</el-menu>-->
 				</el-col>
 				
 			</el-row>
