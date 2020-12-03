@@ -44,39 +44,259 @@
 		<div id="teamArtisanssapp" style="background-color: white;color:#F56C6C">
 			<el-row>
 				<el-col :span="12">
-					<h2>班组技工</h2>
+					<h1>班组技工</h1>
 				</el-col>
-				<el-col :span="12" style="float: right;">
-					<el-input v-model="ss" size="small" style="width: 200px;font-size: 15px;">
-					</el-input>
-					<el-button style="background-color: white;color:#F56C6C">搜索</el-button>
-					<el-button style="background-color: white;color:#F56C6C">关闭</el-button>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="2">
-					<el-button style="background-color: white;color:#F56C6C">增加员工</el-button>
-				</el-col>
-				<el-col :span="2">
-					<el-button style="background-color: white;color:#F56C6C">修改</el-button>
-				</el-col>
-				<el-col :span="2">
-					<el-button style="background-color: white;color:#F56C6C">删除</el-button>
-				</el-col>
-				<el-col :span="2">
-					<el-button style="background-color: white;color:#F56C6C">查询</el-button>
-				</el-col>
+				
 			</el-row>
 			<el-row>
 				<el-col :span="12">
-					<el-tree class="filter-tree" :data="ss" :props="defaultProps" default-expand-all :filter-node-method="filterNode" ref="tree">
-					</el-tree>
+					<el-button type="success" round @click="clickshow">增加员工</el-button>
+					<el-button type="warning" round @click="insertbanzu">增加班组</el-button>
 				</el-col>
-				<el-col :span="12" style="float: right;">
+			</el-row>
+			
+			<el-row>
+				<el-dialog title="新增班组" :visible.sync="dialogVisibless" width="300px" :before-close="handleClose">
+				班组名称：<el-input  v-model="addteam.tename" placeholder="请输入内容"></el-input>
+				<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisible = false">取 消</el-button>
+						<el-button @click="insertTeam" type="primary" >确 定</el-button>
+					</span>
+				</el-dialog>
+			</el-row>
+				
+			
+			<el-row>
+				<el-dialog title="修改" :visible.sync="dialogVisibles" width="1000px" :before-close="handleClose">
+					<div style="background-color: white;color:#F56C6C">
+						<el-row :gutter="20">
+							<el-col :span="16">
+								<h2>技工资料</h2>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								技工编号
+								<el-input v-model="updateteamtechnician.technicianno" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								技工姓名
+								<el-input v-model="updateteamtechnician.mename" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								性别
+								<el-input v-model="updateteamtechnician.mesex" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								班组
+								<template>
+									<el-select v-model="value" placeholder="请选择">
+										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+										</el-option>
+									</el-select>
+								</template>
+							</el-col>
+							<el-col :span="8">
+								手机
+								<el-input v-model="updateteamtechnician.mephone" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								地址
+								<el-input v-model="updateteamtechnician.meaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								出生日期
+								<el-input v-model="updateteamtechnician.mebirthday" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								身份证号
+								<el-input v-model="updateteamtechnician.menumber" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								户口地址
+								<el-input v-model="updateteamtechnician.accountaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								开户银行
+								<el-input v-model="updateteamtechnician.openbank" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								银行账号
+								<el-input v-model="updateteamtechnician.bankaccount" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								星级
+								<el-input v-model="updateteamtechnician.starrating" size="small" style="width: 200px;">
+								</el-input>
+								维修工种
+								<el-input v-model="updateteamtechnician.repairwork" size="small" style="width: 200px;">
+								</el-input>
+
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								维修品牌
+								<el-input v-model="updateteamtechnician.repairbrand" size="small" style="width: 600px;">
+								</el-input>
+							</el-col>
+						</el-row>
+
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisible = false">取 消</el-button>
+						<el-button @click="updateTeam" type="primary" @click="dialogVisible = false">确 定</el-button>
+					</span>
+				</el-dialog>
+			</el-row>
+			<el-row>
+				<el-dialog title="新增" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
+					<div style="background-color: white;color:#F56C6C">
+						<el-row :gutter="20">
+							<el-col :span="16">
+								<h2>技工资料</h2>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								技工编号
+								<el-input v-model="addteamtechnician.technicianno" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								技工姓名
+								<el-input v-model="addteamtechnician.mename" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								性别
+								<el-input v-model="addteamtechnician.mesex" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								班组
+								<template>
+									<el-select v-model="value" placeholder="请选择">
+										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+										</el-option>
+									</el-select>
+								</template>
+							</el-col>
+							<el-col :span="8">
+								手机
+								<el-input v-model="addteamtechnician.mephone" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								地址
+								<el-input v-model="addteamtechnician.meaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
+								出生日期
+								<el-input v-model="addteamtechnician.mebirthday" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								身份证号
+								<el-input v-model="addteamtechnician.menumber" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								户口地址
+								<el-input v-model="addteamtechnician.accountaddress" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								开户银行
+								<el-input v-model="addteamtechnician.openbank" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="12">
+								银行账号
+								<el-input v-model="addteamtechnician.bankaccount" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								星级
+								<el-input v-model="addteamtechnician.starrating" size="small" style="width: 200px;">
+								</el-input>
+								维修工种
+								<el-input v-model="addteamtechnician.repairwork" size="small" style="width: 200px;">
+								</el-input>
+
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								维修品牌
+								<el-input v-model="addteamtechnician.repairbrand" size="small" style="width: 600px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-button @click.native.prevent="deleteRow(scope.$index, tableData)" type="text" size="small">
+									修改
+								</el-button>
+							</el-col>
+						</el-row>
+
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisible = false">取 消</el-button>
+						<el-button @click="insertTeamtechnician" type="primary" @click="dialogVisible = false">确 定</el-button>
+					</span>
+				</el-dialog>
+			</el-row>
+
+			<el-row style="margin-top: -10px;">
+				<el-col :span="8">
+					&nbsp;班组名称
 					<template>
-						<el-table :data="persons" border style="background-color: white;color:#F56C6C;width: 100%;" max-height="300">
-							<el-table-column fixed prop="teid" label="班组编号" width="150">
-							</el-table-column>
+						<el-select v-model="value" @change="zzz">
+							<el-option label="请选择" value="null">
+							</el-option>
+							<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.tename">
+							</el-option>
+						</el-select>
+					</template>
+				</el-col>
+				<el-col :span="16" style="float: right;">
+					<template>
+						<el-table :data="teamtechnician" border style="background-color: white;color:#F56C6C;width: 100%;" max-height="300">
+							<!--<el-table-column fixed prop="teamid" label="班组编号" width="150">
+							</el-table-column>-->
 							<el-table-column prop="tename" label="班组名称" width="150">
 							</el-table-column>
 							<el-table-column prop="technicianno" label="技工编号" width="150">
@@ -93,8 +313,6 @@
 							</el-table-column>
 							<el-table-column prop="groupleader" label="组长" width="150">
 							</el-table-column>
-							<el-table-column prop="loginname" label="登录名" width="150">
-							</el-table-column>
 							<el-table-column prop="menumber" label="身份证号" width="150">
 							</el-table-column>
 							<el-table-column prop="accountaddress" label="户口地址" width="150">
@@ -109,6 +327,12 @@
 							</el-table-column>
 							<el-table-column prop="repairbrand" label="维修品牌" width="150">
 							</el-table-column>
+							<el-table-column fixed="right" label="操作" width="200">
+								<template slot-scope="scope">
+									<el-button style="background-color: white;color:#F56C6C" @click="updateTeams(scope.row)">修改</el-button>
+								<el-button style="background-color: white;color:#F56C6C" @click="deleteTeam(scope.row.technicianno)">删除</el-button>
+								</template>
+							</el-table-column>
 						</el-table>
 					</template>
 				</el-col>
@@ -117,104 +341,148 @@
 	</body>
 
 	<script>
-		new Vue({
+		var teamArtisanssapp = new Vue({
 			el: "#teamArtisanssapp",
 			data: {
-				ss:'',
-				persons: [{
-					teid: '1000',
-					tename: '机修1组',
-					technicianno: 'OEX0001',
-					mename: '哈哈哈',
-					mesex:'男',
-					mephone:'A1',
-					meaddress:'湖南',
-					mebirthday:'2020-1-1',
-					groupleader:'111',
-					loginname:'001',
-					menumber:'430281200209218023',
-					accountaddress:'湖南醴陵',
-					openbank:'11',
-					bankaccount:'11',
-					starrating:'11',
-					repairwork:'11',
-					repairbrand:'11'
-				}, {
-					teid: '1000',
-					tename: '机修1组',
-					technicianno: 'OEX0001',
-					mename: '哈哈哈',
-					mesex:'男',
-					mephone:'A1',
-					meaddress:'湖南',
-					mebirthday:'2020-1-1',
-					groupleader:'',
-					loginname:'001',
-					menumber:'430281200209218023',
-					accountaddress:'湖南醴陵',
-					openbank:'',
-					bankaccount:'',
-					starrating:'',
-					repairwork:'',
-					repairbrand:''
-				}, {
-					teid: '1000',
-					tename: '机修1组',
-					technicianno: 'OEX0001',
-					mename: '哈哈哈',
-					mesex:'男',
-					mephone:'A1',
-					meaddress:'湖南',
-					mebirthday:'2020-1-1',
-					groupleader:'',
-					loginname:'001',
-					menumber:'430281200209218023',
-					accountaddress:'湖南醴陵',
-					openbank:'',
-					bankaccount:'',
-					starrating:'',
-					repairwork:'',
-					repairbrand:''
-				}]
-			},	
-			ss: [{
-					label: '一级 1',
-					children: [{
-						label: '二级 1-1',
-						children: [{
-							label: '三级 1-1-1'
-						}]
-					}]
-				}, {
-					label: '一级 2',
-					children: [{
-						label: '二级 2-1',
-						children: [{
-							label: '三级 2-1-1'
-						}]
-					}, {
-						label: '二级 2-2',
-						children: [{
-							label: '三级 2-2-1'
-						}]
-					}]
-				}, {
-					label: '一级 3',
-					children: [{
-						label: '二级 3-1',
-						children: [{
-							label: '三级 3-1-1'
-						}]
-					}, {
-						label: '二级 3-2',
-						children: [{
-							label: '三级 3-2-1'
-						}]
-					}]
-				}],
+				addteamtechnician: {
+					teamid: 1,
+					technicianno: '',
+					mename: '',
+					mesex: '',
+					tename: '',
+					mephone: '',
+					meaddress: '',
+					mebirthday: '',
+					menumber: '',
+					accountaddress: '',
+					openbank: '',
+					bankaccount: '',
+					starrating: '',
+					repairwork: '',
+					repairbrand: ''
+				},
+				addteam:{
+					tename:''
+				},
+				updateteamtechnician: {
+					technicianno: '',
+					mename: '',
+					mesex: '',
+					tename: '',
+					mephone: '',
+					meaddress: '',
+					mebirthday: '',
+					menumber: '',
+					accountaddress: '',
+					openbank: '',
+					bankaccount: '',
+					starrating: '',
+					repairwork: '',
+					repairbrand: ''
+				},
+				sss: '',
+				Team: [],
+				value: '',
+				teamtechnician: [],
+				Tename: [],
+				dialogVisible: false,
+				dialogVisibles: false,
+				dialogVisibless: false,
+				zz: '',
+				aaa:''
+			},
+			mounted() {
+				this.goToPage();
+				this.queryTeam();
+			},
 			methods: {
-				handleNodeClick(ss) {
-					console.log(ss);
+				insertTeamtechnician() {
+						this.addteamtechnician.teamid = parseInt(this.value);
+						axios.post("http://127.0.0.1:8080/dzw_moblie/api/team/insert", this.addteamtechnician).then(function(resp) {
+							if (resp.data.code == "200") {
+								alert('新增成功');
+								teamArtisanssapp.goToPage();
+							}
+						}).catch(function(e) {});
+					},
+					insertTeam() {
+						//this.addteamtechnician.teamid = parseInt(this.value);
+						axios.post("http://127.0.0.1:8080/dzw_moblie/api/ttt/insert", this.addteam).then(function(resp) {
+							if (resp.data.code == "200") {
+								alert('新增成功');
+								teamArtisanssapp.queryTeam();
+							}
+						}).catch(function(e) {});
+					},
+					goToPage() {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/team/query`).then(function(resp) {
+							_this.teamtechnician = resp.data;
+							for (var i = 0; i < _this.teamtechnician.length; i++) {
+								if (_this.addteamtechnician.technicianno < _this.teamtechnician[i].technicianno) {
+									_this.addteamtechnician.technicianno = _this.teamtechnician[i].technicianno;
+								}
+							}
+							_this.addteamtechnician.technicianno += 1;
+						}).catch(function(e) {
+							console.info(e);
+						});
+					},
+					handleClose(done) {
+						this.$confirm('确认关闭？')
+							.then(_ => {
+								done();
+							})
+							.catch(_ => {});
+					},
+					queryTename(tename) {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/team/querytename/${tename}`).then(function(resp) {
+							_this.teamtechnician = resp.data;
+						})
+					},
+					queryTeam() {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {
+							_this.Team = resp.data;
+						})
+					},
+					insertbanzu(){
+						this.dialogVisibless = true;
+					},
+					clickshow() {
+						if (this.value == '') {
+							alert("请选择班组名称再添加！")
+							return;
+						}
+						this.dialogVisible = true;
+					},
+					updateTeams(updateteamtechnicianss) {
+						this.updateteamtechnician=updateteamtechnicianss;
+						this.dialogVisibles = true;
+					},
+					updateTeam() {
+						axios.put("http://127.0.0.1:8080/dzw_moblie/api/team/update", this.updateteamtechnician).then(function(resp) {
+							if (resp.data.code == "200") {
+								alert('更新成功');
+								teamArtisanssapp.goToPage();
+							}
+						}).catch(function(e) {});
+					},
+					
+					deleteTeam(technicianno) {
+						let _this = this;
+						if(window.confirm('是否移除？')) {
+							axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/team/dele/${technicianno}`).then(function(resp) {
+								if(resp.data.code == "200") {
+									alert('移除成功');
+									teamArtisanssapp.goToPage();
+							}
+						}).catch(function(e) {});
+					}
+				},
+				zzz(){
+					this.queryTename(this.value);
 				}
 			}
 		})

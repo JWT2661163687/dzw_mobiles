@@ -4,10 +4,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<script type="text/javascript" src="js/view_filter.js" ></script>
 		<script type="text/javascript" src="js/vue.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<link rel="stylesheet" href="css/index.css" />
 		<link rel="stylesheet" href="css/element.css" />
+		<script type="text/javascript" src="js/menu_const.js" ></script>
 		<style>
 			.el-header,
 			.el-footer {
@@ -54,7 +56,7 @@
 							<i class="el-icon-tickets"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/pjw/maintain.html')">基础数据</span>
 						</el-col>
 						<el-col :span="2" :push="6">
-							<i class="el-icon-setting"></i>&nbsp;<span style="cursor:pointer">系统</span>
+							<i class="el-icon-setting"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/jwt/maintain2.html')">系统</span>
 						</el-col>
 						<el-col :span="2" :push="6">
 							&nbsp;<span style="cursor:pointer">注销</span>
@@ -79,28 +81,42 @@
 		</div>
 
 	</body>
+<<<<<<< HEAD
 	<script type="text/javascript " src="js/jquery-1.12.4.js "></script>
 	<script type="text/javascript " src="js/jq_ajax_config.js "></script>
 	<script type="text/javascript " src="js/axios.min.js "></script>
 	<script type="text/javascript " src="js/axios_cfg.js "></script>
 	<script type="text/javascript " src="js/echarts.min.js "></script>
+=======
+<<<<<<< HEAD
+>>>>>>> 67aba85e222974ce453ca8c57dd9d74b9fd479f4
 
+=======
+>>>>>>> eef44c48563cea622661a95f33fbc3ff1f0f38ec
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script type="text/javascript" src="js/axios.min.js"></script>
 	<script type="text/javascript" src="js/axios_cfg.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> eef44c48563cea622661a95f33fbc3ff1f0f38ec
+>>>>>>> 67aba85e222974ce453ca8c57dd9d74b9fd479f4
 	<script>
 		var vueapp = new Vue({
 			el: "#app",
 			data: {
 				editableTabsValue: '0',
 				editableTabs: [],
-				url: 'view/jwt/maintain.html',
-			
+				url: 'view/jwt/maintain.html'
+				
 			},
 			mounted: function() {
 				this.loaddiv();
+				//获得树
 			},
 			methods: {
 				loaddiv() {

@@ -32,7 +32,7 @@
 						<el-table-column property="accomplishdate" label="完成时间" align="center"></el-table-column>
 						<el-table-column label="操作" align="center">
 							<template slot-scope="scope">
-								<el-button size="mini" round @click="showjungong(scope.row.accomplishdate)">竣工</el-button>
+								<el-button size="mini" round @click="showjungong(scope.row)">竣工</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -50,17 +50,11 @@
 				</el-row>
 				<br />
 				<el-row>
+
 					<el-col :span="10" :push="1">
 						<el-form ref="form" label-width="80px">
-							<el-form-item label="完成时间">
-								<el-input></el-input>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="10" :push="2">
-						<el-form ref="form" label-width="80px">
 							<el-form-item label="处罚金额">
-								<el-input :disabled="disabled"></el-input>
+								<el-input :disabled="disabled" v-model="completed.penalty"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -69,14 +63,14 @@
 					<el-col :span="10" :push="1">
 						<el-form ref="form" label-width="80px">
 							<el-form-item label="质检员">
-								<el-input></el-input>
+								<el-input v-model="completed.inspector"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="10" :push="2">
 						<el-form ref="form" label-width="80px">
 							<el-form-item label="返工原因">
-								<el-input :disabled="disabled"></el-input>
+								<el-input :disabled="disabled" v-model="completed.rework"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -86,7 +80,7 @@
 					<el-col :span="10" :push="1">
 						<el-form ref="form" label-width="80px">
 							<el-form-item label="责任人">
-								<el-input></el-input>
+								<el-input v-model="completed.personname"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -112,14 +106,17 @@
 				dialogTableVisible: false,
 				//返工数据源
 				radio: "1",
-				disabled: false,
+				disabled: true,
 				//新增竣工表对象
-				completed:{
-					completiondate:'',
-					penalty:'',
-					inspector:'',
-					rework:'',
-					personid:''
+				completed: {
+					completiondate: '', //竣工时间
+					penalty: '', //处罚金额
+					inspector: '', //质检员
+					rework: '', //返工原因
+					personid: 0, //责任人id
+					personname: '', //责任人
+					mainid: '', //维修表id
+					compdate: '' //单据时间
 				}
 			},
 			mounted: function() {
@@ -128,16 +125,16 @@
 			},
 			methods: {
 				//点击竣工打开莫泰框
-				showjungong(completiondate) {
+				showjungong(maintaincar) {
 					this.dialogTableVisible = true;
-					this.completed.completiondate=completiondate;
+					this.completed.mainid = maintaincar.maintainid;
 				},
 				//单选按钮改变事件
 				radiochange() {
 					if(this.radio == '1') {
-						this.disabled = false;
-					} else {
 						this.disabled = true;
+					} else {
+						this.disabled = false;
 					}
 				},
 				//查询维修完成
@@ -146,13 +143,42 @@
 						completedmaintainapp.maintaincars = res.data;
 					})
 				},
+				//获得当前日期，时间
+				getdata(aa) { //定义函数show
+					var d = new Date();
+					var y = d.getFullYear();
+					var m = d.getMonth() + 1;
+					var dd = d.getDate();
+					var h = d.getHours();
+					var mm = d.getMinutes();
+					var s = d.getSeconds();
+					var t = y + "-" + m + "-" + dd + " " + h + ":" + mm + ":" + s;
+					var t2 = y + "-" + m + "-" + dd;
+					if(aa == 1) {
+						return t;
+					} else {
+						return t2;
+					}
+				},
 				//竣工表新增
-				completedclick(){
-					
+				completedclick() {
+					if(this.radio == '1') {
+						this.completed.completiondate = this.getdata(1);
+					}
+					//获得单据创建时间
+					this.completed.compdate = this.getdata(1);
+					//this.completed.penalty=parseFloat(this.completed.penalty);
+					//新增
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/completed`, completedmaintainapp.completed).then(function(res) {
+						if(res.data.code == "200") {
+							completedmaintainapp.$message({
+								message: '执行成功',
+								type: 'success'
+							});
+						}
+					})
 				}
-				
-				
-				
+
 			},
 
 		})

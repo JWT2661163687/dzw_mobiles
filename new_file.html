@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" href="css/element.css" />
+		<script type="text/javascript" src="js/menu_const.js"></script>
+		<style type="text/css">
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				font-family: "微软雅黑";
+				font-size: 14px;
+			}
+			
+			#l-map {
+				height: 300px;
+				width: 100%;
+			}
+			
+			#r-result {
+				width: 100%;
+			}
+		</style>
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=EkSAGbHAEvGI8a8eCBZhKrshRm5BTUsD"></script>
+		<title>关键字输入提示词条</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<div id="l-map"></div>
+			<div id="r-result">请输入:
+				<el-input id="suggestId" v-model="a"></el-input>
+				<el-input id="suggestId2" v-model="b"></el-input>
+				<el-button @click="getDistance">das</el-button>
+			</div>
+			<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="js/axios.min.js"></script>
+	<script type="text/javascript" src="js/axios_cfg.js"></script>
+	<script type="text/javascript" src="js/echarts.min.js"></script>
+	<script type="text/javascript">
+		var vue = new Vue({
+			el: "#app",
+			data: {
+				a: '1',
+				map: '',
+				b: '',
+				start:{},
+				end:{},
+				start2:{},
+				end2:{},
+				address_detail: null, //详细地址
+               userlocation: {lng: "", lat: ""},
+               userlocation2:{lng:"",lat:""}
+			},
+			mounted: function() {
+				this.$nextTick(function () {
+                   var th = this
+                   // 创建Map实例
+                   var map = new BMap.Map("l-map");
+                   // 初始化地图,设置中心点坐标，
+                   var point = new BMap.Point(121.160724,31.173277); // 创建点坐标，汉得公司的经纬度坐标
+                   map.centerAndZoom(point, 15);
+                   map.enableScrollWheelZoom();
+                   var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+                       {
+                           "input": "suggestId"
+                           , "location": map
+                       })
+                   var acd = new BMap.Autocomplete(    //建立一个自动完成的对象
+                       {
+                           "input": "suggestId2"
+                           , "location": map
+                       })
+                    acd.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+                       var _value = e.item.value;
+                       myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+                       this.address_detail = myValue
+                       setPlace(1);
+                   });
+                   var myValue;
+                   ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+                       var _value = e.item.value;
+                       myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+                       this.address_detail = myValue
+                       setPlace(2);
+                   });
+
+                   function setPlace(pan) {
+                       map.clearOverlays();    //清除地图上所有覆盖物
+                       function myFun() {
+                       	if(pan==1){
+                       		 th.userlocation = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                       		  map.centerAndZoom(th.userlocation, 18);
+                           map.addOverlay(new BMap.Marker(th.userlocation));    //添加标注
+                       	}else{
+                       		 th.userlocation2 = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                       		  map.centerAndZoom(th.userlocation2, 18);
+                           map.addOverlay(new BMap.Marker(th.userlocation2));    //添加标注
+                       	}
+                       }
+                       var local = new BMap.LocalSearch(map, { //智能搜索
+                           onSearchComplete: myFun
+                       });
+                       local.search(myValue);
+						
+                       //测试输出坐标（指的是输入框最后确定地点的经纬度）
+                       map.addEventListener("click",function(e){
+                           //经度
+                           console.log(th.userlocation.lng);
+                           //维度
+                           console.log(th.userlocation.lat);
+                       })
+                   }
+           })
+			},
+			methods: {
+				clickbutt(){
+					
+					var output = "从西单到上地驾车需要";
+					var searchComplete = function(results) {
+						if(transit.getStatus() != BMAP_STATUS_SUCCESS) {
+							return;
+						}
+						var plan = results.getPlan(0);
+						output += plan.getDuration(true) + "\n"; //获取时间
+						output += "总路程为：";
+						output += plan.getDistance(true) + "\n"; //获取距离
+					}
+					alert(output)
+					var transit = new BMapGL.DrivingRoute(map, {
+						renderOptions: {
+							map: map
+						},
+						onSearchComplete: searchComplete,
+						onPolylinesSet: function() {
+							setTimeout(function() {
+								alert(output)
+							}, "1000");
+						}
+					});
+					var start = new BMapGL.Point(this.start, this.end);
+					var end = new BMapGL.Point(this.start2, this.end2);
+					transit.search(start, end);
+
+				},
+				// 测量百度地图两个点间的距离
+						getDistance() {
+							var map = new BMap.Map('');
+							var pointB = new BMap.Point(parseFloat(this.userlocation2.lng), parseFloat(this.userlocation2.lat)); // 店铺的经纬度
+							var distance = (map.getDistance(parseFloat(this.userlocation.lng), parseFloat(this.userlocation.lat) / 1000)).toFixed(2);// 保留小数点后两位
+								alert(distance)
+							}
+					
+				
+
+			}
+		})
+	</script>
+
+</html>
