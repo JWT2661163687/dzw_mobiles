@@ -345,7 +345,7 @@ CREATE TABLE `member` (
   `cName` varchar(50) DEFAULT NULL,
   `mBalance` int(11) DEFAULT NULL,
   PRIMARY KEY (`mId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 
