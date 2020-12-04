@@ -1,7 +1,7 @@
 //页面菜单映射【自行维护】
 var menuMapping = {
-	"zw001": "/dzw_mobiles/view/jwt/instationmaintain.html",
-	"zn002": "/dzw_mobiles/view/jwt/seomaintain.html",
+	"zw001": "/dzw_mobiles/view/jwt/seomaintain.html",
+	"zn002": "/dzw_mobiles/view/jwt/instationmaintain.html",
 	"jg003": "/dzw_mobiles/view/jwt/completedmaintain.html",
 	"bx004": "<h1>暂无数据<h1>",
 	"js001": "/dzw_mobiles/view/zsj/closeAnAccountIndex.html",

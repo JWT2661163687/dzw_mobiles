@@ -4,11 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
-		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
-		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
-		<link rel="stylesheet" href="/dzw_mobiles/css/element.css" />
-		<script type="text/javascript" src="/dzw_mobiles/js/menu_const.js"></script>
+		
 		<style>
 			.text {
 				font-size: 14px;
@@ -68,11 +64,7 @@
 			</el-row>
 		</div>
 	</body>
-	<script type="text/javascript" src="/dzw_mobiles/js/jquery-1.12.4.js"></script>
-	<script type="text/javascript" src="/dzw_mobiles/js/jq_ajax_config.js"></script>
-	<script type="text/javascript" src="/dzw_mobiles/js/axios.min.js"></script>
-	<script type="text/javascript" src="/dzw_mobiles/js/axios_cfg.js"></script>
-	<script type="text/javascript" src="/dzw_mobiles/js/echarts.min.js"></script>
+	
 	<script>
 		var authorityapp = new Vue({
 			el: "#authorityapp",
@@ -137,6 +129,7 @@
 							}
 						}
 					}
+					
 					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/loginjurisdiction/postmidd`, this.postmidd).then(function(res) {
 						if(res.data.code == "200") {
 							const loading = authorityapp.$loading({

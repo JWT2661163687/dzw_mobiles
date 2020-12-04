@@ -37,8 +37,9 @@
 			<div id="l-map"></div>
 			<div id="r-result">请输入:
 				<el-input id="suggestId" v-model="a"></el-input>
-				<el-input id="suggestId2" v-model="b"></el-input>
+				<el-input id="suggestId2" v-model="b" @blur="getDistance"></el-input>
 				<el-button @click="getDistance">das</el-button>
+				<el-button id="result">sa</el-button>
 			</div>
 			<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
 		</div>
@@ -52,117 +53,130 @@
 		var vue = new Vue({
 			el: "#app",
 			data: {
-				a: '1',
+				a: '',
 				map: '',
 				b: '',
-				start:{},
-				end:{},
-				start2:{},
-				end2:{},
+				start: {},
+				end: {},
+				start2: {},
+				end2: {},
 				address_detail: null, //详细地址
-               userlocation: {lng: "", lat: ""},
-               userlocation2:{lng:"",lat:""}
+				userlocation: {
+					lng: "",
+					lat: ""
+				},
+				userlocation2: {
+					lng: "",
+					lat: ""
+				}
 			},
 			mounted: function() {
-				this.$nextTick(function () {
-                   var th = this
-                   // 创建Map实例
-                   var map = new BMap.Map("l-map");
-                   // 初始化地图,设置中心点坐标，
-                   var point = new BMap.Point(121.160724,31.173277); // 创建点坐标，汉得公司的经纬度坐标
-                   map.centerAndZoom(point, 15);
-                   map.enableScrollWheelZoom();
-                   var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
-                       {
-                           "input": "suggestId"
-                           , "location": map
-                       })
-                   var acd = new BMap.Autocomplete(    //建立一个自动完成的对象
-                       {
-                           "input": "suggestId2"
-                           , "location": map
-                       })
-                    acd.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
-                       var _value = e.item.value;
-                       myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-                       this.address_detail = myValue
-                       setPlace(1);
-                   });
-                   var myValue;
-                   ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
-                       var _value = e.item.value;
-                       myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
-                       this.address_detail = myValue
-                       setPlace(2);
-                   });
-
-                   function setPlace(pan) {
-                       map.clearOverlays();    //清除地图上所有覆盖物
-                       function myFun() {
-                       	if(pan==1){
-                       		 th.userlocation = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
-                       		  map.centerAndZoom(th.userlocation, 18);
-                           map.addOverlay(new BMap.Marker(th.userlocation));    //添加标注
-                       	}else{
-                       		 th.userlocation2 = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
-                       		  map.centerAndZoom(th.userlocation2, 18);
-                           map.addOverlay(new BMap.Marker(th.userlocation2));    //添加标注
-                       	}
-                       }
-                       var local = new BMap.LocalSearch(map, { //智能搜索
-                           onSearchComplete: myFun
-                       });
-                       local.search(myValue);
+				this.$nextTick(function() {
+					var th = this;
+					// 创建Map实例
+					var map = new BMap.Map("l-map");
+					// 初始化地图,设置中心点坐标，
+					var point = new BMap.Point(121.160724, 31.173277); // 创建点坐标，汉得公司的经纬度坐标
+					map.centerAndZoom(point, 15);
+					map.enableScrollWheelZoom();
+					var ac = new BMap.Autocomplete( //建立一个自动完成的对象
+						{
+							"input": "suggestId",
+							"location": map
+						})
+					var acd = new BMap.Autocomplete( //建立一个自动完成的对象
+						{
+							"input": "suggestId2",
+							"location": map
+						})
+					acd.addEventListener("onconfirm", function(e) { //鼠标点击下拉列表后的事件
+						var _value = e.item.value;
+						myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+						this.address_detail = myValue
+						setPlace(1);
+					});
+					var myValue;
+					ac.addEventListener("onconfirm", function(e) { //鼠标点击下拉列表后的事件
+						var _value = e.item.value;
+						myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+						this.address_detail = myValue
+						setPlace(2);
 						
-                       //测试输出坐标（指的是输入框最后确定地点的经纬度）
-                       map.addEventListener("click",function(e){
-                           //经度
-                           console.log(th.userlocation.lng);
-                           //维度
-                           console.log(th.userlocation.lat);
-                       })
-                   }
-           })
+					});
+
+					function setPlace(pan) {
+						map.clearOverlays(); //清除地图上所有覆盖物
+						function myFun() {
+							if(pan == 1) {
+
+								th.userlocation = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+								map.centerAndZoom(th.userlocation, 18);
+								map.addOverlay(new BMap.Marker(th.userlocation)); //添加标注
+							} else {
+								th.userlocation2 = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+								map.centerAndZoom(th.userlocation2, 18);
+								map.addOverlay(new BMap.Marker(th.userlocation2)); //添加标注
+							}
+						}
+						var local = new BMap.LocalSearch(map, { //智能搜索
+							onSearchComplete: myFun
+						});
+						local.search(myValue);
+
+						//测试输出坐标（指的是输入框最后确定地点的经纬度）
+						map.addEventListener("click", function(e) {
+							//经度
+							console.log(th.userlocation.lng);
+							//维度
+							console.log(th.userlocation.lat);
+						})
+						if(pan==1){
+							getditulu();
+						}
+					}
+					//获得线路图
+					function getditulu(){
+						alert(th.a);alert(th.b);
+						// 百度地图API功能
+						var start = th.a;
+						var end = th.b;
+						map.centerAndZoom(new BMap.Point(parseFloat(th.userlocation.lng), parseFloat(th.userlocation.lat)), 11);
+						//三种驾车策略：最少时间，最短距离，避开高速
+						var routePolicy = [BMAP_DRIVING_POLICY_LEAST_TIME, BMAP_DRIVING_POLICY_LEAST_DISTANCE, BMAP_DRIVING_POLICY_AVOID_HIGHWAYS];
+						$("#result").click(function() {
+							map.clearOverlays();
+							//alert(start)
+							search(start, end, routePolicy[0]);
+							function search(start, end, route) {
+								var driving = new BMap.DrivingRoute(map, {
+									renderOptions: {
+										map: map,
+										autoViewport: true
+									},
+									policy: route
+								});
+								driving.search(start, end);
+							}
+						});
+					}
+					
+					
+					
+				})
 			},
 			methods: {
-				clickbutt(){
-					
-					var output = "从西单到上地驾车需要";
-					var searchComplete = function(results) {
-						if(transit.getStatus() != BMAP_STATUS_SUCCESS) {
-							return;
-						}
-						var plan = results.getPlan(0);
-						output += plan.getDuration(true) + "\n"; //获取时间
-						output += "总路程为：";
-						output += plan.getDistance(true) + "\n"; //获取距离
-					}
-					alert(output)
-					var transit = new BMapGL.DrivingRoute(map, {
-						renderOptions: {
-							map: map
-						},
-						onSearchComplete: searchComplete,
-						onPolylinesSet: function() {
-							setTimeout(function() {
-								alert(output)
-							}, "1000");
-						}
-					});
-					var start = new BMapGL.Point(this.start, this.end);
-					var end = new BMapGL.Point(this.start2, this.end2);
-					transit.search(start, end);
-
-				},
 				// 测量百度地图两个点间的距离
-						getDistance() {
-							var map = new BMap.Map('');
-							var pointB = new BMap.Point(parseFloat(this.userlocation2.lng), parseFloat(this.userlocation2.lat)); // 店铺的经纬度
-							var distance = (map.getDistance(parseFloat(this.userlocation.lng), parseFloat(this.userlocation.lat) / 1000)).toFixed(2);// 保留小数点后两位
-								alert(distance)
-							}
-					
-				
+				getDistance() {
+					alert(this.a)
+					var map = new BMap.Map('');
+					//获得第一个的
+					var pointA = new BMap.Point(parseFloat(this.userlocation.lng), parseFloat(this.userlocation.lat));
+					//获得第二个经纬度
+					var pointB = new BMap.Point(parseFloat(this.userlocation2.lng), parseFloat(this.userlocation2.lat));
+					//计算公里
+					var distance = (map.getDistance(pointB, pointA) / 1000).toFixed(2); // 保留小数点后两位
+					return distance;
+				}
 
 			}
 		})
