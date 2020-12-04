@@ -30,7 +30,7 @@
 								<el-row :span="24">
 									<div align="center">
 										<el-form-item label="品牌编号" :label-width="formLabelWidth2">
-											<el-input v-model="addmake.makeid" autocomplete="off"></el-input>
+											<el-input :disabled="disabled" v-model="addmake.makeid" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
@@ -64,35 +64,34 @@
 				<el-col :span="10" :offset="3">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="adddialog()">增加车型</el-button>
-						<el-dialog :title="titleType" :visible.sync="dialogFormVisible">
-							<el-form :model="form">
+						<el-dialog :title="titleType" :visible.sync="dialogFormVisible" @close="resetForm2('addMotorcycles')">
+							<el-form :model="addMotorcycles" ref="addMotorcycles">
 								<el-row :span="24">
 									<div align="center">
 										<el-form-item label="车型编号" :label-width="formLabelWidth">
-											<el-input v-model="form.name" autocomplete="off"></el-input>
+											<el-input :disabled="disabled2" v-model="addMotorcycles.motorcycleid" oninput="value=value.replace(/[^\d]/g,'')" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 								<el-row>
 									<div align="center">
 										<el-form-item label="车型名称" :label-width="formLabelWidth">
-											<el-input v-model="form.name" autocomplete="off"></el-input>
+											<el-input v-model="addMotorcycles.motorcyclename" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 								<el-row :span="24">
 									<div align="center">
 										<el-form-item label="参考价格" :label-width="formLabelWidth">
-											<el-input v-model="form.name" autocomplete="off"></el-input>
+											<el-input v-model="addMotorcycles.price" oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}" autocomplete="off"></el-input>
 										</el-form-item>
 									</div>
 								</el-row>
 								<el-row>
 									<div align="center">
 										<el-form-item label="车辆品牌" :label-width="formLabelWidth">
-											<el-select v-model="form.region" placeholder="请选择活动区域">
-												<el-option label="区域一" value="shanghai"></el-option>
-												<el-option label="区域二" value="beijing"></el-option>
+											<el-select v-model="addMotorcycles.makeid" placeholder="请选择活动区域">
+												<el-option :label="i.makename" :value="i.makeid" v-for="i in make" :key="i.makeid"></el-option>
 											</el-select>
 										</el-form-item>
 									</div>
@@ -100,9 +99,9 @@
 								<el-row>
 									<div align="center">
 										<el-form-item label="发动机品牌" :label-width="formLabelWidth">
-											<el-select v-model="form.region" placeholder="请选择活动区域">
-												<el-option label="区域一" value="shanghai"></el-option>
-												<el-option label="区域二" value="beijing"></el-option>
+											<el-select v-model="addMotorcycles.engineid" placeholder="请选择活动区域">
+												<el-option :label="i.enginename" :value="i.engineid" v-for="i in tableData" :key="i.engineid"></el-option>
+												<!--<el-option label="区域二" value="beijing"></el-option>-->
 											</el-select>
 										</el-form-item>
 									</div>
@@ -110,14 +109,14 @@
 							</el-form>
 							<div slot="footer" class="dialog-footer" align="center">
 								<el-button @click="dialogFormVisible = false">取 消</el-button>
-								<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+								<el-button type="primary" @click="Motorcycledialogs(addMotorcycles)">确 定</el-button>
 							</div>
 						</el-dialog>
 						<el-form-item :push="4">
 							<el-input v-model="wenben" placeholder="匹配 匹配车型编码/车型名称"></el-input>
 						</el-form-item>
 
-						<el-button type="primary" icon="el-icon-search" @click="">查询</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="SelectByInput(wenben,1,3)">查询</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -129,7 +128,7 @@
 							<el-table :data="make" style="width: 100%" :row-class-name="tableRowClassName">
 								<el-table-column prop="makeid" label="编码" align="center" header-align="center" width="150">
 								</el-table-column>
-								<el-table-column prop="makename" label="品牌编号" align="center" header-align="center" width="150">
+								<el-table-column prop="makename" label="品牌名称" align="center" header-align="center" width="150">
 								</el-table-column>
 								<el-table-column prop="acronym" label="首字母" align="center" header-align="center" width="150">
 								</el-table-column>
@@ -146,24 +145,34 @@
 				<el-col :span="12" :offset="1">
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
-							<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="date" label="车型ID" align="center" header-align="center">
+							<el-table :data="Motorcycle.list" style="width: 100%" :row-class-name="tableRowClassName">
+								<el-table-column prop="motorcycleid" label="车型ID" align="center" header-align="center">
 								</el-table-column>
-								<el-table-column prop="name" label="发动机品牌" align="center" header-align="center">
+								<el-table-column prop="enginename" label="发动机品牌" align="center" header-align="center">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆品牌">
+								<el-table-column prop="makename" align="center" header-align="center" label="车辆品牌">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="车辆名称">
+								<el-table-column prop="motorcyclename" align="center" header-align="center" label="车辆名称">
 								</el-table-column>
-								<el-table-column prop="address" align="center" header-align="center" label="参考价格">
+								<el-table-column prop="price" align="center" header-align="center" label="参考价格">
 								</el-table-column>
+								<!--<el-table-column prop="makeid" align="center" header-align="center" label="bianhao">
+								</el-table-column>-->
 								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
-										<el-button size="mini" type="danger" @click="updatedialog(scope)">编辑</el-button>
-										<el-button size="mini" type="danger">删除</el-button>
+										<el-button size="mini" type="danger" @click="updatedialog(scope.row)">编辑</el-button>
+										<el-button size="mini" type="danger" @click="DeleteById(scope.row.motorcycleid)">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
+							<el-row :span="24" style="margin-top: 20px;">
+								<el-col :span="12" :offset="6">
+									<el-button size="mini" type="primary" @click="SelectMotorcycleShouye()">首页</el-button>
+									<el-button size="mini" type="primary" icon="el-icon-arrow-left" @click="SelectMotorcyclepre()">上一页</el-button>
+									<el-button size="mini" type="primary" @click="SelectMotorcyclenext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+									<el-button size="mini" type="primary" @click="SelectMotorcycleLast()">尾页</el-button>
+								</el-col>
+							</el-row>
 						</template>
 					</div>
 				</el-col>
@@ -180,23 +189,7 @@
 					acronym: ''
 				},
 				make: [],
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}],
+				tableData: [],
 				dialogTableVisible: false,
 				dialogFormVisible: false,
 				form: {
@@ -227,7 +220,18 @@
 				titleType: '',
 				titleType2: '',
 				wenben: "",
-				wenben1: ""
+				wenben1: "",
+				disabled: false,
+
+				Motorcycle: [],
+				disabled2:false,
+				addMotorcycles: {
+					motorcycleid: '',
+					engineid: '',
+					makeid: '',
+					motorcyclename: '',
+					price: ''
+				}
 			},
 			methods: {
 				tableRowClassName({
@@ -245,31 +249,51 @@
 					var _this = this;
 					_this.titleType = "新增车型";
 					_this.dialogFormVisible = true;
+					_this.disabled2 = false;
 				},
 				addMakedialog() {
 					var _this = this;
 					_this.titleType2 = "添加品牌";
 					_this.dialogFormVisible2 = true;
+					_this.disabled = false;
 				},
-				updatedialog() {
+				updatedialog(m) {
 					var _this = this;
 					_this.titleType = "修改车型";
 					_this.dialogFormVisible = true;
+					_this.disabled2 = true;
+					_this.addMotorcycles=m;
+					console.log(m);
+
 				},
 				updateMakedialog(m) {
 					var _this = this;
 					_this.titleType2 = "修改品牌";
 					_this.dialogFormVisible2 = true;
-					_this.addmake=m;
+					_this.addmake = m;
+					_this.disabled = true;
 				},
+				/*品牌判断是新增还是修改的方法*/
 				makedialogs(m) {
 					var _this = this;
 					if(_this.titleType2 == "添加品牌") {
+						//_this.disabled = false;
 						_this.SelectById(m.makeid);
 					} else {
-						_this.updateById(m);
+						_this.updateById();
 					}
 				},
+				/*车型判断是新增还是修改的方法*/
+				Motorcycledialogs(m) {
+					var _this = this;
+					if(_this.titleType == "新增车型") {
+						_this.disabled = false;
+						_this.SelectByIdMotorcycleId(m);
+					} else {
+						_this.UpdateByMotorcycleId(m);
+					}
+				},
+				/*查询车型表所有*/
 				SelectMake() {
 					var _this = this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`).then(function(res) {
@@ -277,6 +301,7 @@
 						_this.make = res.data;
 					})
 				},
+				/*新增品牌表*/
 				insertMake() {
 					var _this = this;
 					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`, _this.addmake).then(function(res) {
@@ -290,6 +315,7 @@
 						}
 					})
 				},
+				/*根据id删除品牌表*/
 				deleteById(id) {
 					var _this = this;
 					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make/${id}`).then(function(res) {
@@ -302,9 +328,14 @@
 						}
 					})
 				},
+				/*清空品牌表模态框的值*/
 				resetForm(addmake) {
 					this.addmake = {};
 				},
+				resetForm2(addMotorcycles){
+					this.addMotorcycles={};
+				},
+				/*查询品牌表id是否相同*/
 				SelectById(id) {
 					var _this = this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make/${id}`).then(function(res) {
@@ -318,6 +349,7 @@
 						}
 					})
 				},
+				/*选择框条件查询*/
 				SelectInput(name) {
 					var _this = this;
 					if(name != "") {
@@ -328,8 +360,10 @@
 						_this.SelectMake();
 					}
 				},
+				/*根据id修改品牌表*/
 				updateById() {
 					var _this = this;
+					//alert(_this.addmake.makeid);
 					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/Makes/make`, _this.addmake).then(function(res) {
 						if(res.data.code = "200") {
 							_this.$message({
@@ -340,12 +374,130 @@
 							_this.SelectMake();
 						}
 					})
+				},
+				/*分页查询车型表*/
+				SelectMotorcyclePage(num, size) {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle/${num}/${size}`).then(function(res) {
+						console.log(res.data);
+						_this.Motorcycle = res.data;
+					})
+				},
+				/*车型查询下一页*/
+				SelectMotorcyclenext() {
+					var _this = this;
+					if(_this.Motorcycle.hasNextPage == true) {
+						_this.SelectByInput(_this.wenben,_this.Motorcycle.nextPage,3)
+					} else {
+						_this.$message({
+							message: '已经是最后一页了！',
+							type: 'warning'
+						});
+					}
+				},
+				/*车型查询上一页*/
+				SelectMotorcyclepre() {
+					var _this = this;
+					if(_this.Motorcycle.hasPreviousPage == true) {
+						_this.SelectByInput(_this.wenben,_this.Motorcycle.prePage, 3)
+					} else {
+						_this.$message({
+							message: '已经是第一页了！',
+							type: 'warning'
+						});
+					}
+				},
+				/*车型查询首页*/
+				SelectMotorcycleShouye() {
+					var _this = this;
+					_this.SelectByInput(_this.wenben,_this.Motorcycle.firstPage, 3)
+				},
+				/*车型查询尾页*/
+				SelectMotorcycleLast() {
+					var _this = this;
+					_this.SelectByInput(_this.wenben,_this.Motorcycle.lastPage, 3)
+				},
+				/*新增车型表*/
+				addMotorcycle() {
+					var _this = this;
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle`, _this.addMotorcycles).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '新增成功！',
+								type: 'success'
+							});
+							_this.dialogFormVisible = false;
+							_this.SelectMotorcyclePage(1, 3);
+						}
+					})
+				},
+				/*查询发动机信息*/
+				Selectengine() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine`).then(function(res) {
+						console.log(res.data);
+						_this.tableData = res.data;
+					})
+				},
+				/*查询车型id是否相同*/
+				SelectByIdMotorcycleId(m) {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle/${m.motorcycleid}`).then(function(res) {
+						if(res.data.length > 0) {
+							_this.$message({
+								message: '车型id重复，请重新输入',
+								type: 'warning'
+							});
+						} else {
+							_this.addMotorcycle();
+						}
+					})
+				},
+				/*根据文本框的值多条件查询*/
+				SelectByInput(name, num, size) {
+					var _this = this;
+					if(name.trim() != "") {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle/input/${name.trim()}/${num}/${size}`).then(function(res) {
+							console.log(res.data);
+							_this.Motorcycle = res.data;
+						})
+					} else {
+						_this.SelectMotorcyclePage(num, size);
+					}
+				},
+				/*根据id删除车型表信息*/
+				DeleteById(id){
+					var _this=this;
+					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle/${id}`).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '删除成功！',
+								type: 'success'
+							});
+							_this.SelectByInput(name, 1, 3);
+						}
+					})
+				},
+				/*修改车型表信息*/
+				UpdateByMotorcycleId(m){
+					var _this = this;
+					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/Motorcycles/Motorcycle`,m).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '修改成功！',
+								type: 'success'
+							});
+							_this.dialogFormVisible = false;
+							_this.SelectByInput(name, 1, 3);
+						}
+					})
 				}
 			},
 			mounted() {
 				this.SelectMake();
+				this.SelectMotorcyclePage(1,3);
+				this.Selectengine();
 			}
-
 		})
 	</script>
 

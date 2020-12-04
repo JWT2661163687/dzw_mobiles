@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="../../js/vue.js"></script>
+		<script type="text/javascript" src="../../js/index.js"></script>
+		<link rel="stylesheet" href="../../css/index.css" />
+		<link rel="stylesheet" href="../../css/element.css" />
+	</head>
+	<style>
+		body {
+			background-color: #f7f7f7
+		}
+		
+		.el-table .warning-row {
+			background: oldlace;
+		}
+		
+		.el-table .success-row {
+			background: #f0f9eb;
+		}
+	</style>
+
+	<body>
+		<div id="post" style="margin-top: 20px;">
+			<el-row :span="24">
+				<el-col :span="4" style="font-size: 40px;" :offset="1">
+					<span @click="SelectAll">岗位定义</span>
+				</el-col>
+				<el-col :span="10" :push="3">
+					<el-form :inline="true" class="demo-form-inline">
+						<el-form-item label="岗位编号" :push="4">
+							<el-input placeholder="岗位编号" v-model="id"></el-input>
+						</el-form-item>
+						<el-form-item label="岗位名称" :push="4">
+							<el-input placeholder="岗位名称" v-model="name"></el-input>
+						</el-form-item>
+						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+						<el-button type="primary" icon="el-icon-delete">删除</el-button>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+			<el-row :span="24">
+				<el-col :span="4" :offset="1">
+					<div style="background-color: white; height: 500px;">
+						<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+					</div>
+				</el-col>
+				<el-col :span="15" :offset="1">
+					<template>
+						<div style="background-color: white; height: 500px;">
+							<el-table :data="posts" highlight-current-row @current-change="handleCurrentChange" style="width: 100%" :row-class-name="tableRowClassName">
+								<el-table-column prop="postid" label="岗位编号">
+								</el-table-column>
+								<el-table-column prop="postname" label="岗位名称">
+								</el-table-column>
+								<el-table-column label="操作" align="center" header-align="center" width="150">
+									<template slot-scope="scope">
+										    
+									</template>
+								</el-table-column>
+							</el-table>
+							<el-row :span="24" style="margin-top: 20px;">
+								<el-col :span="12" :offset="7">
+									<el-button size="mini" type="primary" round>首页</el-button>
+									<el-button size="mini" type="primary" icon="el-icon-arrow-left" round>上一页</el-button>
+									<el-button size="mini" type="primary" round>下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+									<el-button size="mini" type="primary" round>尾页</el-button>
+								</el-col>
+							</el-row>
+						</div>
+					</template>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="../../js/jq_ajax_config.js"></script>
+	<script type="text/javascript" src="../../js/axios.min.js"></script>
+	<script type="text/javascript" src="../../js/axios_cfg.js"></script>
+	<script type="text/javascript" src="../../js/echarts.min.js"></script>
+	<script>
+		var post = new Vue({
+			el: "#post",
+			data: {
+				data: [{
+					label: '一级 1',
+					children: [{
+							label: '二级 1-1'
+						},
+						{
+							label: '二级 2-2'
+						},
+						{
+							label: '二级 3-3'
+						}
+					]
+				}],
+				defaultProps: {
+					children: 'post',
+					label: 'postname'
+				},
+				departmentid: '',
+				posts: [],
+				currentRow:null,
+				id:'',
+				name:'',
+				 checked:[]
+			},
+			mounted() {
+				this.SelectTree();
+				this.SelectAll();
+			},
+			methods: {
+				tableRowClassName({
+					row,
+					rowIndex
+				}) {
+					if(rowIndex === 1) {
+						return 'warning-row';
+					} else if(rowIndex === 3) {
+						return 'success-row';
+					}
+					return '';
+				},
+				SelectTree() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Departments/Department`).then(function(res) {
+						console.log(res.data);
+						res.data.forEach(function(e, i) {
+							e.postname = e.depnames;
+						})
+						_this.data = res.data;
+					})
+				},
+				handleNodeClick(data) {
+					var _this=this;
+					_this.departmentid = '';
+					console.log(data);
+					if(data.depnames != undefined) {
+						this.departmentid = data.departmentid;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Posts/${this.departmentid}`).then(function(res) {
+						console.log(res.data);
+						_this.posts = res.data;
+					})
+					}
+				},
+				add() {
+					if(this.departmentid == '') {
+						this.$message.warning("请选中部门！")
+					}
+				},
+				/*查询所有*/
+				SelectAll() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Posts/Post`).then(function(res) {
+						console.log(res.data);
+						_this.posts = res.data;
+					})
+				},
+				/*表格选中事件*/
+				handleCurrentChange(val) {
+					this.currentRow = val;
+					//alert(this.currentRow);
+					this.id=this.currentRow.postid;
+					this.name=this.currentRow.postname;
+				}
+			}
+		})
+	</script>
+
+</html>
