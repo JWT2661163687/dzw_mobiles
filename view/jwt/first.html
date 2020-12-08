@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>首页</title>
+		<style>
+			.el-col {
+				
+			}
+			
+			#first {
+				
+			}
+			
+			.image {
+				margin: 10px;
+				width: 50px;
+				height: 50px;
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="first" align="center">
+			<h1 style="font-size: 26px;">欢迎使用汽修系统</h1>
+			<el-row :gutter="50">
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日在修台次 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日站内维修台次 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日在修台次 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日结算台次 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				
+			</el-row>
+			<br />
+			<el-row :gutter="50">
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日现金收入 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日会员卡收入 <span>0</span>
+						</p>
+					</el-card>
+				</el-col>
+				
+			</el-row>
+		</div>
+	</body>
+	<script>
+		var first = new Vue({
+			el: "#first"
+		})
+	</script>
+
+</html>

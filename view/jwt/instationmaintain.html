@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
 		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
 		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
+		
 	</head>
 
 	<body>
@@ -67,6 +68,7 @@
 							<h3>站内维修车辆信息</h3>
 						</el-col>
 						<el-col :span="10" :push="4">
+							<el-button @click="lishiweixiu">车辆历史维修</el-button>
 							<template>
 								<el-select v-model="maintainreceiptsvalues" placeholder="请选择" @change="selectchange">
 									<el-option v-for="item in maintainreceipts" :key="item.receiptsid" :label="item.receiptsname" :value="item.receiptsid">
@@ -85,8 +87,9 @@
 							<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
 							<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
 							<el-table-column label="操作" fixed="right" align="center">
-								<template slot-scope="scope">
-									<el-button size="mini" round @click="jungong(scope.row.maintainid)">完成</el-button>
+								<template slot-scope="scope" >
+									<el-button size="mini" v-if="maintainreceiptsvalues=='1'" round @click="jungong(scope.row.maintainid)">完成</el-button>
+									<el-button size="mini" v-if="maintainreceiptsvalues=='4'" round @click="fanggongbut(scope.row)">返工</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -171,7 +174,7 @@
 				<br />
 				<el-row>
 					<el-col :span="5" :push="10">
-						<el-button type="success" round>确定维修项目</el-button>
+						<el-button type="success" round @click="clickweixiumotai" >确定维修项目</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
@@ -214,8 +217,8 @@
 				<br />
 				<el-row>
 					<el-col :span="10" :push="11">
-						<el-button @click="dialogVisible = false">取 消</el-button>
-						<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+						<el-button @click="clickjigongquxiao">取 消</el-button>
+						<el-button type="primary" @click="clickqueding">确 定</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
@@ -301,6 +304,35 @@
 
 			},
 			methods: {
+				//查看历史维修记录
+				lishiweixiu() {
+					if(this.addmaintaincar.maintainvehicleid == 0 || this.addmaintaincar.maintainvehicleid == '') {
+						alert("请选着查看的车辆")
+						return;
+					}
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/maintainvehicleid/${this.addmaintaincar.maintainvehicleid}`).then(function(res) {
+						seomaintainvue.maintaincars = res.data;
+					})
+				},
+				fieldvehiclesload() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/fieldvehicles`).then(function(res) {
+						seomaintainvue.fieldvehicless = res.data;
+					})
+				},
+				//技工模态框取消按钮
+				clickjigongquxiao(){
+					//清空数据源
+					this.teamtechniciantwos=[];
+					this.dialogVisibletwo=false;
+				},
+				clickqueding(){
+					this.dialogVisibletwo=false;
+				},
+				//确定维修项目按钮关闭模态框
+				clickweixiumotai(){
+					this.dialogTableVisible=false;
+				},
+				
 				//获得当前日期，时间
 				getdata(aa) { //定义函数show
 					var d = new Date();
@@ -344,6 +376,7 @@
 							res.data.departdate = instationmaintainapp.getdata(1);
 							res.data.maintaindate = instationmaintainapp.getdata(2);
 							for(var i = 0; i < instationmaintainapp.addmaintaincar.maintaincarxiangmus.length; i++) {
+								//alert(res.data.maintainmoney+":"+instationmaintainapp.addmaintaincar.maintaincarxiangmus[i].xmbiaozhun)
 								res.data.maintainmoney += instationmaintainapp.addmaintaincar.maintaincarxiangmus[i].xmbiaozhun;
 
 							}
@@ -397,8 +430,20 @@
 							instationmaintainapp.addmaintaincar = {};
 							instationmaintainapp.addweixiu = [];
 							instationmaintainapp.teamtechniciantwos = [];
+							//刷新车牌号
+							instationmaintainapp.loadchepai();
 						}
 					})
+				},
+				fanggongbut(aa){
+					this.table = false;
+					for(var i=0;i<this.vehicle.length;i++){
+						if(this.vehicle[i].vid==aa.maintainvehicleid){
+							this.value=i;
+							break;
+						}
+					}
+					this.addmaintaincar=aa;
 				},
 				//下拉框改变
 				chepaichange() {
@@ -418,7 +463,6 @@
 				},
 				//打开抽屉
 				maintaincarshow(maintainreceiptsid) {
-					
 					//加载维修车辆信息
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${maintainreceiptsid}/1`).then(function(res) {
 						instationmaintainapp.maintaincars = res.data;
@@ -446,6 +490,10 @@
 				},
 				//修理完成,修改状态
 				jungong(maintainid) {
+					if(this.maintainreceiptsvalues==4){
+						//执行
+						return;
+					}
 					//alert(maintainid)
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}/2`).then(function(res) {
 						if(res.data.code = "200") {
