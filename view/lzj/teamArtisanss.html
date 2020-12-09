@@ -93,6 +93,11 @@
 						</el-row>
 						<el-row>
 							<el-col :span="8">
+								班组编号
+								<el-input v-model="updateteamtechnician.teamid" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							<el-col :span="8">
 								班组
 								<template>
 									<el-select v-model="value" placeholder="请选择">
@@ -370,6 +375,8 @@
 					tename:''
 				},
 				updateteamtechnician: {
+					teamid: 1,
+					meid:1,
 					technicianno: '',
 					mename: '',
 					mesex: '',
@@ -475,9 +482,11 @@
 						this.dialogVisibles = true;
 					},
 					updateTeam() {
+						this.updateteamtechnician.teamid = this.value;
 						axios.put("http://127.0.0.1:8080/dzw_moblie/api/team/update", this.updateteamtechnician).then(function(resp) {
 							if (resp.data.code == "200") {
 								alert('更新成功');
+								teamArtisanssapp.value=null;
 								teamArtisanssapp.goToPage();
 							}
 						}).catch(function(e) {});
