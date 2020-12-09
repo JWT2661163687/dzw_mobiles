@@ -12,11 +12,12 @@
 			</el-page-header>
 			<br />
 			<br />
-			<el-row>
+			<el-row class="demo-autocomplete">
 				<el-col :md="5" :push="8">
-					<el-input v-model="kahao">
+					<!--<el-input v-model="kahao" @input="chan">
 						<template slot="prepend">会员卡号</template>
-					</el-input>
+					</el-input>-->
+					<el-autocomplete class="inline-input" v-model="kahao" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
 				</el-col>
 				<el-col :md="2" :push="9">
 					<el-button type="success" @click="queryMember(1,2)">搜索</el-button>
@@ -48,7 +49,7 @@
 								</el-table-column>
 								<el-table-column label="客户等级">
 									<template slot-scope="scope">
-										<span>普通会员</span>
+										<span>普通用户</span>
 									</template>
 								</el-table-column>
 								<el-table-column label="操作">
@@ -70,7 +71,7 @@
 					</el-row>
 					<br />
 					<el-row>
-						<el-input v-model="pass">
+						<el-input v-model="pass" show-password>
 							<template slot="prepend">会员密码</template>
 						</el-input>
 					</el-row>
@@ -82,7 +83,7 @@
 			</el-row>
 			<el-row>
 				<template>
-					<el-col :md="15" :push="5">
+					<el-col :md="19" :push="3">
 						<el-table :data="member.list" style="width: 100%">
 							<el-table-column label="编号" width="180">
 								<template slot-scope="scope">
@@ -92,8 +93,8 @@
 							<el-table-column label="会员卡号" width="180">
 								<template slot-scope="scope">
 									<el-popover trigger="hover" placement="top">
-										<p>会员密码: {{ scope.row.mpass }}</p>
-										<p>会员余额: {{ scope.row.mbalance }}</p>
+										<!--<p>会员密码: <input type="password" :value="`${scope.row.mpass}`" style="border: 0px;" readonly="readonly" ></p>
+										<p>会员余额: {{ scope.row.mbalance }}</p>-->
 										<div slot="reference" class="name-wrapper">
 											<el-tag size="medium">{{ scope.row.mcardnumber }}</el-tag>
 										</div>
@@ -105,6 +106,11 @@
 									<span style="margin-left: 10px">{{ scope.row.cname }}</span>
 								</template>
 							</el-table-column>
+							<el-table-column label="会员余额" width="180">
+								<template slot-scope="scope">
+									<span style="margin-left: 10px">{{ scope.row.mbalance }}</span>
+								</template>
+							</el-table-column>
 							<el-table-column label="操作">
 								<template slot-scope="scope">
 									<el-button size="mini" type="success" @click="handleEdit(scope.$index, scope.row)">充值</el-button>
@@ -114,10 +120,11 @@
 						</el-table>
 					</el-col>
 				</template>
-			</el-row><br />
+			</el-row>
+			<br />
 			<el-row>
 				<el-col :md="5" :push="10">
-					<el-pagination small layout="prev, pager, next" @current-change="dianji" :total="member.pages"  :page-size="1">
+					<el-pagination small layout="prev, pager, next" @current-change="dianji" :total="member.pages" :page-size="1">
 					</el-pagination>
 				</el-col>
 			</el-row>
@@ -148,13 +155,14 @@
 					name: '王小虎',
 					address: '上海市普陀区金沙江路 1516 弄'
 				}],
-				kahao:'',
-				member:{},
-				BianHao:'',
-				client:[],
-				client1:{},
-				kh:'',
-				pass:''
+				kahao: '',
+				member: {},
+				BianHao: '',
+				client: [],
+				client1: {},
+				kh: '',
+				pass: '',
+				restaurants: []
 			},
 			methods: {
 				goBack() {},
@@ -168,12 +176,12 @@
 						}) => {
 							this.$message({
 								type: 'success',
-								message: '充值: ' + value+'元'
+								message: '充值: ' + value + '元'
 							});
-							axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/member1/${value}/${row.mid}`).then(function(resp){
-								if(resp.data.code=="200"){
+							axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/member1/${value}/${row.mid}`).then(function(resp) {
+								if (resp.data.code == "200") {
 									_this.$alert("充值成功!");
-									_this.queryMember(1,2);	
+									_this.queryMember(1, 2);
 								}
 							})
 						}).catch(() => {
@@ -185,10 +193,10 @@
 					},
 					handleDelete(index, row) {
 						let _this = this;
-						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/members/member/${row.mid}/${row.cid}`).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/members/member/${row.mid}/${row.cid}`).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.$alert("删除成功!");
-								_this.queryMember(1,2);
+								_this.queryMember(1, 2);
 							}
 						})
 					},
@@ -200,35 +208,35 @@
 							.catch(_ => {});
 					},
 					//根据条件查询会员
-					queryMember(p,s){
+					queryMember(p, s) {
 						let _this = this;
 						var kahao1 = 0;
-						if(this.kahao!=""){
+						if (this.kahao != "") {
 							kahao1 = this.kahao;
 						}
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${kahao1}/${p}/${s}`).then(function(resp){
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${kahao1}/${p}/${s}`).then(function(resp) {
 							_this.member = resp.data;
 						})
 					},
 					//根据条件查询所有不是会员的用户
-					queryclient(){
+					queryclient() {
 						this.dialogTableVisible = true;
 						var BianHao1 = 0;
 						let _this = this;
-						if(_this.BianHao!=""){
+						if (_this.BianHao != "") {
 							BianHao1 = _this.BianHao;
 						}
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${BianHao1}`).then(function(resp){
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/${BianHao1}`).then(function(resp) {
 							_this.client = resp.data;
 						})
 					},
 					//点击成为会员保存点击用户的数据
-					addClient(row){
-						this.dialogVisible=true;
+					addClient(row) {
+						this.dialogVisible = true;
 						this.client1 = row;
 					},
 					//把普通用户变为会员用户
-					insertMember(){
+					insertMember() {
 						let _this = this;
 						this.dialogVisible = false;
 						var member = {};
@@ -236,22 +244,50 @@
 						member["mpass"] = this.pass;
 						member["cid"] = this.client1.cid;
 						member["cname"] = this.client1.cname;
-						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/members/member`,member).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/members/member`, member).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.$alert("新增成功!");
 								_this.queryclient();
-								_this.queryMember(1,2);
+								_this.queryMember(1, 2);
 								_this.kh = "";
 								_this.pass = "";
 							}
 						})
 					},
-					dianji(val){
-						this.queryMember(val,this.member.pageSize)
+					dianji(val) {
+						this.queryMember(val, this.member.pageSize)
+					},
+					querySearch(queryString, cb) {
+						var restaurants = this.restaurants;
+						var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+						// 调用 callback 返回建议列表的数据
+						cb(results);
+					},
+					createFilter(queryString) {
+						return (restaurant) => {
+							return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+						};
+					},
+					handleSelect(item) {
+						console.log(item);
 					}
 			},
-			mounted(){
-				this.queryMember(1,2);
+			mounted() {
+				this.queryMember(1, 2);
+				let _this = this;
+				var kahao = 0;
+				if (this.kahao != "") {
+					kahao = this.kahao;
+				}
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/members/queryAllNumber/${kahao}`).then(function(resp) {
+					for(var i = 0;i<resp.data.length;i++){
+						var aa = {};
+						aa["value"] = resp.data[i];
+						_this.restaurants.push(aa);
+					}
+					alert(_this.restaurants[0])
+					alert(JSON.stringify(_this.restaurants))
+				})
 			}
 		})
 	</script>

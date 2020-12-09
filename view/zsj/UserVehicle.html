@@ -20,7 +20,7 @@
 		<div id="UserVehicleApp">
 			<el-row :span="24">
 				<el-col :md="2">
-					<el-button type="primary" @click="dialogVisible = true">车辆添加</el-button>
+					<el-button type="primary" @click="queryAllClient">车辆添加</el-button>
 				</el-col>
 				<el-col :push="14" :md="2" style="margin-top: 10px;"><a href="#">查询内容</a></el-col>
 				<el-col :md="6" :push="14">
@@ -34,7 +34,12 @@
 			<el-dialog title="车辆添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="客户编号">
-						<el-input v-model="formInline.cid" placeholder="客户编号"></el-input>
+						<!--<el-input v-model="formInline.cid" placeholder="客户编号"></el-input>-->
+						<el-select v-model="formInline.cid" placeholder="请选择">
+							<el-option v-for="item in client5" :key="item.cid" :lable="item.cid" :value="item.cid"></el-option>
+							<!--<el-option :label="cid" value="公司车"></el-option>
+							<el-option :label="cid" value="租赁车"></el-option>-->
+						</el-select>
 					</el-form-item>
 					<el-form-item label="驾驶员">
 						<el-input v-model="formInline.vdriver" placeholder="驾驶员"></el-input>
@@ -242,7 +247,7 @@
 						</div>
 					</el-form-item>
 				</el-form>
-				
+
 				<!--<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="车主" prop="name">
 						<el-input v-model="formInline.user" placeholder="车主"></el-input>
@@ -330,10 +335,18 @@
 						</el-table-column>
 						<el-table-column prop="purchasedate" label="购买日期" width="200">
 						</el-table-column>
-						<el-table-column prop="" label="操作" width="180">
+						<!--<el-table-column prop="" label="操作" width="180">
 							<template slot-scope="scope">
 								<el-button type="success" icon="el-icon-edit" title="修改" @click="tiao(scope.row)"></el-button>
 								<el-button type="primary" icon="el-icon-delete" title="删除" @click="del(scope.row.vid)"></el-button>
+							</template>
+						</el-table-column>-->
+						<el-table-column fixed="right" label="操作" width="180">
+							<template slot-scope="scope">
+								<el-button type="success" icon="el-icon-edit" title="修改" @click="tiao(scope.row)"></el-button>
+								<el-button type="primary" icon="el-icon-delete" title="删除" @click="del(scope.row.vid)"></el-button>
+								<!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+								<el-button type="text" size="small">编辑</el-button>-->
 							</template>
 						</el-table-column>
 					</el-table>
@@ -422,16 +435,18 @@
 					address: '上海市普陀区金沙江路 1518 弄'
 				}],
 				formInline: {
-					cid:'',
-					vdriver:'',
-					vlicense:'',
-					vbrand:'',
-					vmodel:'',
-					vphone:'',
-					vaffiliation:'',
-					vmileage:'',
-					registereddate:'',
-					purchasedate:''
+					cid: '',
+					vdriver: '',
+					vlicense: '',
+					vbrand: '',
+					vmodel: '',
+					vphone: '',
+					vaffiliation: '',
+					vmileage: '',
+					registereddate: '',
+					purchasedate: ''
+						/*,
+											client:[]*/
 				},
 				pickerOptions: {
 					disabledDate(time) {
@@ -495,7 +510,8 @@
 				makeId: "",
 				getIndex: "",
 				getIndex1: "",
-				aa1: {}
+				aa1: {},
+				client5: []
 			},
 			methods: {
 				//查询车辆信息
@@ -538,20 +554,20 @@
 								return false;
 							}
 						});*/
-						if(this.formInline.vlicense=="湘12345"){
+						if (this.formInline.vlicense == "湘12345") {
 							this.$alert("该车牌号已存在!")
 							return;
 						}
-						if(this.formInline.vlicense=="湘54321"){
+						if (this.formInline.vlicense == "湘54321") {
 							this.$alert("该车牌号已存在!")
 							return;
 						}
-						if(this.formInline.cid=="6"){
+						if (this.formInline.cid == "6") {
 							this.$alert("该客户编号不存在!")
 							return;
 						}
-						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle`,this.formInline).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle`, this.formInline).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.dialogVisible = false;
 								_this.$alert("新增成功!");
 								_this.queryVehicle();
@@ -657,28 +673,27 @@
 					},
 					ok() {
 						this.dialogVisible2 = false;
-						if(j!=0){
+						if (j != 0) {
 							this.formInline["vmodel"] = aa["xName"];
-							j=0;
+							j = 0;
 						}
-						if(i!=0){
+						if (i != 0) {
 							this.formInline["vbrand"] = aa["pName"];
-							i=0;
-						} 
-						if(i==0 && j==0){
+							i = 0;
+						}
+						if (i == 0 && j == 0) {
 							this.formInline["vmodel"] = bb["vmodel"];
 							this.formInline["vbrand"] = bb["vbrand"];
 						}
-						
 					},
-					tiao(row){
+					tiao(row) {
 						this.dialogVisible1 = true;
 						this.formInline = row;
 					},
-					update(){
+					update() {
 						let _this = this;
-						axios.put(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle`,this.formInline).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.put(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle`, this.formInline).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.dialogVisible1 = false;
 								_this.$alert("修改成功!");
 								_this.queryVehicle();
@@ -686,13 +701,21 @@
 							}
 						})
 					},
-					del(vid){
+					del(vid) {
 						let _this = this;
-						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle/${vid}`).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle/${vid}`).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.$alert("删除成功!");
 								_this.queryVehicle();
 							}
+						})
+					},
+					//查询所有客户
+					queryAllClient() {
+						this.dialogVisible = true;
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/clientAll`).then(function(resp) {
+							_this.client5 = resp.data;
 						})
 					}
 			},
