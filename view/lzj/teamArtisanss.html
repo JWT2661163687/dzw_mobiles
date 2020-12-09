@@ -198,7 +198,7 @@
 							<el-col :span="8">
 								班组
 								<template>
-									<el-select v-model="value" placeholder="请选择">
+									<el-select v-model="addteamtechnician.teamid" placeholder="请选择">
 										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
 										</el-option>
 									</el-select>
@@ -249,8 +249,12 @@
 						<el-row>
 							<el-col :span="24">
 								星级
-								<el-input v-model="addteamtechnician.starrating" size="small" style="width: 200px;">
-								</el-input>
+						<el-select v-model="addteamtechnician.meid" @change="zzz">
+							<el-option label="请选择" value="null">
+							</el-option>
+							<el-option v-for="item in machs" :key="item.meid" :label="item.starrating" :value="item.meid">
+							</el-option>
+						</el-select>
 								维修工种
 								<el-input v-model="addteamtechnician.repairwork" size="small" style="width: 200px;">
 								</el-input>
@@ -346,6 +350,7 @@
 			data: {
 				addteamtechnician: {
 					teamid: 1,
+					meid:'',
 					technicianno: '',
 					mename: '',
 					mesex: '',
@@ -380,6 +385,7 @@
 					repairwork: '',
 					repairbrand: ''
 				},
+				machs:[],
 				sss: '',
 				Team: [],
 				value: '',
@@ -394,10 +400,17 @@
 			mounted() {
 				this.goToPage();
 				this.queryTeam();
+				this.xingji();
 			},
 			methods: {
+				xingji(){
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/mech/lzjquery`).then(function(res){
+						teamArtisanssapp.machs=res.data;
+					})
+				},
 				insertTeamtechnician() {
-						this.addteamtechnician.teamid = parseInt(this.value);
+					
+						//this.addteamtechnician.teamid = parseInt(this.value);
 						axios.post("http://127.0.0.1:8080/dzw_moblie/api/team/insert", this.addteamtechnician).then(function(resp) {
 							if (resp.data.code == "200") {
 								alert('新增成功');
@@ -482,6 +495,12 @@
 					}
 				},
 				zzz(){
+					for(var i=0;i<this.machs.length;i++){
+						if(this.machs[i].meid==this.addteamtechnician.meid){
+							this.addteamtechnician.starrating=this.machs[i].starrating;
+							break;
+						}
+					}
 					this.queryTename(this.value);
 				}
 			}

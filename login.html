@@ -1,56 +1,223 @@
 <!DOCTYPE html>
-
 <html>
 
 	<head>
-		<meta charset="utf-8" />
-		<title>登陆</title>
+		<meta charset="UTF-8">
+		<title></title>
 		<script type="text/javascript" src="js/vue.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<link rel="stylesheet" href="css/index.css" />
 		<link rel="stylesheet" href="css/element.css" />
+		<style type="text/css">
+			[v-cloak] { 
+				display: none; 
+			}
+			
+			/*body {
+				background: url(img/ucjolaikrzvucjolaikrzv.jpg);
+				background-repeat: no-repeat; //不重复
+				background-size: 100% 100%; // 满屏
+			}*/
+			
+			input::-webkit-input-placeholder {
+				/* WebKit browsers 适配谷歌 */
+				color: blue;
+			}
+			
+			input:-moz-placeholder {
+				/* Mozilla Firefox 4 to 18 适配火狐 */
+				color: #2109a5a6;
+			}
+			
+			input::-moz-placeholder {
+				/* Mozilla Firefox 19+ 适配火狐 */
+				color: #2109a5a6;
+			}
+			
+			input:-ms-input-placeholder {
+				/* Internet Explorer 10+  适配ie*/
+				color: #2109a5a6;
+			}
+			
+			.el-input__inner {
+				background-color: transparent;
+				border: 0px;
+				border-bottom: 2px solid green;
+				font-size: 20px;
+				border-radius: 0;
+			}
+			
+			.el-form-item__label {
+				font-size: 20px;
+			}
+			.el-form-item__label{
+				/*color: white;*/
+				text-align-last: justify;
+			}
+			.el-checkbox__label{
+				/*color: white;*/
+				font-weight: bold;
+			}
+			/*.el-input__inner{
+				color:white;
+			}*/
+		</style>
 	</head>
+	<style>
+		.el-main {
+					margin: 0px auto;
+					width: 30%;
+					height: auto;
+				}
+				
+			/*.el-collapse,
+				.el-collapse-item {
+					border: 0;
+				}*/
+	</style>
 
 	<body>
-		<div id="loginapp">
-			<el-input v-model="username"></el-input>
-			<el-input v-model="pass"></el-input>
-			<el-button @click="gotologin">登录</el-button>
+		
+
+	<div id="adminLogin" style="user-select:none;" v-cloak>
+		<el-col :span="8" :offset="8" class="grid-content bg-purple" style="box-shadow: 0px 0px 5px gray;border-radius: 5px;padding: 10px;margin-top: 150px;">
+			<div class="grid-content ">
+				<h4 style="text-align: center;color: gray;font-weight:bold;font-family: '微软雅黑';font-size: 25px;">德召文汽修管理系统</h4>
+				<el-col :span="18" :offset="3">
+					<el-form ref="loginFrom" :model="loginfrom" :rules="loginRules" label-width="150px">
+						<el-form-item style="font-weight: bold;" label="用户名：" prop="userName">
+							<el-col :span="24">
+								<el-input v-model="loginfrom.userName" placeholder="用户名"></el-input>
+							</el-col>
+						</el-form-item>
+						<el-form-item style="font-weight: bold;" label="用户密码：" prop="userPwd">
+							<el-col :span="24">
+								<el-input type="password" v-model="loginfrom.userPwd" placeholder="密码"></el-input>
+							</el-col>
+						</el-form-item>
+
+						<el-col :span="24" style="cursor: pointer;padding: 0;box-shadow: 0px 0px 2px gray; border-radius: 5px;height: 50px;background: #d4d4d4de;position: relative;">
+							<span style="z-index: 99;display: block;height: 50px;position: absolute;background: white;font-size: 25px;border-radius: 5px;width: 70px;" @mousedown="block" id="block"></span>
+							<span style="display: inline-block;width: 100%;line-height: 50px;color: gray;text-align: center;letter-spacing: 1em;font-weight: bold;user-select:none;" id="blocktext">滑动验证</span>
+							<span style="background: #56fa5673;height: 100%;width:0px;position: absolute;left: 0;border-radius: 5px;" id="gb"></span>
+						</el-col>
+
+						<!--<el-checkbox style="margin-left: 70px;margin-top: 10px;" label="记住密码" name="type"></el-checkbox>-->
+
+						<el-col :span="20" :offset="4" style="margin-top: 20px;">
+							<el-button style="width: 250px;" type="success" @click="login" :disabled="isstuts">登录</el-button>
+						</el-col>
+					</el-form>
+				</el-col>
+		</el-col>
 		</div>
+		</el-col>
+		<el-dialog title="系统提示" :visible.sync="isShow1" width="30%">
+			<span v-text="message"></span>
+			<span slot="footer" class="dialog-footer">
+	    			<el-button type="primary" @click="loginSub">确 定</el-button>
+  				</span>
+		</el-dialog>
+	</div>
 	</body>
-	
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script type="text/javascript" src="js/axios.min.js"></script>
 	<script type="text/javascript" src="js/axios_cfg.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<script type="text/javascript">
-		var loginapp=new Vue({
-			el:'#loginapp',
-			data:{
-				username:'',
-				pass:''
+		
+		var adminLogin = new Vue({
+			el: "#adminLogin",
+			data: {
+				isstuts: true,
+				auth: "111",
+				isShow1: false,
+				loginStatus: false,
+				message: "",
+				aa:'',
+				loginfrom: {
+					userName: "",
+					userPwd: ""
+				},
+				loginRules: {
+					userName: [{
+						required: true,
+						message: '请输入名称',
+						trigger: 'blur'
+					}],
+					userPwd: [{
+						required: true,
+						message: '请输入名称',
+						trigger: 'blur'
+					}]
+				}
 			},
-			methods:{
-				gotologin(){
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/employee/${this.username}/${loginapp.pass}`).then(function(res){
+			methods: {
+				login() {
+					alert("a")
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/employee/${this.loginfrom.userName}/${this.loginfrom.userPwd}`).then(function(res){
 						if(res.data.code=="200"){
-							//储存信息到sesstion
 							sessionStorage.setItem("employee",JSON.stringify(res.data.employee));
 							alert("登录成功")
-							location.href="homepage.html"
-							
-						}else{
+							location.href = "homepage.html"
+						} else {
 							alert("用户名密码错误")
 						}
-						
 					})
+				},
+				loginSub() {
+					isShow1 = false;
+					if(this.loginStatus) {
+
+					}
+
+				},
+				block(e) {
+					bool = true;
+					var _this = $("#block");
+					var __this = this;
+					var startX = e.pageX;
+					$(document).mousemove(function(event) {
+						if(bool) {
+							if(event.pageX - startX > 337) {
+								left = 337;
+							} else if(event.pageX > startX) {
+								left = event.pageX - startX;
+							}
+							_this.css("left", left + "px");
+							$("#gb").css("width", left + "px");
+						}
+						if(left == 337) {
+							$("#blocktext").text("验证成功");
+							__this.isstuts = false;
+						} else {
+							$("#blocktext").text("滑动验证");
+							__this.isstuts = true;
+						}
+
+					});
+					$(document).mouseup(function() {
+						bool = false;
+						if(left == 337) {
+							_this.css("left", "337px");
+							$("#gb").css("width", "337px");
+							return;
+						}
+						_this.css("left", "0px");
+						$("#gb").css("width", "0px");
+					});
 				}
-				
 			}
-			
-			
-		})
+
+		});
+		
+		$("input").focus(function() {
+			left = 0;
+			$("#block").css("left", "0px");
+			$("#gb").css("width", "0px");
+			$("#blocktext").text("滑动验证");
+		});
 	</script>
 
 </html>

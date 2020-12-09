@@ -143,7 +143,6 @@
 					})
 				},
 				DeleteById(id){
-					alert(id);
 					var _this=this;
 					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/engines/engine/${id}`).then(function(res) {
 						if(res.data.code = "200") {
