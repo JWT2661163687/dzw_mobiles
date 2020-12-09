@@ -10,46 +10,75 @@
 		<link rel="stylesheet" href="css/index.css" />
 		<link rel="stylesheet" href="css/element.css" />
 	</head>
+	<style>
+		.el-main {
+					margin: 0px auto;
+					width: 30%;
+					height: auto;
+				}
+				
+			/*.el-collapse,
+				.el-collapse-item {
+					border: 0;
+				}*/
+	</style>
 
 	<body>
 		<div id="loginapp">
-			<el-input v-model="username"></el-input>
+			<!--<el-input v-model="username"></el-input>
 			<el-input v-model="pass"></el-input>
-			<el-button @click="gotologin">登录</el-button>
+			<el-button @click="gotologin">登录</el-button>-->
+			<el-main>
+						<template slot="title">
+							<h1><i class="el-icon-s-custom"></i>&nbsp;登陆</h1>
+						</template>
+						<div style="padding: 15px;">
+							<el-form label-width="100px" status-icon class="demo-ruleForm">
+								<el-form-item>
+									<h1><i class="el-icon-s-custom"></i>&nbsp;登陆</h1>
+								</el-form-item>
+								<el-form-item label="账号" prop="username" :rules="[{ required: true, message: '账号不能为空'}]">
+									<el-input type="username" v-model="username" autocomplete="off" placeholder="请输入账号"></el-input>
+								</el-form-item>
+								<el-form-item label="密码" prop="pass" :rules="[{ required: true, message: '密码不能为空'}]">
+									<el-input type="password" v-model="pass" autocomplete="off" placeholder="请输入密码"></el-input>
+								</el-form-item>
+								<el-form-item>
+									<el-button @click="gotologin">登录</el-button>
+								</el-form-item>
+							</el-form>
+						</div>
+					
+			</el-main>
 		</div>
 	</body>
-	
+
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	<script type="text/javascript" src="js/axios.min.js"></script>
 	<script type="text/javascript" src="js/axios_cfg.js"></script>
 	<script type="text/javascript" src="js/echarts.min.js"></script>
 	<script type="text/javascript">
-		var loginapp=new Vue({
-			el:'#loginapp',
-			data:{
-				username:'',
-				pass:''
+		var loginapp = new Vue({
+			el: '#loginapp',
+			data: {
+				username: '',
+				pass: ''
 			},
-			methods:{
-				gotologin(){
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/employee/${this.username}/${loginapp.pass}`).then(function(res){
-						if(res.data.code=="200"){
+			methods: {
+				gotologin() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/employee/${this.username}/${loginapp.pass}`).then(function(res) {
+						if (res.data.code == "200") {
 							//储存信息到sesstion
-							sessionStorage.setItem("employee",JSON.stringify(res.data.employee));
+							sessionStorage.setItem("employee", JSON.stringify(res.data.employee));
 							alert("登录成功")
-							location.href="homepage.html"
-							
-						}else{
+							location.href = "homepage.html"
+						} else {
 							alert("用户名密码错误")
 						}
-						
 					})
 				}
-				
 			}
-			
-			
 		})
 	</script>
 
