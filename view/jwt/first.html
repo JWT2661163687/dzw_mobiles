@@ -29,31 +29,33 @@
 				<el-col :span="6" >
 					<el-card  shadow="hover">
 						<p>
-							今日在修台次 <span>0</span>
+							今日接车总数 <span>{{front.carnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日维修中总数 <span>{{front.carrepairingnumber}}</span>
 						</p>
 					</el-card>
 				</el-col>
 				<el-col :span="6" >
 					<el-card  shadow="hover">
 						<p>
-							今日站内维修台次 <span>0</span>
+							今日站内维修台次 <span>{{front.instationnumber}}</span>
 						</p>
 					</el-card>
 				</el-col>
 				<el-col :span="6" >
 					<el-card  shadow="hover">
 						<p>
-							今日在修台次 <span>0</span>
+							今日站外维修台次 <span>{{front.outsidenumber}}</span>
 						</p>
 					</el-card>
 				</el-col>
-				<el-col :span="6" >
-					<el-card  shadow="hover">
-						<p>
-							今日结算台次 <span>0</span>
-						</p>
-					</el-card>
-				</el-col>
+				
 				
 			</el-row>
 			<br />
@@ -61,24 +63,56 @@
 				<el-col :span="6" >
 					<el-card  shadow="hover">
 						<p>
-							今日现金收入 <span>0</span>
+							今日返修次数 <span>{{front.repairnumber}}</span>
 						</p>
 					</el-card>
 				</el-col>
 				<el-col :span="6" >
 					<el-card  shadow="hover">
 						<p>
-							今日会员卡收入 <span>0</span>
+							今日结算次数 <span>{{front.closeanaccountnumber}}</span>
 						</p>
 					</el-card>
 				</el-col>
-				
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日总收入 <span>{{front.generalincome}}</span>
+						</p>
+					</el-card>
+				</el-col>
 			</el-row>
 		</div>
 	</body>
 	<script>
 		var first = new Vue({
-			el: "#first"
+			el: "#first",
+			data:{
+				front:{}
+			},
+			methods:{
+				addfront(){
+					//创建今日首页数据
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/addfront`).then(function(res){
+					
+				})
+				},
+				
+				
+				//首页数据加载
+				frontload(){
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/getfront`).then(function(res){
+						first.front=res.data;
+					})
+				},
+				
+			},
+			mounted: function() {
+				this.addfront();
+				this.frontload();
+			},
+			
+			
 		})
 	</script>
 

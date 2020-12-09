@@ -15,6 +15,14 @@
 						<el-tab-pane label="待结算" name="second" @tab-click="queryCar">
 							<br />
 							<div>
+								<el-col :md="4" :push="2">
+									<template>
+										<el-select v-model="date1" placeholder="请选择待结算信息日期" @change="ss">
+											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+											</el-option>
+										</el-select>
+									</template>
+								</el-col>
 								<el-col :md="5" :push="5">
 									<el-input v-model="id">
 										<template slot="prepend">维修id</template>
@@ -48,6 +56,8 @@
 											</el-table-column>
 											<el-table-column prop="tename" label="维修班组名">
 											</el-table-column>
+											<el-table-column prop="maintaindate" label="单据时间" width="200">
+											</el-table-column>
 											<el-table-column prop="departdate" label="开单出发时间" width="200">
 											</el-table-column>
 											<el-table-column prop="departaddress" label="出发地址">
@@ -72,15 +82,20 @@
 											</el-table-column>
 											<el-table-column prop="carownername" label="车主名">
 											</el-table-column>
-											<el-table-column prop="" label="操作" width="180">
+											<!--<el-table-column prop="" label="操作" width="180">
 												<template slot-scope="scope">
 													<el-button type="success" icon="el-icon-edit" @click="addCou(scope.row)" title="编辑2"></el-button>
+												</template>
+											</el-table-column>-->
+											<el-table-column fixed="right" label="操作" width="100">
+												<template slot-scope="scope">
+													<el-button @click="addCou(scope.row)" type="text" size="small">查看</el-button>
 												</template>
 											</el-table-column>
 										</el-table>
 									</template>
 								</el-row>
-								<el-dialog title="结算中心" :visible.sync="dialogVisible" width="50%" >
+								<el-dialog title="结算中心" :visible.sync="dialogVisible" width="50%">
 									<el-row>
 										<template>
 											<el-radio-group v-model="radioTreaty" @change="agreeChange">
@@ -245,7 +260,28 @@
 	</body>
 
 	<script>
-	var as = 0;
+		var leng = 0;
+		/*$(function() {
+			setInterval(alert(jieSuan.currentPage4), 500);
+		})*/
+		/*
+				function test() {
+					$.ajax({
+						url: 'http://127.0.0.1:8080/dzw_moblie/api/counts/queryCloseAll',
+						async: true,
+						type: 'get',
+						success: function(data) {
+							var new_url = $('#new_iframe').attr('src');
+							if (new_url !== data) {
+								$('#new_iframe').attr('src', data);
+							}
+							if(leng!=data.length){
+								leng = data.length;
+							}
+						}
+					})
+				}*/
+		var as = 0;
 		var jieSuan = new Vue({
 			el: "#jieSuan",
 			data: {
@@ -284,19 +320,30 @@
 				textarea: '',
 				play: false,
 				radioTreaty: '1',
-				car:[],
-				id:"",
-				no:"",
-				id1:"",
-				cid1:"",
-				counts:[],
-				cou:{
-					routofpocket:"",
-					rdiscounts:"",
-					cbalance:""
+				car: [],
+				id: "",
+				no: "",
+				id1: "",
+				cid1: "",
+				counts: [],
+				cou: {
+					routofpocket: "",
+					rdiscounts: "",
+					cbalance: ""
 				},
-				jine:0,
-				mainid:0
+				jine: 0,
+				mainid: 0,
+				date1: "",
+				options: [{
+					value: 1,
+					label: '今天'
+				}, {
+					value: 2,
+					label: '昨天'
+				}, {
+					value: 0,
+					label: '全部'
+				}]
 			},
 			methods: {
 				handleClick(tab, event) {
@@ -322,80 +369,83 @@
 						}
 					},
 					//查询待结算的数据信息
-					queryCar(){
+					queryCar() {
 						let _this = this;
 						var id = 0;
 						var no = 0;
-						if(this.id!=""){
+						var date1 = 0;
+						if (this.id != "") {
 							id = this.id;
 						}
-						if(this.no!=""){
+						if (this.no != "") {
 							no = this.no;
 						}
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/car/${id}/${no}`).then(function(resp){
+						if (this.date1 != "") {
+							date1 = this.date1;
+						}
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/car/${id}/${no}/${date1}`).then(function(resp) {
 							_this.car = resp.data;
 						})
 					},
 					//查询所有已结算的数据信息
-					queryCount(){
+					queryCount() {
 						var id1 = 0;
 						var cid1 = 0;
-						let _this =this;
-						if(this.id1!=""){
+						let _this = this;
+						if (this.id1 != "") {
 							id1 = this.id1;
 						}
-						if(this.cid1!=""){
+						if (this.cid1 != "") {
 							cid1 = this.cid1;
 						}
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/count/${id1}/${cid1}`).then(function(resp){
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/count/${id1}/${cid1}`).then(function(resp) {
 							_this.counts = resp.data;
 						})
 					},
-					addCou(row){
+					addCou(row) {
 						let _this = this;
-						this.dialogVisible=true;
+						this.dialogVisible = true;
 						this.cou["cid"] = row.carid;
 						this.cou["maintainid"] = row.maintainid;
 						this.cou["maintainmoney"] = row.maintainmoney;
 						this.cou["rcashier"] = "张三";
 						this.cou["cname"] = row.carownername;
 						this.mainid = row.maintainid;
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp){
-							if(resp.data==""){
-								axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/emp/${_this.cou.cid}`).then(function(resp1){
-									if(resp1.data==""){
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp) {
+							if (resp.data == "") {
+								axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/emp/${_this.cou.cid}`).then(function(resp1) {
+									if (resp1.data == "") {
 										_this.cou.routofpocket = Math.ceil(row.maintainmoney);
-									}else{
-										_this.cou.routofpocket = Math.ceil(row.maintainmoney*0.8);
+									} else {
+										_this.cou.routofpocket = Math.ceil(row.maintainmoney * 0.8);
 									}
 								})
-							}else{
-								_this.cou.routofpocket = Math.ceil(row.maintainmoney*0.9);
+							} else {
+								_this.cou.routofpocket = Math.ceil(row.maintainmoney * 0.9);
 								_this.cou.cbalance = Math.ceil(resp.data.mbalance);
 							}
-							_this.cou.rdiscounts = Math.ceil(row.maintainmoney-_this.cou.routofpocket);
+							_this.cou.rdiscounts = Math.ceil(row.maintainmoney - _this.cou.routofpocket);
 						})
-						
 					},
-					add(){
+					add() {
 						let _this = this;
-						if(this.play == true){
+						if (this.play == true) {
 							this.cou["rway"] = 2;
-							if(this.cou.cbalance<this.cou.routofpocket){
-								this.$alert("余额不够!");	
+							if (this.cou.cbalance < this.cou.routofpocket) {
+								this.$alert("余额不够!");
 								as = 2;
 								return;
-							}else{
+							} else {
 								as = 1;
 							}
-						}else{
+						} else {
 							this.cou["rway"] = 1;
 						}
 						this.cou["rdealwith"] = this.cou.maintainmoney;
 						this.cou["rdiscounts"] = this.cou.rdiscounts;
 						this.cou["remark"] = this.textarea;
-						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${this.cou.cid}/${this.cou.routofpocket}/${as}/${this.jine}/${this.mainid}`,this.cou).then(function(resp){
-							if(resp.data.code=="200"){
+						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${this.cou.cid}/${this.cou.routofpocket}/${as}/${this.jine}/${this.mainid}`, this.cou).then(function(resp) {
+							if (resp.data.code == "200") {
 								_this.$alert("结算成功");
 								_this.dialogVisible = false;
 								_this.queryCar();
@@ -403,15 +453,32 @@
 							}
 						})
 					},
-					aa(){
+					aa() {
 						this.jine = this.cou.cbalance;
 						this.cou.cbalance = 0;
+					},
+					ss() {
+						this.queryCar();
+					},
+					dd() {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/queryCloseAll`).then(function(resp) {
+							if (leng != resp.data.length) {
+								leng = resp.data.length;
+								_this.car = resp.data;
+								_this.$notify({
+									title: '结算提醒',
+									message: '已更新新订单'
+								});
+							}
+						})
 					}
-				},
-				mounted(){
-					this.queryCar();
-					this.queryCount();
-				}
+			},
+			mounted() {
+				this.queryCar();
+				this.queryCount();
+				setInterval(this.dd, 1000);
+			}
 		})
 	</script>
 
