@@ -2,107 +2,178 @@
 <html>
 
 	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
-		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
-		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+		<style type="text/css">
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				font-family: "微软雅黑";
+				font-size: 14px;
+			}
+			
+			#l-map {
+				height: 300px;
+				width: 100%;
+			}
+			
+			#r-result {
+				width: 100%;
+			}
+		</style>
+
+		<title>关键字输入提示词条</title>
 	</head>
 
 	<body>
 		<div id="seomaintainapp">
 			<el-row>
-				<el-col :span="5">
+				<el-col :span="3">
 					<h1>站外维修</h1>
 				</el-col>
-				<el-col :span="10" :push="4">
-					<el-button type="primary" @click="dialogTableVisible = true">添加维修项目</el-button>
-					<el-button type="success">生成维修单据</el-button>
+				<el-col :span="19" :push="0">
+					<el-button @click="getDistance">获得距离</el-button>
+					<el-button id="result">查看线路</el-button>
+					<el-button type="primary" @click="weixiushow">添加维修项目</el-button>
+					<el-button type="success" @click="fanggong">生成维修单据</el-button>
 					<el-button type="primary" @click="maintaincarshow(1)">维修车辆信息</el-button>
+					<el-button type="primary" @click="teamshow">添加技工</el-button>
+					<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index)">
+						{{item.mename}}
+					</el-tag>
 				</el-col>
 			</el-row>
 			<el-row>
 				<el-form ref="form" label-width="80px">
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="4">
 							<el-form-item label="车牌号">
-								<el-select filterable v-model="value" placeholder="请选择">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="救援车辆">
-								<el-select filterable v-model="value" placeholder="请选择">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="技工星级">
-								<el-select filterable v-model="value" placeholder="请选择">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="技工">
-								<el-select filterable v-model="value" placeholder="请选择">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								<el-select filterable v-model="value" placeholder="请选择" @change="chepaichange">
+									<el-option v-for="(item,index) in vehicle" :key="index" :label="item.vlicense" :value="index">
 									</el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 
+						<el-col :span="4">
+							<el-form-item label="驾驶员">
+								<el-input v-model="addmaintaincar.drivername"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-form-item label="车辆品牌">
+								<el-input v-model="addmaintaincar.vehiclebrand"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-form-item label="联系电话">
+								<el-input v-model="addmaintaincar.maintainphone"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-form-item label="维修备注">
+								<el-input v-model="addmaintaincar.beizhu"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-form-item label="总里程">
+								<el-input v-model="addmaintaincar.mileage"></el-input>
+							</el-form-item>
+						</el-col>
 					</el-row>
 					<el-row>
-						<el-col :span="6">
-							<el-form-item label="车辆品牌">
-								<el-input></el-input>
+						<el-col :span="4">
+							<el-form-item label="救援车辆">
+								<el-select filterable v-model="addmaintaincar.id" placeholder="请选择">
+									<el-option v-for="item in fieldvehicless" :key="item.id" :label="item.carnumber" :value="item.id">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
-
-						<el-col :span="6">
-							<el-form-item label="驾驶员">
-								<el-input></el-input>
-							</el-form-item>
+						<el-col :span="4">
+							<el-form ref="form" label-width="80px">
+								<el-form-item label="起始地址">
+									<el-input id="suggestId" v-model="start"></el-input>
+								</el-form-item>
+							</el-form>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item label="联系电话">
-								<el-input></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="维修备注">
-								<el-input></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="总里程">
-								<el-input></el-input>
-							</el-form-item>
+						<el-col :span="4">
+							<el-form ref="form" label-width="80px">
+								<el-form-item label="结束地址">
+									<el-input id="suggestId2" v-model="end"></el-input>
+								</el-form-item>
+							</el-form>
 						</el-col>
 					</el-row>
+					<el-row>
+						<div id="l-map"></div>
+					</el-row>
+					<div id="r-result"></div>
+					<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+					<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
+						<el-col :span="5">
+							<h3>站外维修车辆信息</h3>
+						</el-col>
+						<el-col :span="10" :push="4">
+							<el-button @click="lishiweixiu">车辆历史维修</el-button>
+							<template>
+								<el-select v-model="maintainreceiptsvalues" placeholder="请选择" @change="selectchange">
+									<el-option v-for="item in maintainreceipts" :key="item.receiptsid" :label="item.receiptsname" :value="item.receiptsid">
+									</el-option>
+								</el-select>
+							</template>
+						</el-col>
+						<el-table :data="maintaincars" max-height="250" highlight-current-row @current-change="maintaincarschangge">
+							<el-table-column property="maintaindate" label="序号" width="140" align="center"></el-table-column>
+							<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
+							<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
+							<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
+							<el-table-column property="vehiclebrand" label="车辆品牌" width="140" align="center"></el-table-column>
+							<el-table-column property="vehiclemodel" label="车辆型号" width="140" align="center"></el-table-column>
+							<el-table-column property="maintainmoney" label="维修金额" fixed="right" width="120" align="center"></el-table-column>
+							<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
+							<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
+							<el-table-column label="操作" fixed="right" align="center">
+								<template slot-scope="scope">
+									<el-button size="mini" v-if="maintainreceiptsvalues=='1'" round @click="jungong(scope.row.maintainid)">完成</el-button>
+									<el-button size="mini" v-if="maintainreceiptsvalues=='4'" round @click="fanggongbut(scope.row)">返工</el-button>
+								</template>
 
+							</el-table-column>
+						</el-table>
+						<el-row>
+							<el-col :span="5">
+								<h3>车辆维修项目详情</h3>
+							</el-col>
+						</el-row>
+						<el-table :data="weixius">
+							<el-table-column property="" label="序号"></el-table-column>
+							<el-table-column property="xmmingcheng" label="项目名称"></el-table-column>
+							<el-table-column property="xmshoujia" label="售价类型"></el-table-column>
+							<el-table-column property="xmbiaozhun" label="标准价"></el-table-column>
+							<el-table-column property="xmhuiyuan" label="会员价"></el-table-column>
+
+						</el-table>
+					</el-drawer>
 				</el-form>
 			</el-row>
 			<el-row>
 				<template>
-					<el-table :data="weixiu" style="width: 100%">
-						<el-table-column prop="a" label="序号">
+					<el-table :data="addweixiu" style="width: 100%" show-summary>
+						<el-table-column prop="" label="序号">
 						</el-table-column>
-						<el-table-column prop="a" label="维修项目">
+						<el-table-column prop="xmmingcheng" label="维修项目">
 						</el-table-column>
-						<el-table-column prop="b" label="维修价格">
+						<el-table-column prop="xmbiaozhun" label="维修价格">
 						</el-table-column>
-						<el-table-column prop="c" label="会员价">
+						<el-table-column prop="xmhuiyuan" label="会员价">
 						</el-table-column>
 						<el-table-column label="操作">
 							<template slot-scope="scope">
-								<el-button type="danger" icon="el-icon-delete" circle></el-button>
+								<el-button type="danger" icon="el-icon-delete" circle @click="deleteclickweixiu(scope.$index)"></el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -112,13 +183,41 @@
 
 			<el-dialog title="维修项目" :visible.sync="dialogTableVisible">
 				<el-row>
+					<el-col :span="20" :push="4">
+						<el-tag v-for="(item,index) in addweixiu" :key="item.xmmingcheng" closable @close="deleteweixiu(index)">
+							{{item.xmmingcheng}}
+						</el-tag>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col>
+						<el-form ref="form" :inline="true" label-width="80px">
+							<el-form-item label="选择类型">
+								<el-select v-model="region" placeholder="请选择活动区域" @change="weixiuchange">
+									<el-option label="车型" value="1"></el-option>
+									<el-option label="发动机" value="2"></el-option>
+									<el-option label="其他" value="3"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="请选择">
+								<el-select v-model="weixiuxiangmutwovalue" placeholder="请选择" @change="weixiuchangetwo">
+									<el-option v-for="item in weixiuxiangmutwo" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+
+								</el-select>
+							</el-form-item>
+						</el-form>
+					</el-col>
+				</el-row>
+				<el-row>
 					<el-table :data="weixiu">
-						<el-table-column property="a" label="序号"></el-table-column>
-						<el-table-column property="b" label="维修项目"></el-table-column>
-						<el-table-column property="c" label="价格"></el-table-column>
+						<el-table-column property="xmmingcheng" label="序号"></el-table-column>
+						<el-table-column property="xmmingcheng" label="维修项目"></el-table-column>
+						<el-table-column property="xmbiaozhun" label="价格"></el-table-column>
 						<el-table-column label="操作">
 							<template slot-scope="scope">
-								<el-checkbox></el-checkbox>
+								<el-button size="mini" round @click="clickweixiu(scope.row,1)">选中</el-button>
+								<el-button size="mini" round @click="clickweixiu(scope.row,2)">0元</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -126,75 +225,87 @@
 				<br />
 				<el-row>
 					<el-col :span="5" :push="10">
-						<el-button type="success" round>确定维修项目</el-button>
+						<el-button type="success" round @click="clickweixiumotai">确定维修项目</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
-			<el-drawer :visible.sync="table" direction="rtl" size="60%" title="维修车辆信息">
-				<el-col :span="5">
-					<h3>站外维修车辆信息</h3>
-				</el-col>
-				<el-col :span="10" :push="4">
-					<template>
-						<el-select v-model="maintainreceiptsvalues" placeholder="请选择" @change="selectchange">
-							<el-option v-for="item in maintainreceipts" :key="item.receiptsid" :label="item.receiptsname" :value="item.receiptsid">
-							</el-option>
-						</el-select>
-					</template>
-				</el-col>
-				<el-table :data="maintaincars" max-height="250" highlight-current-row @current-change="maintaincarschangge">
-					<el-table-column property="maintaindate" label="序号" width="140" align="center"></el-table-column>
-					<el-table-column property="licence" label="车牌号" width="140" align="center"></el-table-column>
-					<el-table-column property="drivername" label="驾驶员" width="140" align="center"></el-table-column>
-					<el-table-column property="maintainphone" label="联系电话" width="140" align="center"></el-table-column>
-					<el-table-column property="vehiclebrand" label="车辆品牌" width="140" align="center"></el-table-column>
-					<el-table-column property="vehiclemodel" label="车辆型号" width="140" align="center"></el-table-column>
-					<el-table-column property="maintainmoney" label="维修金额" fixed="right" width="120" align="center"></el-table-column>
-					<el-table-column property="maintaindate" label="单据时间" align="center" fixed="right" width="120"></el-table-column>
-					<el-table-column property="accomplishdate" label="完成时间" fixed="right" width="100" align="center"></el-table-column>
-					<el-table-column label="操作" fixed="right" align="center">
-						<template slot-scope="scope">
-							<el-button size="mini" round @click="jungong(scope.row.maintainid)">完成</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+			<el-dialog title="技工选择" :visible.sync="dialogVisibletwo" width="50%">
 				<el-row>
-					<el-col :span="5">
-						<h3>车辆维修项目详情</h3>
+					<el-col :span="20" :push="4">
+						<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index)">
+							{{item.mename}}
+						</el-tag>
 					</el-col>
 				</el-row>
-				<el-table :data="weixius">
-					<el-table-column property="" label="序号"></el-table-column>
-					<el-table-column property="xmmingcheng" label="项目名称"></el-table-column>
-					<el-table-column property="xmshoujia" label="售价类型"></el-table-column>
-					<el-table-column property="xmbiaozhun" label="标准价"></el-table-column>
-					<el-table-column property="xmhuiyuan" label="会员价"></el-table-column>
+				<el-row>
+					<el-col :span="5">
+						<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+					</el-col>
+					<el-col :span="19">
 
-				</el-table>
-			</el-drawer>
+						<el-table :data="teamtechnicians" style="width: 100%">
+							<el-table-column prop="mename" label="姓名">
+							</el-table-column>
+							<el-table-column prop="b" label="工时">
+							</el-table-column>
+							<el-table-column prop="tename" label="班组名">
+							</el-table-column>
+							<el-table-column prop="starrating" label="星级">
+							</el-table-column>
+							<el-table-column prop="mesex" label="性别">
+							</el-table-column>
+							<el-table-column prop="mephone" label="手机号">
+							</el-table-column>
+							<el-table-column label="操作">
+								<template slot-scope="scope">
+									<el-button size="mini" round @click="clickjigong(scope.row)">选中</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+
+					</el-col>
+				</el-row>
+				<br />
+				<el-row>
+					<el-col :span="10" :push="11">
+						<el-button @click="clickjigongquxiao">取 消</el-button>
+						<el-button type="primary" @click="clickqueding">确 定</el-button>
+					</el-col>
+				</el-row>
+			</el-dialog>
+
 		</div>
 	</body>
-	<script type="text/javascript " src="/dzw_mobiles/js/jquery-1.12.4.js "></script>
-	<script type="text/javascript " src="/dzw_mobiles/js/jq_ajax_config.js "></script>
-	<script type="text/javascript " src="/dzw_mobiles/js/axios.min.js "></script>
-	<script type="text/javascript " src="/dzw_mobiles/js/axios_cfg.js "></script>
-	<script>
+	<script type="text/javascript">
 		var seomaintainvue = new Vue({
 			el: "#seomaintainapp",
 			data: {
+				//地图
+				start: '',
+				end: '',
+				userlocation: {
+					lng: "",
+					lat: ""
+				},
+				userlocation2: {
+					lng: "",
+					lat: ""
+				},
 				//车辆品牌对象
 				value: '',
-				options: [{
-					value: '选项1',
-					label: '黄金糕'
-				}],
+				vehicle: [],
 				//维修单数组
-				weixiu: [{
-					a: 'a',
-					b: 'b',
-					c: 'c',
-					d: 'd'
-				}],
+				weixiu: [],
+				//维修单
+				maintaincar: {
+					licence: '', //车辆品牌
+					//技工编号
+					teamid: '', //技工id
+					vehiclebrand: '', //车辆品牌
+					drivername: '', //驾驶员
+					maintainphone: '', //联系电话
+					beizhu: '', //备注
+				},
 				//维修项目模态框
 				dialogTableVisible: false,
 				//抽屉属性
@@ -203,19 +314,348 @@
 				//维修车辆信息数组
 				maintaincars: [],
 				weixius: [],
-				//维修状态下拉框
+				//维修表数据源
 				maintainreceipts: [],
-				maintainreceiptsvalues:''
+				//维修状态下拉框
+				maintainreceiptsvalues: '',
+				//技工选择模态框
+				dialogVisibletwo: false,
+				//技工树状图
+				data: [],
+				defaultProps: {
+					children: 'children',
+					label: 'text'
+				},
+				//技工查询条件
+				teamid: 0,
+				meid: 0,
+				//技工数据源
+				teamtechnicians: [],
+				//技工数据源2
+				teamtechniciantwos: [],
+				//维修下拉框
+				region: '1',
+				//维修类型2数组
+				weixiuxiangmutwo: [],
+				weixiuxiangmutwovalue: '',
+				//新增的维修表数据源
+				addweixiu: [],
+				//生成维修表数据源对象
+				addmaintaincar: {
+					receiptsid: 1, //维修状态
+					departdate: '', //开单时间
+					maintainvehicleid: 0, //车辆id
+					inside: 2, //占内
+					beizhu: '', //维修备注
+					maintainmoney: 0, //维修金额
+					drivername: '', //驾驶员
+					maintainphone: '', //；联系电话
+					licence: '', //车牌号
+					vehiclebrand: '', //车辆品牌
+					vehiclemodel: '', //车辆型号
+					carownername: '', //车主名
+					carid: 0, //车主id
+					maintaindate: '', //单据日期
+					maintaincarxiangmus: [], //维修项目集合
+					teamtechniciantwos: [], //维修技工集合
+					maintainling: 1,
+					id: '', //救援车辆id
+					departaddress: '', //起始地址
+					rescuevehicleaddress: '', //救援地址
+					mileage: '' //总里程
+
+				},
+				//mileage: '', //总里程
+				fieldvehicless: [] //救援车辆数据源
 
 			},
+			mounted: function() {
+				this.loadjungong();
+				this.loadchepai();
+				this.bmapload()
+				this.fieldvehiclesload()
+			},
 			methods: {
-				
+				//查看历史维修记录
+				lishiweixiu() {
+					if(this.addmaintaincar.maintainvehicleid == 0 || this.addmaintaincar.maintainvehicleid == '') {
+						alert("请选着查看的车辆")
+						return;
+					}
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/maintainvehicleid/${this.addmaintaincar.maintainvehicleid}`).then(function(res) {
+						seomaintainvue.maintaincars = res.data;
+					})
+				},
+				fieldvehiclesload() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/fieldvehicles`).then(function(res) {
+						seomaintainvue.fieldvehicless = res.data;
+					})
+				},
+				bmapload() {
+					var th = this;
+					// 创建Map实例
+					var map = new BMap.Map("l-map");
+					// 初始化地图,设置中心点坐标，
+					var point = new BMap.Point(121.160724, 31.173277); // 创建点坐标，汉得公司的经纬度坐标
+					map.centerAndZoom(point, 15);
+					map.enableScrollWheelZoom();
+					var ac = new BMap.Autocomplete( //建立一个自动完成的对象
+						{
+							"input": "suggestId",
+							"location": map
+						})
+					var acd = new BMap.Autocomplete( //建立一个自动完成的对象
+						{
+							"input": "suggestId2",
+							"location": map
+						})
+					acd.addEventListener("onconfirm", function(e) { //鼠标点击下拉列表后的事件
+						var _value = e.item.value;
+						myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+						this.address_detail = myValue
+						setPlace(1);
+					});
+					var myValue;
+					ac.addEventListener("onconfirm", function(e) { //鼠标点击下拉列表后的事件
+						var _value = e.item.value;
+						myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+						this.address_detail = myValue
+						setPlace(2);
+
+					});
+
+					function setPlace(pan) {
+						map.clearOverlays(); //清除地图上所有覆盖物
+						function myFun() {
+							if(pan == 1) {
+								th.userlocation = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+								map.centerAndZoom(th.userlocation, 18);
+								map.addOverlay(new BMap.Marker(th.userlocation)); //添加标注
+							} else {
+								th.userlocation2 = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+								map.centerAndZoom(th.userlocation2, 18);
+								map.addOverlay(new BMap.Marker(th.userlocation2)); //添加标注
+							}
+						}
+						var local = new BMap.LocalSearch(map, { //智能搜索
+							onSearchComplete: myFun
+						});
+						local.search(myValue);
+
+						//测试输出坐标（指的是输入框最后确定地点的经纬度）
+						map.addEventListener("click", function(e) {
+							//经度
+							console.log(th.userlocation.lng);
+							//维度
+							console.log(th.userlocation.lat);
+						})
+						if(pan == 1) {
+							getditulu();
+							//this.search()
+						}
+					}
+					//获得线路图
+					function getditulu() {
+						//三种驾车策略：最少时间，最短距离，避开高速
+						var routePolicy = [BMAP_DRIVING_POLICY_LEAST_TIME, BMAP_DRIVING_POLICY_LEAST_DISTANCE, BMAP_DRIVING_POLICY_AVOID_HIGHWAYS];
+						$("#result").click(function() {
+							map.clearOverlays();
+							search(routePolicy[0]);
+
+							function search(route) {
+								var driving = new BMap.DrivingRoute(map, {
+									renderOptions: {
+										map: map,
+										autoViewport: true
+									},
+									policy: route
+								});
+								driving.search($("#suggestId").val(), $("#suggestId2").val());
+							}
+						});
+					}
+
+				},
+				// 测量百度地图两个点间的距离
+				getDistance() {
+					var map = new BMap.Map('');
+					//获得第一个的
+					var pointA = new BMap.Point(parseFloat(this.userlocation.lng), parseFloat(this.userlocation.lat));
+					//获得第二个经纬度
+					var pointB = new BMap.Point(parseFloat(this.userlocation2.lng), parseFloat(this.userlocation2.lat));
+					//计算公里
+					this.addmaintaincar.mileage = (map.getDistance(pointB, pointA) / 1000).toFixed(0); // 保留小数点后两位
+					var qian = this.addmaintaincar.mileage * 5;
+					this.addweixiu.push({
+						xmmingcheng: '救援费',
+						xmbiaozhun: qian
+					})
+					//天假维修项目
+					alert(this.addmaintaincar.mileage)
+				},
+				//技工模态框取消按钮
+				clickjigongquxiao() {
+					//清空数据源
+					this.teamtechniciantwos = [];
+					this.dialogVisibletwo = false;
+				},
+				clickqueding() {
+					this.dialogVisibletwo = false;
+				},
+				//确定维修项目按钮关闭模态框
+				clickweixiumotai() {
+					this.dialogTableVisible = false;
+				},
+
+				//获得当前日期，时间
+				getdata(aa) { //定义函数show
+					var d = new Date();
+					var y = d.getFullYear();
+					var m = d.getMonth() + 1;
+					var dd = d.getDate();
+					var h = d.getHours();
+					var mm = d.getMinutes();
+					var s = d.getSeconds();
+					var t = y + "-" + m + "-" + dd + " " + h + ":" + mm + ":" + s;
+					var t2 = y + "-" + m + "-" + dd;
+					if(aa == 1) {
+						return t;
+					} else {
+						return t2;
+					}
+				},
+				//返工数更新
+				fanggong() {
+					if(this.addweixiu.length == 0) {
+						this.$message({
+							message: '请选着维修项目',
+							type: 'warning'
+						});
+						return;
+					}
+					if(this.teamtechniciantwos.length == 0) {
+						this.$message({
+							message: '请选着维修技工',
+							type: 'warning'
+						});
+						return;
+					}
+					//判断是否返工车辆
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/maintainling/${seomaintainvue.addmaintaincar.licence}`).then(function(res) {
+						if(res.data != "") {
+							//新增
+							res.data.maintainling = res.data.maintainling + res.data.maintainling;
+							res.data.maintaincarxiangmus = seomaintainvue.addweixiu;
+							res.data.teamtechniciantwos = seomaintainvue.teamtechniciantwos;
+							res.data.departdate = seomaintainvue.getdata(1);
+							res.data.maintaindate = seomaintainvue.getdata(2);
+							//计算价格，							
+							for(var i = 0; i < seomaintainvue.addweixiu.length; i++) {
+								res.data.maintainmoney += seomaintainvue.addweixiu[i].xmbiaozhun;
+							}
+							axios.post(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/maintainling`, res.data).then(function(res) {
+								if(res.data.code == "200") {
+									seomaintainvue.$message({
+										message: '返工数据添加成功',
+										type: 'success'
+									});
+									//清空
+									seomaintainvue.loadchepai();
+									seomaintainvue.addmaintaincar = {};
+									seomaintainvue.addweixiu = [];
+									seomaintainvue.teamtechniciantwos = [];
+									seomaintainvue.start = '';
+									seomaintainvue.end = '';
+								}
+							})
+						} else {
+							seomaintainvue.addweixiudanju();
+						}
+
+					})
+
+				}, //生成维修单据
+				addweixiudanju() {
+					if(this.addweixiu.length == 0) {
+						this.$message({
+							message: '请选着维修项目',
+							type: 'success'
+						});
+						return;
+					}
+					if(this.teamtechniciantwos.length == 0) {
+						this.$message({
+							message: '请选着维修技工',
+							type: 'success'
+						});
+						return;
+					}
+					this.addmaintaincar.maintainmoney = 0;
+					this.addmaintaincar.maintaincarxiangmus = this.addweixiu;
+					this.addmaintaincar.teamtechniciantwos = this.teamtechniciantwos;
+					this.addmaintaincar.departdate = this.getdata(1);
+					this.addmaintaincar.maintaindate = this.getdata(2);
+					this.addmaintaincar.departaddress = $("#suggestId").val();
+					this.addmaintaincar.rescuevehicleaddress = $("#suggestId2").val();
+					for(var i = 0; i < this.addmaintaincar.maintaincarxiangmus.length; i++) {
+						this.addmaintaincar.maintainmoney += this.addmaintaincar.maintaincarxiangmus[i].xmbiaozhun;
+					} //新增方法
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow`, seomaintainvue.addmaintaincar).then(function(res) {
+						if(res.data.code == "200") {
+							seomaintainvue.$message({
+								message: '新增维修单成功',
+								type: 'success'
+							});
+							//清空
+							seomaintainvue.loadchepai();
+							seomaintainvue.addmaintaincar = {};
+							seomaintainvue.addweixiu = [];
+							seomaintainvue.teamtechniciantwos = [];
+							seomaintainvue.start = '';
+							seomaintainvue.end = '';
+							//刷新车牌号
+							seomaintainvue.loadchepai();
+						}
+					})
+				},
+				fanggongbut(aa) {
+					this.table = false;
+					for(var i = 0; i < this.vehicle.length; i++) {
+						if(this.vehicle[i].vid == aa.maintainvehicleid) {
+							this.value = i;
+							break;
+						}
+					}
+					this.start = aa.departaddress;
+					this.end = aa.rescuevehicleaddress;
+					$("#suggestId").val(aa.departaddress);
+					$("#suggestId2").val(aa.rescuevehicleaddress);
+					this.addmaintaincar = aa;
+				},
+				//下拉框改变
+				chepaichange() {
+					this.addmaintaincar.maintainvehicleid = this.vehicle[this.value].vid;
+					this.addmaintaincar.drivername = this.vehicle[this.value].vdriver;
+					this.addmaintaincar.maintainphone = this.vehicle[this.value].vphone;
+					this.addmaintaincar.licence = this.vehicle[this.value].vlicense;
+					this.addmaintaincar.vehiclebrand = this.vehicle[this.value].vbrand;
+					this.addmaintaincar.vehiclemodel = this.vehicle[this.value].vmodelid;
+					this.addmaintaincar.carid = this.vehicle[this.value].cid;
+				},
+				//维修模态框
+				weixiushow() {
+					this.weixiuchange();
+					this.dialogTableVisible = true;
+				},
 				//打开抽屉
 				maintaincarshow(maintainreceiptsid) {
 					//加载维修车辆信息
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${maintainreceiptsid}/0`).then(function(res) {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincar/${maintainreceiptsid}/2`).then(function(res) {
 						seomaintainvue.maintaincars = res.data;
 					})
+					if(this.table == false) {
+						this.maintainreceiptsvalues = this.maintainreceipts[0].receiptsid;
+					}
 					this.table = true;
 				},
 				//维修项目详情
@@ -226,10 +666,20 @@
 					//id查询所有项目
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarxiangmu/${currentRow.maintainid}`).then(function(res) {
 						seomaintainvue.weixius = res.data;
+						//判断是否返工
+						if(this.maintainreceiptsvalues == '4') {
+							seomaintainvue.maintaincar = currentRow;
+						}
+
 					})
+
 				},
 				//修理完成,修改状态
 				jungong(maintainid) {
+					if(this.maintainreceiptsvalues == 4) {
+						//执行
+						return;
+					}
 					//alert(maintainid)
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintaincarupdate/${maintainid}/2`).then(function(res) {
 						if(res.data.code = "200") {
@@ -239,30 +689,140 @@
 							});
 							//加载维修车辆信息
 							seomaintainvue.weixius = [];
-							seomaintainvue.maintaincarshow();
+							seomaintainvue.maintaincarshow(1);
 						} else {
-							seomaintainvue.$message({
-								message: '竣工失败',
-								type: 'success'
-							});
+							seomaintainvue.$message.error('竣工失败');
 						}
 
 					})
 				},
 				//下拉框改变
-				selectchange(){
+				selectchange() {
 					this.maintaincarshow(this.maintainreceiptsvalues);
-				}
+				},
+				//技工模态框
+				teamshow() {
+					//加载树控件
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/gettree`).then(function(res) {
+						seomaintainvue.data = res.data;
+					})
+					this.dialogVisibletwo = true;
+				},
+				//选中子节点时回调函数，查询技工
+				handleNodeClick(tree, node, c) {
+					if(node.level === 2) {
+						this.meid = tree.mechanicstar.meid;
+						this.teamid = node.parent.data.team.teamid
+						//查询
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/${seomaintainvue.teamid}/${seomaintainvue.meid}`).then(function(res) {
+							seomaintainvue.teamtechnicians = res.data;
+						})
+					}
+				},
+				//选择技工
+				clickjigong(teamtechniciantwo) {
+					//巡皇判断是否选中过
+					for(var i = 0; i < this.teamtechniciantwos.length; i++) {
+						if(this.teamtechniciantwos[i].mename == teamtechniciantwo.mename) {
+							seomaintainvue.$message.error('已选该技工，请勿重复选中');
+							return;
+						}
+					}
+					//添加技工
+					this.teamtechniciantwos.push(teamtechniciantwo);
+				},
+				//移除
+				deletejigong(index) {
+					this.teamtechniciantwos.splice(index, 1);
+				},
+				//维修下拉框改变事件
+				weixiuchange() {
+					if(this.region == '1') {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/motorcycle`).then(function(res) {
+							seomaintainvue.weixiuxiangmutwo = [];
+							for(var i = 0; i < res.data.length; i++) {
+								seomaintainvue.weixiuxiangmutwo.push({
+									value: res.data[i].motorcycleid,
+									label: res.data[i].motorcyclename
+								});
+							}
+							seomaintainvue.weixiuxiangmutwovalue = res.data[0].motorcycleid;
+							seomaintainvue.weixiuchangetwo();
+						})
+					} else if(this.region == '2') {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/engine`).then(function(res) {
+							seomaintainvue.weixiuxiangmutwo = [];
+							for(var i = 0; i < res.data.length; i++) {
+								seomaintainvue.weixiuxiangmutwo.push({
+									value: res.data[i].engineid,
+									label: res.data[i].enginename
+								});
+							}
+							seomaintainvue.weixiuxiangmutwovalue = res.data[0].engineid;
+							seomaintainvue.weixiuchangetwo();
+						})
+					} else {
+						//查询车型发动机为空的维修项目，禁用下拉框
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/weixiunull`).then(function(res) {
+							seomaintainvue.weixiuxiangmutwo = [];
+							seomaintainvue.weixiuxiangmutwovalue = '';
+							seomaintainvue.weixiu = res.data;
+						})
+					}
 
-			},
-			mounted: function() {
-				//加载竣工数据
-				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintainreceipts`).then(function(res){
-					seomaintainvue.maintainreceipts=res.data;
-					seomaintainvue.maintainreceiptsvalues=seomaintainvue.maintainreceipts[0].receiptsid;
-				})
+				},
+				//维修下拉框2改变事件，加载维修项目
+				weixiuchangetwo() {
+					if(this.region == '1') {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/weixiucid/${seomaintainvue.weixiuxiangmutwovalue}`).then(function(res) {
+							seomaintainvue.weixiu = res.data;
+						})
+					} else {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/weixiufid/${seomaintainvue.weixiuxiangmutwovalue}`).then(function(res) {
+							seomaintainvue.weixiu = res.data;
+						})
+					}
+
+				},
+				//删除维修项目
+				deleteweixiu(index) {
+					this.addweixiu.splice(index, 1);
+				},
+				//删除新增维修项目
+				deleteclickweixiu(index) {
+					this.addweixiu.splice(index, 1);
+				},
+				//添加维修表
+				clickweixiu(weixiu, p) {
+					//巡皇判断是否选中过
+					for(var i = 0; i < this.addweixiu.length; i++) {
+						if(this.addweixiu[i].xmmingcheng == weixiu.xmmingcheng) {
+							seomaintainvue.$message.error('已选中该维修项目，请勿重复选中');
+							return;
+						}
+					}
+					if(p == 2) {
+						weixiu.xmbiaozhun = 0;
+						weixiu.XMhuiyuan = 0;
+					}
+					//添加维修项目
+					this.addweixiu.push(weixiu);
+				},
+				loadjungong() {
+					//加载竣工数据
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/maintaincars/maintainreceipts`).then(function(res) {
+						seomaintainvue.maintainreceipts = res.data;
+						seomaintainvue.maintainreceiptsvalues = seomaintainvue.maintainreceipts[0].receiptsid;
+					})
+				},
+				//加载车牌
+				loadchepai() {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/vehicle`).then(function(res) {
+						seomaintainvue.vehicle = res.data;
+					})
+				},
+
 			}
-
 		})
 	</script>
 
