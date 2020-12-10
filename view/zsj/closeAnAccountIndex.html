@@ -408,7 +408,8 @@
 						this.cou["cid"] = row.carid;
 						this.cou["maintainid"] = row.maintainid;
 						this.cou["maintainmoney"] = row.maintainmoney;
-						this.cou["rcashier"] = "张三";
+						this.cou["rcashier"] = JSON.parse(sessionStorage.getItem("employee")).empname;
+						
 						this.cou["cname"] = row.carownername;
 						this.mainid = row.maintainid;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp) {
