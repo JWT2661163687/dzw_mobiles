@@ -16,7 +16,7 @@
 					<el-input v-model="neirong" placeholder="请输入内容" ></el-input>
 				</el-col>	
 				<el-col :span="2" :push="1">
-					 <el-button type="primary">搜索</el-button>
+					 <el-button type="primary" @click="mohu()">搜索</el-button>
 				</el-col>
 				<el-col :span="2" :push="1">	 
 					  <el-button type="primary">关闭</el-button>
@@ -40,27 +40,27 @@
 					      width="180">
 					    </el-table-column>
 					    <el-table-column
-					      prop="bianhao"
+					      prop="employeeid"
 					      label="员工编号">
 					    </el-table-column>
 					    <el-table-column
-					      prop="name"
+					      prop="emplogenid"
 					      label="姓名">
 					    </el-table-column>
 					    <el-table-column
-					      prop="dianhua"
+					      prop="empphone"
 					      label="电话">
 					    </el-table-column>
 					    <el-table-column
-					      prop="youxiang"
+					      prop="email"
 					      label="邮箱">
 					    </el-table-column>
 					   
 					  </el-table>
 					</template>
 				</el-col>
-				<el-col>
-					<span>合计:1条记录</span>
+				<el-col :span="4" :push="1">
+						<span>合计:</span><el-input  v-model="jilu" :disabled="true">  </el-input><span>条记录</span>
 				</el-col>
 				</el-row>
 			</el-row>
@@ -78,21 +78,27 @@
 			el:"#tongxunapp",
 			data:{
 				neirong:'',
-				tableData: [{
-					  bumen:'人事',
-					  gangwei:'扫地',
-					  bianhao:1,
-					  name:'大哥',
-					  dianhua:'111111',
-			          youxiang: '1111@qq.com',		          
-			        }, {
-			          bumen:'人事',
-					  gangwei:'洗碗',
-					  bianhao:2,
-					  name:'小弟',
-					  dianhua:'2222',
-			          youxiang: '2222@qq.com',	
-			        }]
+				tableData:[],
+				jilu:''
+			},
+			mounted(){
+				this.mohu();
+			},
+			methods:{
+				mohu(){
+							var employeeid;			//员工编号
+						if(this.neirong==""){
+							employeeid=-1;
+						}else{
+							employeeid=this.neirong;
+						}
+							let _this=this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/yuangong/select/${employeeid}`).then(function(resp) {
+									_this.tableData=resp.data;
+									alert("总条数:"+_this.tableData.length)
+									_this.jilu=_this.tableData.length;
+					})
+				}
 			}
 		})
 	</script>
