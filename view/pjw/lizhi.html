@@ -20,7 +20,7 @@
 					      <el-input v-model="form.name" autocomplete="off"></el-input>
 					    </el-form-item>
 					    <el-form-item label="离职原因" :label-width="formLabelWidth">
-					      <el-input v-model="form.yuanyin" autocomplete="off"></el-input>
+					      <el-input v-model="form.yy" autocomplete="off"></el-input>
 					    </el-form-item>
 					    </el-form-item>
 					  </el-form>
@@ -40,17 +40,17 @@
 						      width="180">
 						    </el-table-column>
 						    <el-table-column
-						      prop="name"
+						      prop="emplogenid"
 						      label="姓名">
 						    </el-table-column>
 						    <el-table-column
-						      prop="sex"
-						      label="性别">
+						      prop="empphone"
+						      label="电话">
 						    </el-table-column>
 						  </el-table>
 					</template>
 					  <div slot="footer" class="dialog-footer">
-					  	<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>					 
+					  	<el-button type="primary" @click="xiugai()">确 定</el-button>					 
 					    <el-button @click="dialogFormVisible = false">取 消</el-button>
 					   </div>
 					</el-dialog>
@@ -76,19 +76,19 @@
 					      width="180">
 					    </el-table-column>
 					    <el-table-column
-					      prop="bianhao"
+					      prop="employeeid"
 					      label="员工编号">
 					    </el-table-column>
 					    <el-table-column
-					      prop="name"
+					      prop="emplogenid"
 					      label="姓名">
 					    </el-table-column>
 					    <el-table-column
-					      prop="sex"
-					      label="性别">
+					      prop="empphone"
+					      label="电话">
 					    </el-table-column>
 					    <el-table-column
-					      prop="date"
+					      prop="lztimes"
 					      label="离职日期">
 					    </el-table-column>
 					    <el-table-column
@@ -98,8 +98,8 @@
 					  </el-table>
 					</template>
 				</el-col>
-				<el-col>
-					<span>合计:1条记录</span>
+				<el-col :span="4" :push="1">
+						<span>合计:</span><el-input  v-model="jilu" :disabled="true">  </el-input><span>条记录</span>
 				</el-col>
 				
 			</el-row>
@@ -117,43 +117,65 @@
 		var lizhi=new Vue({
 			el:"#lizhiapp",
 			data:{
-				tableData: [{
-					  bumen:'人事',
-					  gangwei:'扫地',
-					  bianhao:1,
-					  name:'大哥',
-					  sex:'男',
-			          date: '2016-05-02',
-			          yuanyin: '工资低'			          
-			        }, {
-			          bumen:'人事',
-					  gangwei:'扫地',
-					  bianhao:2,
-					  name:'小弟',
-					  sex:'男',
-			          date: '2018-05-02',
-			          yuanyin: '工资低了'
-			        }],
+				tableData: [],
 			        //模态框
 			        dialogFormVisible: false,
 				        form: {
 				          name: '',
-				          yuanyin: '',				          
+				          yy: '',				          
 				          delivery: false,				         
 				        },
 				      formLabelWidth: '120px',
 				    //离职员工表格
-				    tableData2:[{
-				      bumen:'人事',
-					  gangwei:'扫地',
-					  name:'大哥',
-					  sex:'男',
-				    },{
-				      bumen:'人事',
-					  gangwei:'洗碗',
-					  name:'小弟',
-					  sex:'男',
-				    }]
+				    tableData2:[],
+				    jilu:''
+			},
+			mounted(){
+				this.select();
+				this.mohu();
+			},
+			methods:{
+				select(){				//已经离职的方法
+					let _this=this;
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/yuangong/lizhi`).then(function(resp) {
+									_this.tableData=resp.data;
+									
+									_this.jilu=_this.tableData.length;		//查询离职人员  个数
+					})
+				},
+				mohu(){
+							var employeeid;			//员工编号
+							var neirong="";
+						if(neirong==""){
+							employeeid=-1;
+						}else{
+							employeeid=neirong;
+						}
+							let _this=this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/yuangong/select/${employeeid}`).then(function(resp) {
+									_this.tableData2=resp.data;
+									alert("总条数:"+_this.tableData.length)
+								//	_this.jilu=_this.tableData.length;
+					})
+				},
+				xiugai(){
+					dialogFormVisible = false;
+					let _this=this;
+					alert(_this.form.name+"和"+_this.form.yy)
+					axios.put(`http://127.0.0.1:8080/dzw_moblie/api/yuangong/update/${_this.form.name}/${_this.form.yy}`).then(function(resp) {
+									if(resp.data.code=="200"){
+									_this.$message({
+									message: '离职成功！',
+									type: 'success'
+										});
+									}
+									_this.select();
+									_this.mohu();
+									 _this.form.name='';
+				          			 _this.form.yy= '';
+									
+					})
+				}
 			}
 		})
 		
