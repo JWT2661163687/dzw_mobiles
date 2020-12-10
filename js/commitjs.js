@@ -6,12 +6,13 @@ var mainappvue = new Vue({
 	mounted: function() {
 		//获得树
 		this.loadtree();
+		//加载首页
+		this.menuclick("首页","首页",'shiuye001');
 	},
 	methods: {
 		loadtree() {
 			axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/loginjurisdiction/getFunTree`).then(function(res) {
 				mainappvue.trees = res.data;
-				//alert(JSON.stringify(mainappvue.trees))
 			})
 		},
 		handleOpen(key, keyPath) {

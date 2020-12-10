@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>首页</title>
+		<style>
+			.el-col {
+				
+			}
+			
+			#first {
+				
+			}
+			
+			.image {
+				margin: 10px;
+				width: 50px;
+				height: 50px;
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="first" align="center">
+			<h1 style="font-size: 26px;">欢迎使用汽修系统</h1>
+			<el-row :gutter="50">
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日接车总数 <span>{{front.carnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日维修中总数 <span>{{front.carrepairingnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日站内维修台次 <span>{{front.instationnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日站外维修台次 <span>{{front.outsidenumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				
+				
+			</el-row>
+			<br />
+			<el-row :gutter="50">
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日返修次数 <span>{{front.repairnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日结算次数 <span>{{front.closeanaccountnumber}}</span>
+						</p>
+					</el-card>
+				</el-col>
+				<el-col :span="6" >
+					<el-card  shadow="hover">
+						<p>
+							今日总收入 <span>{{front.generalincome}}</span>
+						</p>
+					</el-card>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script>
+		var first = new Vue({
+			el: "#first",
+			data:{
+				front:{}
+			},
+			methods:{
+				addfront(){
+					//创建今日首页数据
+				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/addfront`).then(function(res){
+					
+				})
+				},
+				
+				
+				//首页数据加载
+				frontload(){
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/getfront`).then(function(res){
+						first.front=res.data;
+					})
+				},
+				
+			},
+			mounted: function() {
+				this.addfront();
+				this.frontload();
+			},
+			
+			
+		})
+	</script>
+
+</html>
