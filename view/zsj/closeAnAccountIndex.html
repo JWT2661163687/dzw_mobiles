@@ -54,11 +54,7 @@
 											</el-table-column>
 											<el-table-column prop="maintainid" label="维修编号">
 											</el-table-column>
-<<<<<<< HEAD
 											<el-table-column prop="carid" label="客户编号">
-=======
-											<el-table-column prop="carid" label="车主名">
->>>>>>> 8fe505d82272f19394c40709b2ca06d113789179
 											</el-table-column>
 											<el-table-column prop="tename" label="维修班组名">
 											</el-table-column>
@@ -66,7 +62,7 @@
 											</el-table-column>
 											<el-table-column prop="departdate" label="开单出发时间" width="200">
 											</el-table-column>
-											<el-table-column prop="departaddress" label="出发地址" width="200">
+											<el-table-column prop="departaddress" label="出发地址">
 											</el-table-column>
 											<el-table-column prop="constructiondate" label="施工时间" width="200">
 											</el-table-column>
@@ -410,8 +406,7 @@
 						this.cou["cid"] = row.carid;
 						this.cou["maintainid"] = row.maintainid;
 						this.cou["maintainmoney"] = row.maintainmoney;
-						this.cou["rcashier"] = JSON.parse(sessionStorage.getItem("employee")).empname;
-						
+						this.cou["rcashier"] = "张三";
 						this.cou["cname"] = row.carownername;
 						this.mainid = row.maintainid;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp) {
@@ -454,7 +449,7 @@
 								_this.cou["remark"] = _this.textarea;
 								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${_this.cou.cid}/${_this.cou.routofpocket}/${as}/${_this.jine}/${_this.mainid}`, _this.cou).then(function(resp) {
 									if (resp.data.code == "200") {
-										_this.$alert("结算成功");
+										_this.$alert("结算成功!");
 										_this.dialogVisible = false;
 										_this.queryCar();
 										_this.queryCount();
