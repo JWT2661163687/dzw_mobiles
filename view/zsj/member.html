@@ -83,23 +83,23 @@
 			</el-row>
 			<el-row>
 				<template>
-					<el-col :md="19" :push="3">
+					<el-col :md="23" :push="2">
 						<el-table :data="member.list" style="width: 100%">
 							<el-table-column label="编号" width="180">
 								<template slot-scope="scope">
 									<span style="margin-left: 10px">{{ scope.row.mid }}</span>
 								</template>
 							</el-table-column>
+							<el-table-column label="客户编号" width="180">
+								<template slot-scope="scope">
+									<span style="margin-left: 10px">{{ scope.row.cid }}</span>
+								</template>
+							</el-table-column>
 							<el-table-column label="会员卡号" width="180">
 								<template slot-scope="scope">
 									<el-popover trigger="hover" placement="top">
-<<<<<<< HEAD
 										<!--<p>会员密码: <input type="password" :value="`${scope.row.mpass}`" style="border: 0px;" readonly="readonly" ></p>
 										<p>会员余额: {{ scope.row.mbalance }}</p>-->
-=======
-										<p>会员密码: <input type="password" :value="`${scope.row.mpass}`" style="border: 0px;"></p>
-										<p>会员余额: {{ scope.row.mbalance }}</p>
->>>>>>> 1947ac34f8c62c0d7d44d8c2c4734d4b44829439
 										<div slot="reference" class="name-wrapper">
 											<el-tag size="medium">{{ scope.row.mcardnumber }}</el-tag>
 										</div>
@@ -290,8 +290,6 @@
 						aa["value"] = resp.data[i];
 						_this.restaurants.push(aa);
 					}
-					alert(_this.restaurants[0])
-					alert(JSON.stringify(_this.restaurants))
 				})
 			}
 		})

@@ -54,6 +54,8 @@
 											</el-table-column>
 											<el-table-column prop="maintainid" label="维修编号">
 											</el-table-column>
+											<el-table-column prop="carid" label="客户编号">
+											</el-table-column>
 											<el-table-column prop="tename" label="维修班组名">
 											</el-table-column>
 											<el-table-column prop="maintaindate" label="单据时间" width="200">
@@ -100,7 +102,7 @@
 										<template>
 											<el-radio-group v-model="radioTreaty" @change="agreeChange">
 												<el-radio label="1" border>现金支付</el-radio>
-												<el-radio label="2" border>余额支付</el-radio>
+												<el-radio label="2" border>会员余额支付</el-radio>
 											</el-radio-group>
 										</template>
 									</el-row>
@@ -215,19 +217,15 @@
 											</el-table-column>
 											<el-table-column prop="cid" label="客户编号">
 											</el-table-column>
-											<el-table-column prop="cname" label="客户名称">
-											</el-table-column>
 											<el-table-column prop="" label="支付方式">
 												<template slot-scope="scope">
 													<span v-if="scope.row.rway==1">
 														现金支付
 													</span>
 													<span v-if="scope.row.rway==2">
-														微信支付
+														会员余额支付
 													</span>
 												</template>
-											</el-table-column>
-											<el-table-column prop="mbalance" label="客户余额">
 											</el-table-column>
 											<el-table-column prop="rcashier" label="收银员">
 											</el-table-column>
@@ -429,27 +427,34 @@
 					},
 					add() {
 						let _this = this;
-						if (this.play == true) {
-							this.cou["rway"] = 2;
-							if (this.cou.cbalance < this.cou.routofpocket) {
-								this.$alert("余额不够!");
-								as = 2;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${this.cou.cid}`).then(function(resp) {
+							if (resp.data == "") {
+								_this.$alert("该用户不是会员");
 								return;
 							} else {
-								as = 1;
-							}
-						} else {
-							this.cou["rway"] = 1;
-						}
-						this.cou["rdealwith"] = this.cou.maintainmoney;
-						this.cou["rdiscounts"] = this.cou.rdiscounts;
-						this.cou["remark"] = this.textarea;
-						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${this.cou.cid}/${this.cou.routofpocket}/${as}/${this.jine}/${this.mainid}`, this.cou).then(function(resp) {
-							if (resp.data.code == "200") {
-								_this.$alert("结算成功");
-								_this.dialogVisible = false;
-								_this.queryCar();
-								_this.queryCount();
+								if (_this.play == true) {
+									_this.cou["rway"] = 2;
+									if (_this.cou.cbalance < _this.cou.routofpocket) {
+										_this.$alert("余额不够!");
+										as = 2;
+										return;
+									} else {
+										as = 1;
+									}
+								} else {
+									_this.cou["rway"] = 1;
+								}
+								_this.cou["rdealwith"] = _this.cou.maintainmoney;
+								_this.cou["rdiscounts"] = _this.cou.rdiscounts;
+								_this.cou["remark"] = _this.textarea;
+								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${_this.cou.cid}/${_this.cou.routofpocket}/${as}/${_this.jine}/${_this.mainid}`, _this.cou).then(function(resp) {
+									if (resp.data.code == "200") {
+										_this.$alert("结算成功");
+										_this.dialogVisible = false;
+										_this.queryCar();
+										_this.queryCount();
+									}
+								})
 							}
 						})
 					},
@@ -465,10 +470,10 @@
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/queryCloseAll`).then(function(resp) {
 							if (leng != resp.data.length) {
 								leng = resp.data.length;
-								_this.car = resp.data;
+								_this.queryCar();
 								_this.$notify({
 									title: '结算提醒',
-									message: '已更新新订单'
+									message: '还有待结算订单，请尽快完成!'
 								});
 							}
 						})
@@ -477,7 +482,7 @@
 			mounted() {
 				this.queryCar();
 				this.queryCount();
-				setInterval(this.dd, 1000);
+				setInterval(this.dd, 500);
 			}
 		})
 	</script>

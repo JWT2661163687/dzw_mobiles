@@ -36,7 +36,7 @@
 					<el-form-item label="客户编号">
 						<!--<el-input v-model="formInline.cid" placeholder="客户编号"></el-input>-->
 						<el-select v-model="formInline.cid" placeholder="请选择">
-							<el-option v-for="item in client5" :key="item.cid" :lable="item.cid" :value="item.cid"></el-option>
+							<el-option v-for="item in client5" :key="item.cid" :lable="item.cid" :value="item.cname"></el-option>
 							<!--<el-option :label="cid" value="公司车"></el-option>
 							<el-option :label="cid" value="租赁车"></el-option>-->
 						</el-select>
@@ -45,7 +45,7 @@
 						<el-input v-model="formInline.vdriver" placeholder="驾驶员"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input v-model="formInline.vlicense" placeholder="车牌号码"></el-input>
+						<el-input v-model="formInline.vlicense" placeholder="车牌号码" width="350"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆品牌">
 						<el-input v-model="formInline.vbrand" placeholder="请选择" suffix-icon="el-icon-arrow-down" @click.native="pinpai" :row-class-name="tableRowClassName1" :row-style="selectedstyle1" @row-click="css11"></el-input>
@@ -571,6 +571,18 @@
 								_this.dialogVisible = false;
 								_this.$alert("新增成功!");
 								_this.queryVehicle();
+								_this.formInline = {
+									cid: '',
+									vdriver: '',
+									vlicense: '',
+									vbrand: '',
+									vmodel: '',
+									vphone: '',
+									vaffiliation: '',
+									vmileage: '',
+									registereddate: '',
+									purchasedate: ''
+								};
 							}
 						})
 					},
