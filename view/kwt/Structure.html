@@ -24,9 +24,9 @@
 				<el-col :span="10" :push="3">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-form-item label="员工名称" :push="4">
-							<el-input placeholder="员工名称"></el-input>
+							<el-input placeholder="员工名称" v-model="wenben1"></el-input>
 						</el-form-item>
-						<el-button type="primary" icon="el-icon-search">搜索</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="SelectByName()">搜索</el-button>
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addStructuredialog()">新增</el-button>
 						<el-button type="primary" icon="el-icon-delete">修改</el-button>
 						<el-button type="primary" icon="el-icon-delete">删除</el-button>
@@ -36,64 +36,64 @@
 			</el-row>
 
 			<el-dialog :title="titleType2" :visible.sync="dialogFormVisible2">
-				<el-form :inline="true" :label-position="labelPosition" :model="formInline" class="demo-form-inline">
+				<el-form :inline="true" :label-position="labelPosition" :model="Employees" class="demo-form-inline">
 					<el-form-item label="员工编号">
-						<el-input placeholder="员工编号"></el-input>
+						<el-input placeholder="员工编号" v-model="Employees.employeeid"></el-input>
 					</el-form-item>
 					<el-form-item label="员工姓名">
-						<el-input placeholder="员工姓名"></el-input>
+						<el-input placeholder="员工姓名" v-model="Employees.empname"></el-input>
 					</el-form-item>
 					<el-form-item label="性别">
-						<el-input placeholder="性别"></el-input>
+						<el-select v-model="Employees.esex" placeholder="活动区域">
+							<el-option label="女" value="1"></el-option>
+							<el-option label="男" value="2"></el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="登录账号">
-						<el-input placeholder="登录账号"></el-input>
+						<el-input placeholder="登录账号" v-model="Employees.emplogenid"></el-input>
 					</el-form-item>
 					<el-form-item label="登录密码">
-						<el-input placeholder="登录密码"></el-input>
-					</el-form-item>
-					<el-form-item label="门店">
-						<el-input placeholder="所在门店"></el-input>
+						<el-input placeholder="登录密码" v-model="Employees.emplogepasword"></el-input>
 					</el-form-item>
 					<el-form-item label="所在部门">
-						<el-select  placeholder="请选择活动区域">
-							<el-option ></el-option>
-						</el-select>
+						<template>
+							<el-select v-model="Employees.departmentid" placeholder="请选择" @change="SelectPost(Employees.departmentid)">
+								<el-option v-for="item in department" :key="item.departmentid" :label="item.depnames" :value="item.departmentid">
+								</el-option>
+							</el-select>
+						</template>
 					</el-form-item>
 					<el-form-item label="职位">
-						<el-select  placeholder="请选择活动区域">
-							<el-option ></el-option>
-						</el-select>
+						<template>
+							<el-select v-model="Employees.postid" placeholder="请选择">
+								<el-option v-for="item in SelectPosts" :key="item.postid" :label="item.postname" :value="item.postid">
+								</el-option>
+							</el-select>
+						</template>
 					</el-form-item>
 					<el-form-item label="学历">
-						<el-input placeholder="请输入学历"></el-input>
-					</el-form-item>
-					<el-form-item label="属性">
-						<el-input placeholder="请输入学历"></el-input>
+						<el-input placeholder="请输入学历" v-model="Employees.education"></el-input>
 					</el-form-item>
 					<el-form-item label="毕业学校">
-						<el-input placeholder="毕业学校"></el-input>
+						<el-input placeholder="请输入毕业学校" v-model="Employees.graduationschool"></el-input>
 					</el-form-item>
 					<el-form-item label="专业">
-						<el-input placeholder="专业"></el-input>
+						<el-input placeholder="请输入专业" v-model="Employees.major"></el-input>
 					</el-form-item>
 					<el-form-item label="身份证号码">
-						<el-input placeholder="身份证号码"></el-input>
-					</el-form-item>
-					<el-form-item label="户口地址">
-						<el-input placeholder="户口地址"></el-input>
+						<el-input placeholder="请输入身份证号码" v-model="Employees.crrdID"></el-input>
 					</el-form-item>
 					<el-form-item label="现居住地址">
-						<el-input placeholder="现居住地址"></el-input>
+						<el-input placeholder="请输入现居住地址" v-model="Employees.newaddress"></el-input>
 					</el-form-item>
 					<el-form-item label="员工联系电话">
-						<el-input placeholder="员工联系电话"></el-input>
+						<el-input placeholder="请输入员工联系电话" v-model="Employees.molphone"></el-input>
 					</el-form-item>
 				</el-form>
 
 				<div slot="footer" class="dialog-footer" align="center">
 					<el-button @click="dialogFormVisible2 = false">取 消</el-button>
-					<el-button type="primary">确 定</el-button>
+					<el-button type="primary" @click="insertEmployee()">确 定</el-button>
 				</div>
 			</el-dialog>
 
@@ -106,18 +106,23 @@
 				<el-col :span="15" :offset="1">
 					<template>
 						<div style="background-color: white; height: 500px;">
-							<el-table :data="tableData" style="width: 100%" height="400px">
-								<el-table-column fixed prop="date" label="日期" width="150">
+							<el-table :data="Employee" style="width: 100%" height="400px">
+								<el-table-column fixed prop="post.postname" label="岗位名称" width="150">
 								</el-table-column>
-								<el-table-column prop="name" label="姓名" width="120">
+								<el-table-column prop="employeeid" label="工号" width="150">
 								</el-table-column>
-								<el-table-column prop="province" label="省份" width="120">
+								<el-table-column prop="empname" label="姓名" width="150">
 								</el-table-column>
-								<el-table-column prop="city" label="市区" width="120">
+								<el-table-column prop="esex" label="性别" width="150">
+									<template slot-scope="scope">
+										{{scope.row.esex==1?'男':'女'}}
+									</template>
 								</el-table-column>
-								<el-table-column prop="address" label="地址" width="300">
+								<el-table-column prop="newaddress" label="现住地址" width="150">
 								</el-table-column>
-								<el-table-column prop="zip" label="邮编" width="120">
+								<el-table-column prop="molphone" label="联系电话" width="150">
+								</el-table-column>
+								<el-table-column prop="email" label="Email" width="150">
 								</el-table-column>
 							</el-table>
 						</div>
@@ -139,7 +144,31 @@
 					postname: '全部',
 					post: []
 				}],
-				formInline: {},
+				Employee: [],
+				wenben1: '',
+				Employees: {
+					employeeid: '',
+					propertyid: '',
+					stateid: '',
+					departmentid: '',
+					postid: '',
+					empname: '',
+					esex: '',
+					emplogenid: '',
+					emplogepasword: '',
+					education: '',
+					graduationschool: '',
+					major: '',
+					crrdid: '',
+					address: '',
+					newaddress: '',
+					empphone: '',
+					emergencyphone: '',
+					molphone: '',
+					email: '',
+					entrytimes: '',
+					lztimes: ''
+				},
 				labelPosition: 'left',
 				formLabelAlign: {},
 				defaultProps: {
@@ -155,56 +184,8 @@
 				},
 				dialogFormVisible2: false,
 				titleType2: "新增员工",
-				tableData: [{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-02',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-08',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-06',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}, {
-					date: '2016-05-07',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}]
+				department: [],
+				SelectPosts: []
 			},
 			methods: {
 				addStructuredialog() {
@@ -229,6 +210,7 @@
 						_this.Post.postname = '';
 						_this.Post.departmentid = '';
 						//this.SelectPostId(1, 3);
+						this.SelectEmployee();
 						return;
 					}
 					_this.Post.departmentid = '';
@@ -236,11 +218,83 @@
 					if(data.depnames != undefined) {
 						this.Post.departmentid = data.departmentid;
 						//this.SelectPostId(1, 3);
+						this.SelectEmployee();
 					}
+				},
+				SelectEmployee() {
+					var _this = this;
+					if(this.Post.departmentid != '') {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Employees/Employee/${this.Post.departmentid}`).then(function(res) {
+							_this.Employee = res.data;
+						})
+					} else {
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Employees/Employee/${-1}`).then(function(res) {
+							_this.Employee = res.data;
+						})
+					}
+				},
+				/*部门下拉框*/
+				SelectBydepartmentid() {
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Departments/Departments`).then(function(res) {
+						_this.department = res.data;
+					})
+				},
+				/*岗位下拉框*/
+				SelectPost(id) {
+					var _this = this;
+					_this.Employees.postid = '';
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Posts/Post/Department/${id}`).then(function(res) {
+						_this.SelectPosts = res.data;
+					})
+				},
+				insertEmployee() {
+					var _this = this;
+					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/Employees/Employee`, _this.Employees).then(function(res) {
+						if(res.data.code = "200") {
+							_this.$message({
+								message: '新增成功！',
+								type: 'success'
+							});
+							_this.dialogFormVisible2 = false;
+							_this.Employees= {
+					employeeid: '',
+					propertyid: '',
+					stateid: '',
+					departmentid: '',
+					postid: '',
+					empname: '',
+					esex: '',
+					emplogenid: '',
+					emplogepasword: '',
+					education: '',
+					graduationschool: '',
+					major: '',
+					crrdid: '',
+					address: '',
+					newaddress: '',
+					empphone: '',
+					emergencyphone: '',
+					molphone: '',
+					email: '',
+					entrytimes: '',
+					lztimes: ''
+				};
+							_this.SelectEmployee();
+						}
+					})
+				},
+				SelectByName(){
+					var _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Employees/${this.wenben1}`).then(function(res) {
+						_this.Employee = res.data;
+					})
 				}
 			},
 			mounted() {
 				this.SelectTree();
+				this.SelectEmployee();
+				this.SelectBydepartmentid();
 			}
 		})
 	</script>
