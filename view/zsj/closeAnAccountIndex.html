@@ -54,13 +54,15 @@
 											</el-table-column>
 											<el-table-column prop="maintainid" label="维修编号">
 											</el-table-column>
+											<el-table-column prop="carid" label="车主名">
+											</el-table-column>
 											<el-table-column prop="tename" label="维修班组名">
 											</el-table-column>
 											<el-table-column prop="maintaindate" label="单据时间" width="200">
 											</el-table-column>
 											<el-table-column prop="departdate" label="开单出发时间" width="200">
 											</el-table-column>
-											<el-table-column prop="departaddress" label="出发地址">
+											<el-table-column prop="departaddress" label="出发地址" width="200">
 											</el-table-column>
 											<el-table-column prop="constructiondate" label="施工时间" width="200">
 											</el-table-column>
@@ -408,7 +410,8 @@
 						this.cou["cid"] = row.carid;
 						this.cou["maintainid"] = row.maintainid;
 						this.cou["maintainmoney"] = row.maintainmoney;
-						this.cou["rcashier"] = "张三";
+						this.cou["rcashier"] = JSON.parse(sessionStorage.getItem("employee")).empname;
+						
 						this.cou["cname"] = row.carownername;
 						this.mainid = row.maintainid;
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/counts/member/${this.cou.cid}`).then(function(resp) {
