@@ -562,15 +562,16 @@
 							this.$alert("该车牌号已存在!")
 							return;
 						}
-						if (this.formInline.cid == "6") {
+						/*if (this.formInline.cid == "6") {
 							this.$alert("该客户编号不存在!")
 							return;
-						}
+						}*/
 						axios.post(`http://127.0.0.1:8080/dzw_moblie/api/vehicles/vehicle`, this.formInline).then(function(resp) {
 							if (resp.data.code == "200") {
 								_this.dialogVisible = false;
 								_this.$alert("新增成功!");
 								_this.queryVehicle();
+<<<<<<< HEAD
 								_this.formInline = {
 									cid: '',
 									vdriver: '',
@@ -583,6 +584,9 @@
 									registereddate: '',
 									purchasedate: ''
 								};
+=======
+								_this.formInline = [];
+>>>>>>> 8fe505d82272f19394c40709b2ca06d113789179
 							}
 						})
 					},

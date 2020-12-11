@@ -155,7 +155,6 @@
 			},
 			methods: {
 				login() {
-					alert("a")
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/loginjurisdictions/employee/${this.loginfrom.userName}/${this.loginfrom.userPwd}`).then(function(res){
 						if(res.data.code=="200"){
 							sessionStorage.setItem("employee",JSON.stringify(res.data.employee));
