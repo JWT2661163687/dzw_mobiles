@@ -8,13 +8,7 @@
 
 	<body>
 		<div id="fieldvehiclesapp" style="background-color: white;color:#F56C6C">
-			<el-row :gutter="20">
-				<el-col :span="16">
-					<div>
-						<h1>外勤车辆</h1></div>
-				</el-col>
-				
-			</el-row>
+
 			<br/>
 			<div>
 				<el-row :span="10">
@@ -25,7 +19,7 @@
 						<el-button type="success" round @click="deletefieldvehicles(addfieldvehicles.id)">删除</el-button>
 					</el-col>
 					<el-col :md="1" :push="4" style="margin-left: 20px;">
-						<el-button type="danger" round @click="insertfieldvehicles">新增</el-button>
+						<el-button type="danger" round @click="insertbanzu">新增</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -50,19 +44,70 @@
 					</el-select>
 				</template>
 			</div>
+
+			<el-row>
+				<el-dialog title="新增车辆" :visible.sync="dialogVisibless" width="400px">
+					<div style="background-color: white;color:#F56C6C">
+						<el-row>
+							<el-col :span="8">
+								车牌号
+								<el-input v-model="addfieldvehicless.carnumber" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								品牌
+								<el-input v-model="addfieldvehicless.fbrand" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								车型
+								<el-input v-model="addfieldvehicless.fmodel" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								当前里程
+								<el-input v-model="addfieldvehicless.currentmileage" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								班组
+								<template>
+									<el-select v-model="value" placeholder="请选择">
+										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+										</el-option>
+									</el-select>
+								</template>
+							</el-col>
+						</el-row>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisibless = false">取 消</el-button>
+						<el-button @click="insertfieldvehicles" type="primary" @click="dialogVisibless = false">确 定</el-button>
+					</span>
+				</el-dialog>
+			</el-row>
+
 			<template>
-				<el-table :data="fieldvehicles" height="200" border style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
-				<el-table-column prop="carnumber" label="车牌号">
-				</el-table-column>
-				<el-table-column prop="fbrand" label="品牌">
-				</el-table-column>
-				<el-table-column prop="fmodel" label="车型">
-				</el-table-column>
-				<el-table-column prop="currentmileage" label="当前里程">
-				</el-table-column>
-				<el-table-column prop="tename" label="归属班组">
-				</el-table-column>
-			</el-table>
+				<el-table :data="fieldvehicles" height="200" style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
+					<el-table-column prop="carnumber" label="车牌号">
+					</el-table-column>
+					<el-table-column prop="fbrand" label="品牌">
+					</el-table-column>
+					<el-table-column prop="fmodel" label="车型">
+					</el-table-column>
+					<el-table-column prop="currentmileage" label="当前里程">
+					</el-table-column>
+					<el-table-column prop="tename" label="归属班组">
+					</el-table-column>
+				</el-table>
 			</template>
 		</div>
 	</body>
@@ -79,16 +124,28 @@
 					tename:'',
 					teamid:0
 				},
+				addfieldvehicless: {
+					id:0,
+					carnumber: '',
+					fbrand: '',
+					fmodel: '',
+					currentmileage: '',
+					tename:'',
+					teamid:0
+				},
 				fieldvehicles: [],
 				Team: [],
-				value: ''
+				value: '',
+				dialogVisibless: false
 			},
 			mounted() {
 				this.goToPage();
 				this.queryTeam();
 			},
 			methods: {
-				
+				insertbanzu(){
+						this.dialogVisibless = true;
+					},
 				deletefieldvehicles(id) {
 					if (this.value == '') {
 							alert("请选择车辆在删除！")
@@ -134,8 +191,8 @@
 							alert("请选择车辆在新增！")
 							return;
 						}
-					this.addfieldvehicles.teamid=parseInt(this.value);
-					axios.post("http://127.0.0.1:8080/dzw_moblie/api/fiel/insert", this.addfieldvehicles).then(function(resp) {
+					this.addfieldvehicless.teamid=parseInt(this.value);
+					axios.post("http://127.0.0.1:8080/dzw_moblie/api/fiel/insert", this.addfieldvehicless).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('新增成功');
 							fieldvehiclesapp.goToPage();

@@ -8,13 +8,6 @@
 
 	<body>
 		<div id="mechanicstarapp" style="background-color: white;color:#F56C6C">
-			<el-row :gutter="20">
-				<el-col :span="16">
-					<div>
-						<h1>技工星级</h1></div>
-				</el-col>
-				
-			</el-row>
 			<br />
 			<div>
 				<el-row :span="10">
@@ -25,10 +18,56 @@
 						<el-button type="success" round @click="deleteMechanicstar(addmechanicstar.meid)">删除</el-button>
 					</el-col>
 					<el-col :md="1" :push="4" style="margin-left: 20px;">
-						<el-button type="danger" round @click="insertmechanicstar">新增</el-button>
+						<el-button type="danger" round @click="insertbanzu">新增</el-button>
 					</el-col>
 				</el-row>
 			</div>
+			
+			<el-row>
+				<el-dialog title="新增星级" :visible.sync="dialogVisibless" width="400px" >
+					<div style="background-color: white;color:#F56C6C">
+						<!--<el-row :gutter="20">
+							<el-col :span="16">
+								<h2>技工资料</h2>
+							</el-col>
+						</el-row>-->
+						<el-row>
+							<el-col :span="8">
+								等级编码
+								<el-input v-model="addmechanicstars.meid" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							</el-row>
+							<el-row>
+							<el-col :span="8">
+								星级
+								<el-input v-model="addmechanicstars.starrating" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							</el-row>
+							<el-row>
+							<el-col :span="8">
+								等级
+								<el-input v-model="addmechanicstars.grade" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+							</el-row>
+							<el-row>
+							<el-col :span="8">
+								提成权重
+								<el-input v-model="addmechanicstars.weight" size="small" style="width: 200px;">
+								</el-input>
+							</el-col>
+						</el-row>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="dialogVisibless = false">取 消</el-button>
+						<el-button @click="insertmechanicstar" type="primary" @click="dialogVisibless = false">确 定</el-button>
+					</span>
+				</el-dialog>
+			</el-row>
+			
+			
 			<div style="background-color: white;color:#F56C6C">
 				等级编码：
 				<el-input v-model="addmechanicstar.meid" size="small" placeholder="请输入内容" style="width: 100px;">
@@ -48,7 +87,7 @@
 
 			</div>
 			<template>
-				<el-table :data="mechanicstar" height="200" border style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
+				<el-table :data="mechanicstar" height="200" style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
 						<el-table-column prop="meid" label="编码">
 						</el-table-column>
 						<el-table-column prop="starrating" label="星级">
@@ -73,13 +112,25 @@
 					grade:'',
 					weight:''
 				},
+				addmechanicstars:{
+					meid:'',
+					starrating:'',
+					grade:'',
+					weight:''
+				},
 				disabled:true,
-				value: ''
+				value: '',
+				dialogVisibless: false
 			},
 			mounted() {
 				this.goToPage();
 			},
 			methods: {
+				
+				insertbanzu(){
+						this.dialogVisibless = true;
+					},
+					
 				goToPage() {
 					let _this = this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/mech/lzjquery`).then(function(resp) {
@@ -98,11 +149,11 @@
 					mechanicstarapp.addmechanicstar.weight=currentRow.weight;
 				},
 				insertmechanicstar() {
-					if (this.addmechanicstar.starrating == '') {
+					if (this.addmechanicstars.starrating == '') {
 							alert("请选择星级在新增！")
 							return;
 						}
-					axios.post("http://127.0.0.1:8080/dzw_moblie/api/mech/insert", this.addmechanicstar).then(function(resp) {
+					axios.post("http://127.0.0.1:8080/dzw_moblie/api/mech/insert", this.addmechanicstars).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('新增成功');
 							mechanicstarapp.goToPage();
@@ -110,7 +161,7 @@
 					}).catch(function(e) {});
 				},
 				updateMechanicstar() {
-					if (this.value == '') {
+					if (this.addmechanicstar.starrating == '') {
 							alert("请选择星级在修改！")
 							return;
 						}
@@ -122,7 +173,7 @@
 					}).catch(function(e) {});
 				},
 				deleteMechanicstar(meid) {
-					if (this.value == '') {
+					if (this.addmechanicstar.starrating == '') {
 							alert("请选择星级在删除！")
 							return;
 						}
