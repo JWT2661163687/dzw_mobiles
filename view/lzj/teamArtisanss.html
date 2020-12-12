@@ -42,16 +42,24 @@
 
 	<body>
 		<div id="teamArtisanssapp" style="background-color: white;color:#F56C6C">
-			<el-row>
-				<el-col :span="12">
-					<h1>班组技工</h1>
-				</el-col>
-				
-			</el-row>
+			
 			<el-row>
 				<el-col :span="12">
 					<el-button type="success" round @click="clickshow">增加员工</el-button>
 					<el-button type="warning" round @click="insertbanzu">增加班组</el-button>
+					<!--<el-button type="primary" round @click="upTeam">修改班组</el-button>-->
+					<el-button type="danger" round @click="delTeam(addteam.teamid)">删除班组</el-button>
+				</el-col>
+				<el-col :span="8">
+					&nbsp;班组名称
+					<template>
+						<el-select v-model="value" @change="zzz">
+							<el-option label="请选择" value="null">
+							</el-option>
+							<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+							</el-option>
+						</el-select>
+					</template>
 				</el-col>
 			</el-row>
 			
@@ -200,15 +208,7 @@
 							</el-col>
 						</el-row>
 						<el-row>
-							<el-col :span="8">
-								班组
-								<template>
-									<el-select v-model="addteamtechnician.teamid" placeholder="请选择">
-										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
-										</el-option>
-									</el-select>
-								</template>
-							</el-col>
+							
 							<el-col :span="8">
 								手机
 								<el-input v-model="addteamtechnician.mephone" size="small" style="width: 200px;">
@@ -290,20 +290,10 @@
 			</el-row>
 
 			<el-row style="margin-top: -10px;">
-				<el-col :span="8">
-					&nbsp;班组名称
+				
+				<el-col :span="24">
 					<template>
-						<el-select v-model="value" @change="zzz">
-							<el-option label="请选择" value="null">
-							</el-option>
-							<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.tename">
-							</el-option>
-						</el-select>
-					</template>
-				</el-col>
-				<el-col :span="16" style="float: right;">
-					<template>
-						<el-table :data="teamtechnician" border style="background-color: white;color:#F56C6C;width: 100%;" max-height="300">
+						<el-table :data="teamtechnician"  style="background-color: white;color:#F56C6C;" max-height="300">
 							<!--<el-table-column fixed prop="teamid" label="班组编号" width="150">
 							</el-table-column>-->
 							<el-table-column prop="tename" label="班组名称" width="150">
@@ -392,6 +382,7 @@
 					repairwork: '',
 					repairbrand: ''
 				},
+				
 				machs:[],
 				sss: '',
 				Team: [],
@@ -402,7 +393,12 @@
 				dialogVisibles: false,
 				dialogVisibless: false,
 				zz: '',
-				aaa:''
+				aaa:'',
+				updateTe:{
+					teamid:'',
+					tename:''
+				}
+				
 			},
 			mounted() {
 				this.goToPage();
@@ -410,13 +406,34 @@
 				this.xingji();
 			},
 			methods: {
+				delTeam(teamid){
+					let _this = this;
+						if(window.confirm('是否移除？')) {
+							axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/ttt/dele/${this.value}`).then(function(resp) {
+								if(resp.data.code == "200") {
+									alert('移除成功');
+									teamArtisanssapp.goToPage();
+							}
+						}).catch(function(e) {});
+					}
+				},
+				upTeam(){
+					this.updateTe.teamid = this.value;
+						axios.put("http://127.0.0.1:8080/dzw_moblie/api/ttt/update", this.updateTe).then(function(resp) {
+							if (resp.data.code == "200") {
+								alert('更新成功');
+								teamArtisanssapp.goToPage();
+							}
+						}).catch(function(e) {});
+					
+				},
 				xingji(){
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/mech/lzjquery`).then(function(res){
 						teamArtisanssapp.machs=res.data;
 					})
 				},
 				insertTeamtechnician() {
-					
+						this.addteamtechnician.teamid=this.value;
 						//this.addteamtechnician.teamid = parseInt(this.value);
 						axios.post("http://127.0.0.1:8080/dzw_moblie/api/team/insert", this.addteamtechnician).then(function(resp) {
 							if (resp.data.code == "200") {
@@ -471,7 +488,7 @@
 						this.dialogVisibless = true;
 					},
 					clickshow() {
-						if (this.value == '') {
+						if (this.value == '' || this.value=='null') {
 							alert("请选择班组名称再添加！")
 							return;
 						}
