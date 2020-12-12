@@ -8,17 +8,16 @@
 	<body>
 		<div id="tongxunapp">
 			<el-row>
-				<el-col>
+				<el-col :span="4">
 					<h1>通讯目录</h1>
 				</el-col>
-				<el-row>
-				<el-col :span="4">
+				<el-col :span="4" :push="3">
 					<el-input v-model="neirong" placeholder="请输入内容" ></el-input>
 				</el-col>	
-				<el-col :span="2" :push="1">
+				<el-col :span="2" :push="3">
 					 <el-button type="primary" @click="mohu()">搜索</el-button>
 				</el-col>
-				<el-col :span="2" :push="1">	 
+				<el-col :span="2" :push="3">	 
 					  <el-button type="primary">关闭</el-button>
 				</el-col>	
 				</el-row>
@@ -59,9 +58,7 @@
 					  </el-table>
 					</template>
 				</el-col>
-				<el-col :span="4" :push="1">
-						<span>合计:</span><el-input  v-model="jilu" :disabled="true">  </el-input><span>条记录</span>
-				</el-col>
+				
 				</el-row>
 			</el-row>
 		</div>
@@ -95,7 +92,6 @@
 							let _this=this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/yuangong/select/${employeeid}`).then(function(resp) {
 									_this.tableData=resp.data;
-									alert("总条数:"+_this.tableData.length)
 									_this.jilu=_this.tableData.length;
 					})
 				}

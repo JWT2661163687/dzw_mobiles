@@ -94,7 +94,7 @@
 				addfront(){
 					//创建今日首页数据
 				axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/addfront`).then(function(res){
-					
+					first.frontload();
 				})
 				},
 				
@@ -109,7 +109,7 @@
 			},
 			mounted: function() {
 				this.addfront();
-				this.frontload();
+				//this.frontload();
 			},
 			
 			

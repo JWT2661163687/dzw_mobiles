@@ -11,20 +11,7 @@
 		<h2>维修项目</h2>
 		<div id="weixiushowapp">
 		
-		<el-row>
-			
-		<el-col :span="4"  style="border: 1px black solid;">
-			<div  style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
-					<span style="font-size: larger;">维修类型</span>
-			</div>
-			<el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-		</el-col>
-		<el-col :span="19" :push="1" style="border: 1px black solid;">
-			<div  style="border-bottom: 1px black solid; background-color: lightcyan;line-height: 80px;">
-				<span style="font-size: larger;">维修项目</span>
-			</div>
-			</br>
-			<el-row>
+		
 				<el-col :span="3">
 					<el-input v-model="neirong" placeholder="请输入内容" style="width: 200px;"></el-input>
 				</el-col>
@@ -34,50 +21,49 @@
 				<el-col :span="2" :push="3">
 					<el-button type="button" @click="dialogFormVisible = true">新增</el-button>
 				</el-col>			
-							<el-dialog title="项目新增" :visible.sync="dialogFormVisible">
-								<el-form :model="form">
+							<el-dialog title="维修项目新增" :visible.sync="dialogFormVisible">
+								<el-form :model="form" :inline="true">
+									<el-row>
+										<el-col :span="12">
 									<el-form-item label="维修类型" :label-width="formLabelWidth" >
-										<el-select v-model="form.a" placeholder="请选择维修类型" @change="changeone">
+										<el-select v-model="value1" placeholder="请选择维修类型" @change="changeone">
 											<el-option label="车型" value="1"></el-option>
 											<el-option label="发动机" value="2"></el-option>
 											<el-option label="其他" value="3"></el-option>
 										</el-select>
 									</el-form-item>
+									</el-col>
+									<el-col :span="12">
 									<el-form-item label="请选择" :label-width="formLabelWidth">
-										<el-select v-model="form.xmleixing" placeholder="请选择维修类型">
+										<el-select v-model="value11" placeholder="请选择维修类型">
 											<el-option v-for="item  in xiala" :label="item.lable" :value="item.value">
 											</el-option>
-											<!--<el-option label="1" value="1"></el-option>
-											<el-option label="2" value="2"></el-option>
-											<el-option label="3" value="3"></el-option>-->
+											
 										</el-select>
 									</el-form-item>
-									<el-form-item label="项目编号" :label-width="formLabelWidth">
-										<el-input v-model="form.xmbianma" autocomplete="off"></el-input>
-									</el-form-item>
+									</el-col>
+									</el-row>
+									<el-row>
+										</el-col>
+									<el-col :span="12">
 									<el-form-item label="项目名称" :label-width="formLabelWidth">
 										<el-input v-model="form.xmmingcheng" autocomplete="off"></el-input>
 									</el-form-item>
-									<el-form-item label="收入种类" :label-width="formLabelWidth">
-										<el-select v-model="form.xmzhonglei" placeholder="请选择收入种类">
-											<el-option label="工时费" value="工时费"></el-option>
-											<el-option label="日结" value="日结"></el-option>
-										</el-select>
-									</el-form-item>
+									
+										</el-col>
+									<el-col :span="12">
 									<el-form-item label="标准价" :label-width="formLabelWidth">
 										<el-input v-model="form.xmbiaozhun" autocomplete="off"></el-input>
 									</el-form-item>
-									<el-form-item label="会员价" :label-width="formLabelWidth">
-										<el-input v-model="form.xmhuiyuan" autocomplete="off"></el-input>
-									</el-form-item>
-									<el-form-item label="售价" :label-width="formLabelWidth">
-										<el-input v-model="form.xmshoujia" autocomplete="off"></el-input>
-									</el-form-item>
+									</el-col>
+									</el-row>
 								</el-form>
-								<div slot="footer" class="dialog-footer">
+								<el-row>
+									<el-col :span="8" :push="10">
 									<el-button type="primary" @click="chickinsert()">新增</el-button>
 									<el-button @click="dialogFormVisible = false">关闭</el-button>
-								</div>
+									</el-col>
+								</el-row>
 							</el-dialog>
 							
 				<el-col :span="2" :push="3">
@@ -97,58 +83,57 @@
 								</el-table-column>
 								<el-table-column prop="xmleixing" label="维修类型">
 								</el-table-column>
-								<el-table-column prop="xmbianma" label="项目编号">
+								<el-table-column prop="xmbianma" label="类型">
 								</el-table-column>
 								<el-table-column prop="xmmingcheng" label="项目名称">
 								</el-table-column>
-								<el-table-column prop="xmzhonglei" label="收入种类">
-								</el-table-column>
+								
 								<el-table-column prop="xmbiaozhun" label="标准价">
 								</el-table-column>
-								<el-table-column prop="xmhuiyuan" label="会员价">
-								</el-table-column>
-								</el-table-column>
-								<el-table-column prop="xmshoujia" label="售价">
-								</el-table-column>
+								
+								
+								
 								<el-table-column prop="xiugai" label="修改">
 									<template slot-scope="scope">
        									<el-button type="primary" @click="update(scope.row)" icon="el-icon-edit" circle ></el-button>
+       									
+       									
        									<el-dialog title="项目修改" :visible.sync="dialogFormVisible1">
-								<el-form :model="form1">
-									<el-form-item label="维修类型" :label-width="formLabelWidth">
-										<el-select v-model="form1.a" placeholder="请选择维修类型" @change="changeone1">
+								<el-form :model="form1" :inline="true">
+									<el-row>
+										<el-col :span="12">
+									<el-form-item label="维修类型" :label-width="formLabelWidth" >
+										<el-select v-model="value1" placeholder="请选择维修类型" @change="changeone">
 											<el-option label="车型" value="1"></el-option>
 											<el-option label="发动机" value="2"></el-option>
 											<el-option label="其他" value="3"></el-option>
 										</el-select>
 									</el-form-item>
-									<el-form-item label="请选择1" :label-width="formLabelWidth">	
-										<el-select v-model="form1.xmleixing" placeholder="请选择类型1">
-											<el-option v-for="item  in xiala1" :label="item.lable" :value="item.value">
+									</el-col>
+									<el-col :span="12">
+									<el-form-item label="请选择" :label-width="formLabelWidth">
+										<el-select v-model="value11" placeholder="请选择维修类型">
+											<el-option v-for="item  in xiala" :label="item.lable" :value="item.value">
 											</el-option>
+											
 										</el-select>
 									</el-form-item>
-									<el-form-item label="项目编号" :label-width="formLabelWidth1">
-										<el-input v-model="form1.xmbianma" autocomplete="off"></el-input>
-									</el-form-item>
-									<el-form-item label="项目名称" :label-width="formLabelWidth1">
+									</el-col>
+									</el-row>
+									<el-row>
+										</el-col>
+									<el-col :span="12">
+									<el-form-item label="项目名称" :label-width="formLabelWidth">
 										<el-input v-model="form1.xmmingcheng" autocomplete="off"></el-input>
 									</el-form-item>
-									<el-form-item label="收入种类" :label-width="formLabelWidth1">
-										<el-select v-model="form1.xmzhonglei" placeholder="请选择收入种类">
-											<el-option label="工时费" value="工时费"></el-option>
-											<el-option label="日结" value="日结"></el-option>
-										</el-select>
-									</el-form-item>
-									<el-form-item label="标准价" :label-width="formLabelWidth1">
+									
+										</el-col>
+									<el-col :span="12">
+									<el-form-item label="标准价" :label-width="formLabelWidth">
 										<el-input v-model="form1.xmbiaozhun" autocomplete="off"></el-input>
 									</el-form-item>
-									<el-form-item label="会员价" :label-width="formLabelWidth1">
-										<el-input v-model="form1.xmhuiyuan" autocomplete="off"></el-input>
-									</el-form-item>
-									<el-form-item label="售价" :label-width="formLabelWidth1">
-										<el-input v-model="form1.xmshoujia" autocomplete="off"></el-input>
-									</el-form-item>
+									</el-col>
+									</el-row>
 								</el-form>
 								<div slot="footer" class="dialog-footer">
 									<el-button type="primary" @click="chickupdate()">修改</el-button>
@@ -187,55 +172,23 @@
 			el:"#weixiushowapp",
 			data:{
 				neirong:'',
-				
-				data: [{
-	          label: '车型',
-	          children: [{
-	            label: '奥迪a3',
-	          },{
-	          	label: '奥迪a4',
-	          },{
-	          	label: '奥迪a6',
-	          },{
-	          	label: '宝马x1',
-	          },{
-	          	label: '宝马x3',
-	          },{
-	          	label: '宝马x6',
-	          }]
-	        }, {
-	          label: '发动机',
-	          children: [{
-	            label: '发动机1',	            
-	          }, {
-	            label: '发动机2',	            
-	          },{
-	            label: '发动机3',	            
-	          },{
-	            label: '发动机4',	            
-	          }]
-	        }],
-	        defaultProps: {
-	          children: 'children',
-	          label: 'label'		//SELECT * FROM `make` m INNER JOIN `motorcycle` e ON m.`makeid`=e.`makeid`
-	        },
 	        //新增模态框
 				form: {
-					a:'',
-					cid:'1',
 					xmleixing:'',
-					xmbianma: '',
+					xmbianma:'',
 					xmmingcheng: '',
-					xmzhonglei: '',
 					xmbiaozhun: '',
-					xmhuiyuan: '',
-					xmshoujia: '',
 				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
+				value1:'',
+				value11:'',
 				//修改模态框
 				form1: {
-					a:''
+					xmleixing:'',
+					xmbianma:'',
+					xmmingcheng: '',
+					xmbiaozhun: '',
 				},
 				formLabelWidth1: '120px',
 				dialogFormVisible1: false,
@@ -270,7 +223,25 @@
 	      	chickupdate(){					//点击修改按钮
 	      		let _this=this;
 	      		dialogFormVisible = false ;
-	      		alert(_this.form1.xmleixing);
+	      		if(this.value1=='1'){
+	      			 this.$set(this.form1, 'cid', this.value11)
+	      			 this.form1.xmleixing='车型';
+	      			 this.$delete(this.form1,'fid')
+	      		}else if(this.value1=='2'){
+	      			this.$set(this.form1, 'fid', this.value11)
+	      			this.form1.xmleixing='发动机';
+	      			this.$delete(this.form1,'cid');
+	      		}else{
+	      			this.$delete(this.form1,'cid');
+	      			this.$delete(this.form1,'fid');
+	      			this.form1.xmleixing='其他';
+	      		}
+	      		for(var i=0;i<this.xiala.length;i++){
+	      			if(this.value11==this.xiala[i].value){
+	      				this.form1.xmbianma=this.xiala[i].lable;
+	      				break;
+	      			}
+	      		}
 	      		axios.put(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/update`,_this.form1).then(function(resp) {
 							console.log("11111"+resp.data);
 							if(resp.data.code=="200"){
@@ -285,6 +256,26 @@
 	      	},
 	      	chickinsert(){				//新增
 	      		let _this=this;
+	      		if(this.value1=='1'){
+	      			 this.$set(this.form, 'cid', this.value11)
+	      			 this.form.xmleixing='车型';
+	      			 this.$delete(this.form,'fid')
+	      		}else if(this.value1=='2'){
+	      			this.$set(this.form, 'fid', this.value11)
+	      			this.form.xmleixing='发动机';
+	      			this.$delete(this.form,'cid');
+	      		}else{
+	      			this.$delete(this.form,'cid');
+	      			this.$delete(this.form,'fid');
+	      			this.form.xmleixing='其他';
+	      		}
+	      		for(var i=0;i<this.xiala.length;i++){
+	      			if(this.value11==this.xiala[i].value){
+	      				this.form.xmbianma=this.xiala[i].lable;
+	      				break;
+	      			}
+	      		}
+	      		//添加属于类型类型
 	      		dialogFormVisible = false ;
 	      		axios.post(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/insert`,_this.form).then(function(resp) {
 								if(resp.data.code=="200"){
@@ -312,7 +303,7 @@
 	      	changeone(){
 	      		  // alert("值"+this.form.a);
 	      		   let _this=this;
-	      		   if(this.form.a=="1"){
+	      		   if(this.value1=="1"){
 	      		   		axios.get(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/kang`).then(function(resp) {	 
 	      		   			_this.xiala=[];
 							for(var i=0;i<resp.data.length;i++){						
@@ -320,26 +311,26 @@
 								_this.xiala.push({
 									//value:resp.data[i].motorcycleid,
 									lable:resp.data[i].motorcyclename,
-									value:resp.data[i].motorcyclename,
+									value:resp.data[i].motorcycleid,
 									
 								})								
 							}
-							_this.form.xmleixing=_this.xiala[0].value;		//新增的维修类型  下拉列表
+							_this.value11=_this.xiala[0].value;		//新增的维修类型  下拉列表
 						})
 	      		   }
-	      			if(this.form.a=="2"){
+	      			if(this.value1=="2"){
 	      		   		axios.get(`http://127.0.0.1:8080/dzw_moblie/api/weixiu/kang2`).then(function(resp) {	
 	      		   			_this.xiala=[];
 							for(var i=0;i<resp.data.length;i++){
 								//alert(resp.data[i].enginename);
 								_this.xiala.push({
 									//value:resp.data[i].engineid,
-									value:resp.data[i].enginename,
+									value:resp.data[i].engineid,
 									lable:resp.data[i].enginename,
 								})		
 								
 							}
-							_this.form.xmleixing=_this.xiala[0].value;		//新增的维修类型  下拉列表
+							_this.value11=_this.xiala[0].value;		//新增的维修类型  下拉列表
 					})
 	      		 }else{
 	      		 			this.xiala = [];

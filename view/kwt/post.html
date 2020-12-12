@@ -4,10 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<script type="text/javascript" src="../../js/vue.js"></script>
-		<script type="text/javascript" src="../../js/index.js"></script>
-		<link rel="stylesheet" href="../../css/index.css" />
-		<link rel="stylesheet" href="../../css/element.css" />
+		
 	</head>
 	<style>
 		body {
@@ -26,15 +23,15 @@
 	<body>
 		<div id="post" style="margin-top: 20px;">
 			<el-row :span="24">
-				<el-col :span="4" style="font-size: 40px;" :offset="1">
-					<span>岗位定义</span>
+				<el-col :span="4"  :offset="1">
+					<h1>岗位定义</h1>
 				</el-col>
-				<el-col :span="10" :push="3">
+				<el-col :span="18" :push="1">
 					<el-form :inline="true" class="demo-form-inline">
-						<el-form-item label="岗位编号" :push="4">
+						<el-form-item label="岗位编号" >
 							<el-input placeholder="岗位编号" v-model="Post.postid"></el-input>
 						</el-form-item>
-						<el-form-item label="岗位名称" :push="4">
+						<el-form-item label="岗位名称">
 							<el-input placeholder="岗位名称" v-model="Post.postname"></el-input>
 						</el-form-item>
 						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
@@ -74,11 +71,6 @@
 			</el-row>
 		</div>
 	</body>
-	<script type="text/javascript" src="../../js/jquery-1.12.4.js"></script>
-	<script type="text/javascript" src="../../js/jq_ajax_config.js"></script>
-	<script type="text/javascript" src="../../js/axios.min.js"></script>
-	<script type="text/javascript" src="../../js/axios_cfg.js"></script>
-	<script type="text/javascript" src="../../js/echarts.min.js"></script>
 	<script>
 		var post = new Vue({
 			el: "#post",

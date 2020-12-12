@@ -103,6 +103,15 @@
 				//查看岗位权限
 				showpost(index, rid) {
 					this.rid = rid;
+					if(this.posts[index].postmiddles<=0){
+						for(var i = 0; i<this.functiontable.length; i++){
+							for(var j = 0; j < this.functiontable[i].functionlist.length; j++){
+								this.functiontable[i].functionlist[j].value = false;
+							}
+						}
+						return;
+					}
+					
 					for(var i = 0; i<this.functiontable.length; i++) {
 						for(var j = 0; j < this.functiontable[i].functionlist.length; j++) {
 							for(var k = 0; k < this.posts[index].postmiddles.length; k++) {
@@ -147,6 +156,7 @@
 					})
 				},
 				swchange(index){
+					
 					if(this.functiontable[index].value){
 						for(var i=0;i<this.functiontable[index].functionlist.length;i++){
 							this.functiontable[index].functionlist[i].value=true;

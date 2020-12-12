@@ -15,10 +15,10 @@
 	<body>
 		<div id="Structure" style="margin-top: 20px;">
 			<el-row :span="24">
-				<el-col :span="4" style="font-size: 40px;" :offset="1">
-					<span>岗位定义</span>
+				<el-col :span="4"  :offset="1">
+					<h1>人员管理</h1>
 				</el-col>
-				<el-col :span="10" :push="3">
+				<el-col :span="15" :push="1">
 					<el-form :inline="true" class="demo-form-inline">
 						<el-form-item label="员工名称" :push="4">
 							<el-input placeholder="员工名称" v-model="wenben1"></el-input>
@@ -104,7 +104,7 @@
 					<template>
 						<div style="background-color: white; height: 500px;">
 							<el-table :data="Employee" style="width: 100%" height="400px">
-								<el-table-column fixed prop="post.postname" label="岗位名称" width="150">
+								<el-table-column fixed prop="postname" label="岗位名称" width="150">
 								</el-table-column>
 								<el-table-column prop="employeeid" label="工号" width="150">
 								</el-table-column>
@@ -227,9 +227,10 @@
 					}
 				},
 				/*部门下拉框*/
+				//没放法
 				SelectBydepartmentid() {
 					var _this = this;
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Departments/Departments`).then(function(res) {
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/Departments/Department`).then(function(res) {
 						_this.department = res.data;
 					})
 				},
@@ -243,6 +244,7 @@
 				},
 				insertEmployee() {
 					var _this = this;
+					_this.Employees.stateid=1;
 					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/Employees/Employee`, _this.Employees).then(function(res) {
 						if(res.data.code = "200") {
 							_this.$message({

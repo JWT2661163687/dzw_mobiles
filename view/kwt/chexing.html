@@ -80,13 +80,7 @@
 										</el-form-item>
 									</div>
 								</el-row>
-								<el-row :span="24">
-									<div align="center">
-										<el-form-item label="参考价格" :label-width="formLabelWidth">
-											<el-input v-model="addMotorcycles.price" oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}" autocomplete="off"></el-input>
-										</el-form-item>
-									</div>
-								</el-row>
+								
 								<el-row>
 									<div align="center">
 										<el-form-item label="车辆品牌" :label-width="formLabelWidth">
@@ -126,13 +120,13 @@
 					<div style="background-color: #FFFFFF; height: 500px;">
 						<template>
 							<el-table :data="make" style="width: 100%" :row-class-name="tableRowClassName">
-								<el-table-column prop="makeid" label="编码" align="center" header-align="center" width="150">
+								<el-table-column prop="makeid" label="编码" align="center" header-align="center">
 								</el-table-column>
-								<el-table-column prop="makename" label="品牌名称" align="center" header-align="center" width="150">
+								<el-table-column prop="makename" label="品牌名称" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column prop="acronym" label="首字母" align="center" header-align="center" width="150">
+								<el-table-column prop="acronym" label="首字母" align="center" header-align="center" >
 								</el-table-column>
-								<el-table-column label="操作" align="center" header-align="center">
+								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
 										<el-button size="mini" type="danger" @click="deleteById(scope.row.makeid)">删除</el-button>
 										<el-button size="mini" type="danger" @click="updateMakedialog(scope.row)">编辑</el-button>
@@ -154,10 +148,7 @@
 								</el-table-column>
 								<el-table-column prop="motorcyclename" align="center" header-align="center" label="车辆名称">
 								</el-table-column>
-								<el-table-column prop="price" align="center" header-align="center" label="参考价格">
-								</el-table-column>
-								<!--<el-table-column prop="makeid" align="center" header-align="center" label="bianhao">
-								</el-table-column>-->
+								
 								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
 										<el-button size="mini" type="danger" @click="updatedialog(scope.row)">编辑</el-button>
@@ -166,7 +157,7 @@
 								</el-table-column>
 							</el-table>
 							<el-row :span="24" style="margin-top: 20px;">
-								<el-col :span="12" :offset="6">
+								<el-col :span="14" :offset="6">
 									<el-button size="mini" type="primary" @click="SelectMotorcycleShouye()">首页</el-button>
 									<el-button size="mini" type="primary" icon="el-icon-arrow-left" @click="SelectMotorcyclepre()">上一页</el-button>
 									<el-button size="mini" type="primary" @click="SelectMotorcyclenext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
