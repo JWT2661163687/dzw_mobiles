@@ -27,7 +27,7 @@
 				</el-col>
 			</el-row>
 			<br />
-			<el-dialog title="用户添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+			<el-dialog title="客户添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="客户名称">
 						<el-input v-model="formInline.cname" placeholder="客户名称"></el-input>
@@ -35,16 +35,16 @@
 					<el-form-item label="客户手机">
 						<el-input v-model="formInline.cphone" placeholder="客户手机"></el-input>
 					</el-form-item>
-					<el-form-item label="联系人">
+					<el-form-item label="联 系 人 ">
 						<el-input v-model="phoneName" placeholder="联系人"></el-input>
 					</el-form-item>
-					<el-form-item label="额度">
+					<el-form-item label="客户额度">
 						<el-input v-model="formInline.climit" placeholder="额度"></el-input>
 					</el-form-item>
-					<el-form-item label="积分">
+					<el-form-item label="客户积分">
 						<el-input v-model="formInline.cintegral" placeholder="积分"></el-input>
 					</el-form-item>
-					<el-form-item label="备注">
+					<el-form-item label="客户备注">
 						<el-input v-model="formInline.cremark" placeholder="备注"></el-input>
 					</el-form-item>
 				</el-form>
@@ -53,7 +53,7 @@
     				<el-button type="primary" @click="add('formInline')">确 定</el-button>
   				</span>
 			</el-dialog>
-			<el-dialog title="用户修改" :visible.sync="dialogVisible1" width="50%" :before-close="handleClose">
+			<el-dialog title="客户修改" :visible.sync="dialogVisible1" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="client1" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="客户名称">
 						<el-input v-model="client1.cname" placeholder="客户名称"></el-input>
@@ -61,16 +61,16 @@
 					<el-form-item label="客户手机">
 						<el-input v-model="client1.cphone" placeholder="客户手机"></el-input>
 					</el-form-item>
-					<el-form-item label="联系人">
+					<el-form-item label="联 系 人 ">
 						<el-input v-model="client1.cname" placeholder="联系人"></el-input>
 					</el-form-item>
-					<el-form-item label="额度">
+					<el-form-item label="客户额度">
 						<el-input v-model="client1.climit" placeholder="额度"></el-input>
 					</el-form-item>
-					<el-form-item label="积分">
+					<el-form-item label="客户积分">
 						<el-input v-model="client1.cintegral" placeholder="积分"></el-input>
 					</el-form-item>
-					<el-form-item label="备注">
+					<el-form-item label="客户备注">
 						<el-input v-model="client1.cremark" placeholder="备注"></el-input>
 					</el-form-item>
 				</el-form>
@@ -165,8 +165,8 @@
 		var UserListApp = new Vue({
 			el: "#UserListApp",
 			data: {
-				dialogVisible:false,
-				dialogVisible1:false,
+				dialogVisible: false,
+				dialogVisible1: false,
 				sel: "",
 				tableData: [{
 					date: '2016-05-03',
@@ -221,7 +221,7 @@
 					cintegral: '',
 					cremark: ''
 				},
-				value2:'',
+				value2: '',
 				pickerOptions: {
 					disabledDate(time) {
 							return time.getTime() > Date.now();
@@ -247,70 +247,79 @@
 							}
 						}]
 				},
-				client:[],
-				vehicle1:[],
-				phoneName:'',
-				client1:{}
+				client: [],
+				vehicle1: [],
+				phoneName: '',
+				client1: {}
 			},
 			methods: {
 				handleClose(done) {
-					this.$confirm('确认关闭？')
-						.then(_ => {
-							done();
-							this.$message({
-								message: '关闭成功!',
-								type: 'success'
-							});
-						})
-						.catch(_ => {});
-				},
-				add(a){
-					this.$refs[a].validate((valid) => {
+						this.$confirm('确认关闭？')
+							.then(_ => {
+								done();
+								this.$message({
+									message: '关闭成功!',
+									type: 'success'
+								});
+							})
+							.catch(_ => {});
+					},
+					add(a) {
+						this.$refs[a].validate((valid) => {
 							if (valid) {
 								let _this = this;
-								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`,this.formInline).then(function(resp){
-									if(resp.data.code=="200"){
+								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`, this.formInline).then(function(resp) {
+									if (resp.data.code == "200") {
 										_this.$alert("新增成功!");
 										_this.queryClient();
 										_this.dialogVisible = false;
+										_this.formInline = {
+											cname: '',
+											cphone: '',
+											climit: '',
+											cintegral: '',
+											cremark: ''
+										};
+										_this.phoneName = "";
+										_this.formInline = [];
 									}
 								})
 							} else {
 								console.log('error submit!!');
 								return false;
 							}
-					});
-				},
-				//根据条件查询用户信息
-				queryClient(){
-					var sel1 = 0;
-					if(this.sel!=""){
-						sel1 = this.sel;
-					}
-					let _this = this;
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/${sel1}`).then(function(resp){
-						_this.client = resp.data;
-					})
-				},
-				//双击指定用户显示对应的车辆信息
-				vehicle(row){
-					let _this = this;
-					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/client1/${row.cid}`).then(function(resp){
-						_this.vehicle1 = resp.data;
-					})
-				},
-				//打开修改页面模态框
-				updateClient(row){
-					this.dialogVisible1=true;
-					this.client1 = row;
-				},
-				//修改客户信息
-				update(a){
-					this.$refs[a].validate((valid) => {
+						});
+					},
+					//根据条件查询用户信息
+					queryClient() {
+						var sel1 = 0;
+						if (this.sel != "") {
+							sel1 = this.sel;
+						}
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/${sel1}`).then(function(resp) {
+							_this.client = resp.data;
+						})
+					},
+					//双击指定用户显示对应的车辆信息
+					vehicle(row) {
+						let _this = this;
+						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/clients/client1/${row.cid}`).then(function(resp) {
+							_this.vehicle1 = resp.data;
+						})
+					},
+					//打开修改页面模态框
+					updateClient(row) {
+						this.dialogVisible1 = true;
+						this.client1 = row;
+					},
+					//修改客户信息
+					update(a) {
+						this.$refs[a].validate((valid) => {
 							if (valid) {
 								let _this = this;
-								axios.put(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`,this.client1).then(function(resp){
-									if(resp.data.code=="200"){
+								axios.put(`http://127.0.0.1:8080/dzw_moblie/api/clients/client`, this.client1).then(function(resp) {
+									if (resp.data.code == "200") {
 										_this.$alert("修改成功!");
 										_this.queryClient();
 										_this.dialogVisible1 = false;
@@ -320,19 +329,19 @@
 								console.log('error submit!!');
 								return false;
 							}
-					});
-				},
-				deleteClient(cid){
-					let _this = this;
-					axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/clients/client/${cid}`).then(function(resp){
-						if(resp.data.code=="200"){
-							_this.$alert("删除成功!");
-							_this.queryClient();
-						}
-					})
-				}
+						});
+					},
+					deleteClient(cid) {
+						let _this = this;
+						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/clients/client/${cid}`).then(function(resp) {
+							if (resp.data.code == "200") {
+								_this.$alert("删除成功!");
+								_this.queryClient();
+							}
+						})
+					}
 			},
-			mounted(){
+			mounted() {
 				this.queryClient();
 			}
 		})

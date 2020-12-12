@@ -30,7 +30,7 @@
 							<el-input v-model="nr" placeholder="请输入内容" style="width: 200px;"></el-input>
 							</el-col>
 							<el-col :span="2" :push="3">
-							<el-button icon="el-icon-search" circle></el-button>
+							<el-button icon="el-icon-search" circle @click="pageinfo(1,2)"></el-button>
 							</el-col>
 							<el-col :span="2" :push="3">
 							<el-button type="button" @click="dialogFormVisible = true">新增</el-button>
@@ -38,30 +38,29 @@
 							<el-dialog title="商品新增" :visible.sync="dialogFormVisible">
 								<el-form :model="form">
 									<el-form-item label="商品编号" :label-width="formLabelWidth">
-										<el-input v-model="form.bianhao" autocomplete="off"></el-input>
+										<el-input v-model="form.spbianma" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="商品名称" :label-width="formLabelWidth">
-										<el-input v-model="form.mingcheng" autocomplete="off"></el-input>
+										<el-input v-model="form.spmingcheng" autocomplete="off"></el-input>
 									</el-form-item>
 									<el-form-item label="商品大类" :label-width="formLabelWidth">
-										<el-select v-model="form.dazhonglei" placeholder="请选择活动区域">
-											<el-option label="种类一" value="shanghai"></el-option>
-											<el-option label="种类二" value="beijing"></el-option>
+										<el-select v-model="form.spdalei" placeholder="请选择商品大类">
+											<el-option label="发动机" value="发动机"></el-option>
 										</el-select>
 									</el-form-item>
 									<el-form-item label="商品小类" :label-width="formLabelWidth">
-										<el-select v-model="form.xiaodazhonglei" placeholder="请选择活动区域">
-											<el-option label="种类一" value="shanghai"></el-option>
-											<el-option label="种类二" value="beijing"></el-option>
+										<el-select v-model="form.spxiaolei" placeholder="请选择商品小类">
+											<el-option label="汽油过滤发动机" value="汽油过滤发动机"></el-option>
+											<el-option label="柴油过滤发动机" value="柴油过滤发动机"></el-option>
 										</el-select>
 									</el-form-item>
 									<el-form-item label="售价类型" :label-width="formLabelWidth">
-										<el-input v-model="form.shoujia" autocomplete="off"></el-input>
+										<el-input v-model="form.spshoujia" autocomplete="off"></el-input>
 									</el-form-item>
 									
 								</el-form>
 								<div slot="footer" class="dialog-footer">
-									<el-button type="primary" @click="dialogFormVisible = false">新增</el-button>
+									<el-button type="primary" @click="clickinsert()">新增</el-button>
 									<el-button @click="dialogFormVisible = false">关闭</el-button>
 								</div>
 							</el-dialog>
@@ -79,36 +78,74 @@
 						
 						</br>
 						<template>
-							<el-table :data="tableData" border show-summary style="width: 100%">
-								<el-table-column prop="id" label="序号" width="100">
+							<el-table :data="tableData.list" style="width: 100%">
+								<el-table-column prop="spid" label="序号" width="100">
 								</el-table-column>
-								<el-table-column prop="name" label="商品编号">
+								<el-table-column prop="spbianma" label="商品编号">
 								</el-table-column>
-								<el-table-column prop="mingcheng" label="商品名称">
+								<el-table-column prop="spmingcheng" label="商品名称">
 								</el-table-column>
-								<el-table-column prop="dalei" label="商品大类">
+								<el-table-column prop="spdalei" label="商品大类">
 								</el-table-column>
-								<el-table-column prop="xiaolei" label="商品小类">
+								<el-table-column prop="spxiaolei" label="商品小类">
 								</el-table-column>
-								<el-table-column prop="shoujia" label="商品售价类型">
+								<el-table-column prop="spshoujia" label="商品售价类型">
 								</el-table-column>
 								<el-table-column prop="xiugai" label="修改">
 									<template slot-scope="scope">
-       									<i class="el-icon-edit"></i>
-     								 </template>
+										<el-button type="primary" icon="el-icon-edit" circle @click="update(scope.row)"></el-button>
+     									<el-dialog title="商品修改" :visible.sync="dialogFormVisible1">
+								<el-form :model="form">
+									<el-form-item label="商品编号" :label-width="formLabelWidth">
+										<el-input v-model="form1.spbianma" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="商品名称" :label-width="formLabelWidth">
+										<el-input v-model="form1.spmingcheng" autocomplete="off"></el-input>
+									</el-form-item>
+									<el-form-item label="商品大类" :label-width="formLabelWidth">
+										<el-select v-model="form1.spdalei" placeholder="请选择商品大类">
+											<el-option label="发动机" value="发动机"></el-option>
+										</el-select>
+									</el-form-item>
+									<el-form-item label="商品小类" :label-width="formLabelWidth">
+										<el-select v-model="form1.spxiaolei" placeholder="请选择商品小类">
+											<el-option label="汽油过滤发动机" value="汽油过滤发动机"></el-option>
+											<el-option label="柴油过滤发动机" value="柴油过滤发动机"></el-option>
+										</el-select>
+									</el-form-item>
+									
+									
+									<el-form-item label="售价类型" :label-width="formLabelWidth">
+										<el-input v-model="form1.spshoujia" autocomplete="off"></el-input>
+									</el-form-item>
+									
+								</el-form>
+								<div slot="footer" class="dialog-footer">
+									<el-button type="primary" @click="clickupdate()">修改</el-button>
+									<el-button @click="dialogFormVisible1 = false">关闭</el-button>
+								</div>
+							</el-dialog>
+									</template>
 								</el-table-column>
+								
+								
 								<el-table-column prop="shanchu" label="删除">
 									<template slot-scope="scope">
-       									<i class="el-icon-delete"></i>
+       									 <el-button type="danger"  icon="el-icon-delete" circle @click="clickdelete(scope.row)"></el-button>
      								 </template>
 								</el-table-column>
-							</el-table>
-
+							</el-table>						
 						</template>
-						<el-pagination class="el-col-push-5" background layout="prev, pager, next" :total="1000">
-						</el-pagination>
-					</el-col>
-					
+						
+						<el-row>
+							<el-col :span="3" :push="8">
+								<el-button type="primary" icon="el-icon-arrow-left" @click="pageinfo(tableData.prePage,2)">上一页</el-button>								
+							</el-col>						  
+						 	<el-col :span="3" :push="10">
+								<el-button type="primary" @click="pageinfo(tableData.nextPage,2)">下一页<i class="el-icon-arrow-right el-icon--right" ></i></el-button>								
+							</el-col>
+						</el-col>
+						</el-row>
 
 				</el-row>
 		</div>
@@ -126,90 +163,112 @@
 			data: {
 				nr:'',
 				data: [{
-					label: '一级 1',
+					label: '发动机',
 					children: [{
-						label: '二级 1-1',
-						children: [{
-							label: '三级 1-1-1'
-						}]
+						label: '汽油过滤发动机',						
+					},{
+						label: '柴油过滤发动机',						
 					}]
 				}, {
-					label: '一级 2',
+					label: '轮胎',
 					children: [{
-						label: '二级 2-1',
-						children: [{
-							label: '三级 2-1-1'
-						}]
+						label: '大轮胎',						
 					}, {
-						label: '二级 2-2',
-						children: [{
-							label: '三级 2-2-1'
-						}]
-					}]
-				}, {
-					label: '一级 3',
-					children: [{
-						label: '二级 3-1',
-						children: [{
-							label: '三级 3-1-1'
-						}]
-					}, {
-						label: '二级 3-2',
-						children: [{
-							label: '三级 3-2-1'
-						}]
+						label: '小轮胎',						
 					}]
 				}],
 				defaultProps: {
-					children: 'children',
+				//	children: 'children',
 					label: 'label'
 				},
 				//新增模态框
 				form: {
-					bianhao: '',
-					mingcheng: '',
-					dazhonglei: '',
-					xiaozhonglei: '',
-					shoujia: ''					
+					daid:'2',
+					spbianhao: '',
+					spmingcheng: '',
+					spdalei: '',
+					spxiaolei: '',
+					spshoujia: ''					
 				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
-				 tableData: [{
-			          id: '12987122',
-			          name: '王小虎',
-			          mingcheng: '234',
-			          dalei: '3.2',
-			          xiaolei: 10,
-			          shoujia:'现金'
-			        }, {
-			          id: '12987123',
-			          name: '王小虎',
-			          mingcheng: '165',
-			          dalei: '4.43',
-			          xiaolei: 12,
-			          shoujia:'现金'
-			        }, {
-			          id: '12987124',
-			          name: '王小虎',
-			          mingcheng: '324',
-			          dalei: '1.9',
-			          xiaolei: 9,
-			           shoujia:'现金'
-			        }, {
-			          id: '12987125',
-			          name: '王小虎',
-			          mingcheng: '621',
-			          dalei: '2.2',
-			          xiaolei: 17,
-			           shoujia:'现金'
-			        }]
+				//修改模态框
+				form1: {},
+				formLabelWidth: '120px',
+				dialogFormVisible1: false,	
 				
+				 tableData: []			//填表格数据	
 			},
 			methods: {
 				handleNodeClick(data) {
 					console.log(data);
-				}
-			}
+				},
+				//分页查询方法
+				pageinfo(page1,page2){
+					let _this=this;			      	
+			      	
+			      	var sousuo;
+			      	if(this.nr==""){
+			      		sousuo="-1";	
+			      	}else{
+						sousuo=this.nr;
+			      	}
+			      	axios.get(`http://127.0.0.1:8080/dzw_moblie/api/shangpin/select/${page1}/${page2}/${sousuo}`).then(function(resp) {
+									//alert(resp.data.list[0].spmingcheng);
+									_this.tableData = resp.data;
+					})
+			      	
+	      		},
+	      		update(gai){			//修改图案方法
+	      			this.dialogFormVisible1 = true;		//弹出模态框
+	      			this.form1=gai	      			
+	      		},
+	      		clickupdate(){				//修改  按钮  方法
+	      			let _this=this;
+	      			dialogFormVisible = false ;
+	      			axios.put(`http://127.0.0.1:8080/dzw_moblie/api/shangpin/update`,_this.form1).then(function(resp) {
+									if(resp.data.code=="200"){
+									_this.$message({
+									message: '修改成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}		
+					})
+	      		},
+	      		clickinsert(){			//新增
+	      			let _this=this;
+	      			dialogFormVisible = false;
+	      			axios.post(`http://127.0.0.1:8080/dzw_moblie/api/shangpin/insert`,_this.form).then(function(resp) {
+									if(resp.data.code=="200"){
+									_this.$message({
+									message: '新增成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}		
+					})
+	      			
+	      		},
+	      		clickdelete(shan){			//删除
+	      			let _this=this;
+	      			axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/shangpin/shanchu/${shan.spid}`).then(function(resp) {
+									if(resp.data.code=="200"){
+									_this.$message({
+									message: '删除成功！',
+									type: 'success'
+								});
+									_this.pageinfo(1,2);
+							}		
+					})
+	      		}
+
+			},
+			mounted(){
+	   			/*var page1=parseInt(1);
+	      	    var page2=parseInt(2);*/	      	   
+	   			this.pageinfo(1,2);
+	   		}
 		})
 	</script>
 
