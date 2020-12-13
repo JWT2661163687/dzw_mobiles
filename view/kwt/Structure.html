@@ -7,13 +7,14 @@
 	</head>
 	
 	<style>
-		body {
-			background-color: #f7f7f7
-		}
+		.el-main {
+				color: #333;
+				padding: 0px;
+			}
 	</style>
-
+<link rel="stylesheet" href="../../js/comm.css" />
 	<body>
-		<div id="Structure" style="margin-top: 20px;">
+		<div id="Structure" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :span="4"  :offset="1">
 					<h1>人员管理</h1>
@@ -23,10 +24,10 @@
 						<el-form-item label="员工名称" :push="4">
 							<el-input placeholder="员工名称" v-model="wenben1"></el-input>
 						</el-form-item>
-						<el-button type="primary" icon="el-icon-search" @click="SelectByName()">搜索</el-button>
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addStructuredialog()">新增</el-button>
-						<el-button type="primary" icon="el-icon-delete">修改</el-button>
-						<el-button type="primary" icon="el-icon-delete">删除</el-button>
+						<el-button  icon="el-icon-search" @click="SelectByName()">搜索</el-button>
+						<el-button  icon="el-icon-circle-plus-outline" @click="addStructuredialog()">新增</el-button>
+						<el-button  icon="el-icon-delete">修改</el-button>
+						<el-button  icon="el-icon-delete">删除</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -34,25 +35,36 @@
 
 			<el-dialog :title="titleType2" :visible.sync="dialogFormVisible2">
 				<el-form :inline="true" :label-position="labelPosition" :model="Employees" class="demo-form-inline">
-					<el-form-item label="员工编号">
+					<el-col :span="12">
+					<el-form-item label="员工编号" label-width="80px">
 						<el-input placeholder="员工编号" v-model="Employees.employeeid"></el-input>
 					</el-form-item>
-					<el-form-item label="员工姓名">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="员工姓名" label-width="80px">
 						<el-input placeholder="员工姓名" v-model="Employees.empname"></el-input>
 					</el-form-item>
-					<el-form-item label="性别">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="性别" label-width="80px">
 						<el-select v-model="Employees.esex" placeholder="活动区域">
 							<el-option label="女" value="1"></el-option>
 							<el-option label="男" value="2"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="登录账号">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="登录账号" label-width="80px">
 						<el-input placeholder="登录账号" v-model="Employees.emplogenid"></el-input>
 					</el-form-item>
-					<el-form-item label="登录密码">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="登录密码" label-width="80px">
 						<el-input placeholder="登录密码" v-model="Employees.emplogepasword"></el-input>
 					</el-form-item>
-					<el-form-item label="所在部门">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="所在部门" label-width="80px">
 						<template>
 							<el-select v-model="Employees.departmentid" placeholder="请选择" @change="SelectPost(Employees.departmentid)">
 								<el-option v-for="item in department" :key="item.departmentid" :label="item.depnames" :value="item.departmentid">
@@ -60,7 +72,9 @@
 							</el-select>
 						</template>
 					</el-form-item>
-					<el-form-item label="职位">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="职位" label-width="80px">
 						<template>
 							<el-select v-model="Employees.postid" placeholder="请选择">
 								<el-option v-for="item in SelectPosts" :key="item.postid" :label="item.postname" :value="item.postid">
@@ -68,29 +82,42 @@
 							</el-select>
 						</template>
 					</el-form-item>
-					<el-form-item label="学历">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="学历" label-width="80px">
 						<el-input placeholder="请输入学历" v-model="Employees.education"></el-input>
 					</el-form-item>
-					<el-form-item label="毕业学校">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="毕业学校" label-width="80px">
 						<el-input placeholder="请输入毕业学校" v-model="Employees.graduationschool"></el-input>
 					</el-form-item>
-					<el-form-item label="专业">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="专业" label-width="80px">
 						<el-input placeholder="请输入专业" v-model="Employees.major"></el-input>
 					</el-form-item>
-					<el-form-item label="身份证号码">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="身份证" label-width="80px">
 						<el-input placeholder="请输入身份证号码" v-model="Employees.crrdID"></el-input>
 					</el-form-item>
-					<el-form-item label="现居住地址">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="居住地址" label-width="80px">
 						<el-input placeholder="请输入现居住地址" v-model="Employees.newaddress"></el-input>
 					</el-form-item>
-					<el-form-item label="员工联系电话">
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="联系电话" label-width="80px">
 						<el-input placeholder="请输入员工联系电话" v-model="Employees.molphone"></el-input>
 					</el-form-item>
+					</el-col>
 				</el-form>
 
 				<div slot="footer" class="dialog-footer" align="center">
 					<el-button @click="dialogFormVisible2 = false">取 消</el-button>
-					<el-button type="primary" @click="insertEmployee()">确 定</el-button>
+					<el-button @click="insertEmployee()">确 定</el-button>
 				</div>
 			</el-dialog>
 

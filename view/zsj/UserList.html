@@ -9,11 +9,14 @@
 			a {
 				text-decoration: none;
 			}
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
 		</style>
 	</head>
-
 	<body>
-		<div id="UserListApp">
+		<div id="UserListApp" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :md="2">
 					<el-button type="primary" @click="dialogVisible = true">用户添加</el-button>

@@ -7,9 +7,7 @@
 		
 	</head>
 	<style>
-		body {
-			background-color: #f7f7f7
-		}
+		
 		
 		.el-table .warning-row {
 			background: oldlace;
@@ -18,10 +16,13 @@
 		.el-table .success-row {
 			background: #f0f9eb;
 		}
+		.el-main {
+				color: #333;
+				padding: 0px;
+			}
 	</style>
-
 	<body>
-		<div id="post" style="margin-top: 20px;">
+		<div id="post" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :span="4"  :offset="1">
 					<h1>岗位定义</h1>
@@ -34,8 +35,8 @@
 						<el-form-item label="岗位名称">
 							<el-input placeholder="岗位名称" v-model="Post.postname"></el-input>
 						</el-form-item>
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
-						<el-button type="primary" icon="el-icon-delete" @click="DeleteByPostId()">删除</el-button>
+						<el-button  icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+						<el-button  icon="el-icon-delete" @click="DeleteByPostId()">删除</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -59,10 +60,10 @@
 							</el-table>
 							<el-row :span="24" style="margin-top: 20px;">
 								<el-col :span="12" :offset="9">
-									<el-button size="mini" type="primary" round @click="SelectPostShouye()">首页</el-button>
-									<el-button size="mini" type="primary" icon="el-icon-arrow-left" round @click="SelectPostpre()">上一页</el-button>
-									<el-button size="mini" type="primary" round @click="SelectPostnext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-									<el-button size="mini" type="primary" round @click="SelectPostLast()">尾页</el-button>
+									<el-button size="mini"  round @click="SelectPostShouye()">首页</el-button>
+									<el-button size="mini"  icon="el-icon-arrow-left" round @click="SelectPostpre()">上一页</el-button>
+									<el-button size="mini" round @click="SelectPostnext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+									<el-button size="mini"  round @click="SelectPostLast()">尾页</el-button>
 								</el-col>
 							</el-row>
 						</div>

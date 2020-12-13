@@ -4,9 +4,15 @@
 		<meta charset="UTF-8">
 		<title>通讯目录</title>
 		<link rel="stylesheet" href="css/index.css" />
+		<style type="text/css">
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
 	<body>
-		<div id="tongxunapp">
+		<div id="tongxunapp" style="padding: 0px 10px;">
 			<el-row>
 				<el-col :span="4">
 					<h1>通讯目录</h1>
@@ -15,10 +21,10 @@
 					<el-input v-model="neirong" placeholder="请输入内容" ></el-input>
 				</el-col>	
 				<el-col :span="2" :push="3">
-					 <el-button type="primary" @click="mohu()">搜索</el-button>
+					 <el-button  @click="mohu()">搜索</el-button>
 				</el-col>
 				<el-col :span="2" :push="3">	 
-					  <el-button type="primary">关闭</el-button>
+					  <el-button >关闭</el-button>
 				</el-col>	
 				</el-row>
 				<el-row>

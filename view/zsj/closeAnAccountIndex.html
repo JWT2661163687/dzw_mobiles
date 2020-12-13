@@ -4,10 +4,15 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
-
 	<body>
-		<div id="jieSuan">
+		<div id="jieSuan" style="padding: 0px 10px;">
 			<el-row>
 				<template>
 					<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -450,6 +455,7 @@
 								axios.post(`http://127.0.0.1:8080/dzw_moblie/api/counts/mem/${_this.cou.cid}/${_this.cou.routofpocket}/${as}/${_this.jine}/${_this.mainid}`, _this.cou).then(function(resp) {
 									if (resp.data.code == "200") {
 										_this.$alert("结算成功!");
+										first.addfront();
 										_this.dialogVisible = false;
 										_this.queryCar();
 										_this.queryCount();

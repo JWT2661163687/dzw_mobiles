@@ -7,21 +7,27 @@
 		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
 		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
 		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
-		
+		<style type="text/css">
+			
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div id="instationmaintainapp">
+		<div id="instationmaintainapp" style="padding: 0px 10px;">
 			<el-row>
 				<el-col :span="5">
 					<h1>站内维修</h1>
 				</el-col>
 				<el-col :span="14" :push="4">
-					<el-button type="primary" @click="weixiushow">添加维修项目</el-button>
-					<el-button type="success" @click="fanggong">生成维修单据</el-button>
-					<el-button type="primary" @click="maintaincarshow(1)">维修车辆信息</el-button>
-					<el-button type="primary" @click="teamshow">添加技工</el-button>
-					<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index)">
+					<el-button  @click="weixiushow">添加维修项目</el-button>
+					<el-button  @click="fanggong">生成维修单据</el-button>
+					<el-button  @click="maintaincarshow(1)">维修车辆信息</el-button>
+					<el-button  @click="teamshow">添加技工</el-button>
+					<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index,mename)">
 						{{item.mename}}
 					</el-tag>
 				</el-col>
@@ -122,7 +128,7 @@
 						</el-table-column>
 						<el-table-column label="操作">
 							<template slot-scope="scope">
-								<el-button type="danger" icon="el-icon-delete" circle @click="deleteclickweixiu(scope.$index)"></el-button>
+								<el-button  icon="el-icon-delete" circle @click="deleteclickweixiu(scope.$index)"></el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -174,7 +180,7 @@
 				<br />
 				<el-row>
 					<el-col :span="5" :push="10">
-						<el-button type="success" round @click="clickweixiumotai" >确定维修项目</el-button>
+						<el-button round @click="clickweixiumotai" >确定维修项目</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
@@ -218,7 +224,7 @@
 				<el-row>
 					<el-col :span="10" :push="11">
 						<el-button @click="clickjigongquxiao">取 消</el-button>
-						<el-button type="primary" @click="clickqueding">确 定</el-button>
+						<el-button  @click="clickqueding">确 定</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
@@ -300,7 +306,8 @@
 					maintaincarxiangmus: [], //维修项目集合
 					teamtechniciantwos: [], //维修技工集合
 					maintainling: 1
-				}
+				},
+				gongshi:''
 
 			},
 			methods: {
@@ -383,6 +390,7 @@
 							axios.post(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/maintainling`, res.data).then(function(res) {
 								if(res.data.code == "200") {
 									instationmaintainapp.$message({message:'返工数据添加成功',type: 'success'});
+									first.addfront();
 									//清空
 									instationmaintainapp.loadchepai();
 									instationmaintainapp.addmaintaincar = {};
@@ -425,6 +433,7 @@
 					axios.post(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow`, instationmaintainapp.addmaintaincar).then(function(res) {
 						if(res.data.code == "200") {
 							instationmaintainapp.$message({message:'新增维修单成功',type: 'success'});
+							first.addfront();
 							//清空
 							instationmaintainapp.loadchepai();
 							instationmaintainapp.addmaintaincar = {};
@@ -542,11 +551,18 @@
 							return;
 						}
 					}
+										this.addweixiu.push({xmmingcheng:teamtechniciantwo.mename,biaozhun:this.gongshi})
 					//添加技工
 					this.teamtechniciantwos.push(teamtechniciantwo);
 				},
 				//移除
-				deletejigong(index) {
+				deletejigong(index,mename) {
+					for(var i=0;i<this.addweixiu.length;i++){
+						if(this.addweixiu[i].xmmingcheng==mename){
+							this.addweixiu.splice(i,1);
+							break;
+						}
+					}
 					this.teamtechniciantwos.splice(index, 1);
 				},
 				//维修下拉框改变事件

@@ -8,10 +8,16 @@
 		<script type="text/javascript" src="/dzw_mobiles/js/vue.js"></script>
 		<script type="text/javascript" src="/dzw_mobiles/js/index.js"></script>
 		<link rel="stylesheet" href="/dzw_mobiles/css/index.css" />
+		<style>
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div id="completedmaintainapp">
+		<div id="completedmaintainapp" style="padding: 0px 10px;">
 			<el-row>
 				<el-col :span="5">
 					<h1>竣工检查</h1>
@@ -79,7 +85,7 @@
 				<el-row>
 					
 					<el-col :span="10" :push="4">
-						<el-button type="primary" @click="completedclick">提交</el-button>
+						<el-button  @click="completedclick">提交</el-button>
 					</el-col>
 				</el-row>
 
@@ -157,6 +163,7 @@
 				},
 				//竣工表新增
 				completedclick() {
+					
 					if(this.radio == '1') {
 						this.completed.completiondate = this.getdata(1);
 					}

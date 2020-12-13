@@ -4,133 +4,139 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
-
 	<body>
-		<div id="mechanicstarapp" style="background-color: white;color:#F56C6C">
+		<div id="mechanicstarapp" style="padding: 0px 10px;">
 			<br />
-			<div>
-				<el-row :span="10">
-					<el-col :md="1" :push="2">
-						<el-button type="primary" round @click="updateMechanicstar">保存</el-button>
-					</el-col>
-					<el-col :md="1" :push="3" style="margin-left: 20px;">
-						<el-button type="success" round @click="deleteMechanicstar(addmechanicstar.meid)">删除</el-button>
-					</el-col>
-					<el-col :md="1" :push="4" style="margin-left: 20px;">
-						<el-button type="danger" round @click="insertbanzu">新增</el-button>
-					</el-col>
-				</el-row>
-			</div>
-			
 			<el-row>
-				<el-dialog title="新增星级" :visible.sync="dialogVisibless" width="400px" >
-					<div style="background-color: white;color:#F56C6C">
-						<!--<el-row :gutter="20">
-							<el-col :span="16">
-								<h2>技工资料</h2>
-							</el-col>
-						</el-row>-->
+				<el-col :span="2" :push="8">
+					<el-button  round @click="updateMechanicstar">保存</el-button>
+				</el-col>
+				<el-col :span="2" :push="8">
+					<el-button  round @click="deleteMechanicstar(addmechanicstar.meid)">删除</el-button>
+				</el-col>
+				<el-col :span="2" :push="8">
+					<el-button  round @click="insertbanzu">新增</el-button>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-dialog title="新增星级" :visible.sync="dialogVisibless" width="300px" >
+					<div>
 						<el-row>
-							<el-col :span="8">
-								等级编码
-								<el-input v-model="addmechanicstars.meid" size="small" style="width: 200px;">
-								</el-input>
-							</el-col>
-							</el-row>
-							<el-row>
-							<el-col :span="8">
-								星级
-								<el-input v-model="addmechanicstars.starrating" size="small" style="width: 200px;">
-								</el-input>
-							</el-col>
-							</el-row>
-							<el-row>
-							<el-col :span="8">
-								等级
-								<el-input v-model="addmechanicstars.grade" size="small" style="width: 200px;">
-								</el-input>
-							</el-col>
-							</el-row>
-							<el-row>
-							<el-col :span="8">
-								提成权重
-								<el-input v-model="addmechanicstars.weight" size="small" style="width: 200px;">
-								</el-input>
-							</el-col>
+							<el-form label-width="100px" :rules="rules" ref="addmechanicstars" :model="addmechanicstars">
+								<el-form-item label="等级编码：" prop="meid">
+									<el-input v-model="addmechanicstars.meid" size="small">
+									</el-input>
+								</el-form-item>
+								<el-form-item label="星级：" prop="starrating">
+									<el-input v-model="addmechanicstars.starrating" size="small">
+									</el-input>
+								</el-form-item>
+								<el-form-item label="等级：">
+									<el-input v-model="addmechanicstars.grade" size="small">
+									</el-input>
+								</el-form-item>
+								<el-form-item label="工时：" prop="weight">
+									<el-input v-model="addmechanicstars.weight" size="small">
+									</el-input>
+								</el-form-item>
+							</el-form>
 						</el-row>
 					</div>
 					<span slot="footer" class="dialog-footer">
 						<el-button @click="dialogVisibless = false">取 消</el-button>
-						<el-button @click="insertmechanicstar" type="primary" @click="dialogVisibless = false">确 定</el-button>
+						<el-button @click="insertmechanicstar"  >确 定</el-button>
 					</span>
 				</el-dialog>
 			</el-row>
-			
-			
-			<div style="background-color: white;color:#F56C6C">
-				等级编码：
-				<el-input v-model="addmechanicstar.meid" size="small" placeholder="请输入内容" style="width: 100px;">
-				</el-input>
-
-				星级：
-				<el-input v-model="addmechanicstar.starrating" size="small" placeholder="请输入内容" style="width: 100px;">
-				</el-input>
-
-				等级：
-				<el-input v-model="addmechanicstar.grade" size="small" placeholder="请输入内容" style="width: 100px;">
-				</el-input>
-
-				提成权重：
-				<el-input v-model="addmechanicstar.weight" size="small" placeholder="请输入内容" style="width: 100px;">
-				</el-input>
-
-			</div>
-			<template>
-				<el-table :data="mechanicstar" height="200" style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
-						<el-table-column prop="meid" label="编码">
-						</el-table-column>
-						<el-table-column prop="starrating" label="星级">
-						</el-table-column>
-						<el-table-column prop="grade" label="等级">
-						</el-table-column>
-						<el-table-column prop="weight" label="提成权重">
-						</el-table-column>
-					</el-table>
-			</template>
+			<el-row>
+				<el-form :inline="true" >
+					<el-form-item label="等级编码：">
+						<el-input v-model="addmechanicstar.meid" size="small" placeholder="请输入内容">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="星级：">
+						<el-input v-model="addmechanicstar.starrating" size="small" placeholder="请输入内容">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="等级：">
+						<el-input v-model="addmechanicstar.grade" size="small" placeholder="请输入内容">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="工时：">
+						<el-input v-model="addmechanicstar.weight" size="small" placeholder="请输入内容">
+						</el-input>
+					</el-form-item>
+				</el-form>
+			</el-row>
+			<el-table :data="mechanicstar" height="200" @current-change="fuzhi" highlight-current-row>
+				<el-table-column prop="meid" label="编码">
+				</el-table-column>
+				<el-table-column prop="starrating" label="星级">
+				</el-table-column>
+				<el-table-column prop="grade" label="等级">
+				</el-table-column>
+				<el-table-column prop="weight" label="工时">
+				</el-table-column>
+			</el-table>
 		</div>
 	</body>
 	<script>
 		var mechanicstarapp = new Vue({
 			el: "#mechanicstarapp",
 			data: {
-				
+
 				mechanicstar: [],
-				addmechanicstar:{
-					meid:'',
-					starrating:'',
-					grade:'',
-					weight:''
+				addmechanicstar: {
+					meid: '',
+					starrating: '',
+					grade: '',
+					weight: ''
 				},
-				addmechanicstars:{
-					meid:'',
-					starrating:'',
-					grade:'',
-					weight:''
+				addmechanicstars: {
+					meid: '',
+					starrating: '',
+					grade: '',
+					weight: ''
 				},
-				disabled:true,
+				disabled: true,
 				value: '',
-				dialogVisibless: false
+				dialogVisibless: false,
+				//非空检验
+				rules: {
+					weight: [{
+						required: true,
+						message: '请输入工时',
+						trigger: 'blur' 
+					}],
+					meid: [{
+						required: true,
+						message: '请输入编号',
+						trigger: 'blur' 
+					}],
+					starrating: [{
+						required: true,
+						message: '请输入星级',
+						trigger: 'blur' 
+					}],
+				}
+
 			},
 			mounted() {
 				this.goToPage();
 			},
 			methods: {
-				
-				insertbanzu(){
-						this.dialogVisibless = true;
-					},
-					
+
+				insertbanzu() {
+					this.dialogVisibless = true;
+				},
+
 				goToPage() {
 					let _this = this;
 					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/mech/lzjquery`).then(function(resp) {
@@ -139,57 +145,92 @@
 						console.info(e);
 					});
 				},
-				fuzhi(currentRow,oldCurrenRow){
-					if(currentRow==null){
+				fuzhi(currentRow, oldCurrenRow) {
+					if(currentRow == null) {
 						return;
 					}
-					mechanicstarapp.addmechanicstar.meid=currentRow.meid;
-					mechanicstarapp.addmechanicstar.starrating=currentRow.starrating;
-					mechanicstarapp.addmechanicstar.grade=currentRow.grade;
-					mechanicstarapp.addmechanicstar.weight=currentRow.weight;
+					mechanicstarapp.addmechanicstar.meid = currentRow.meid;
+					mechanicstarapp.addmechanicstar.starrating = currentRow.starrating;
+					mechanicstarapp.addmechanicstar.grade = currentRow.grade;
+					mechanicstarapp.addmechanicstar.weight = currentRow.weight;
 				},
 				insertmechanicstar() {
-					if (this.addmechanicstars.starrating == '') {
-							alert("请选择星级在新增！")
+					if(this.addmechanicstars.starrating == '') {
+						this.$message({
+							message: '请选择星级在新增',
+							type: 'warning'
+						});
+						return;
+					}
+					for(var i = 0; i < this.mechanicstar.length; i++) {
+						if(this.mechanicstar[i].starrating == this.addmechanicstars.starrating) {
+							this.$message({
+								message: '星级重复',
+								type: 'warning'
+							});
 							return;
 						}
+					}
+					var _this=this;
 					axios.post("http://127.0.0.1:8080/dzw_moblie/api/mech/insert", this.addmechanicstars).then(function(resp) {
 						if(resp.data.code == "200") {
-							alert('新增成功');
+							_this.$message({
+								message: '新增成功',
+								type: 'success'
+							});
+							mechanicstarapp.addmechanicstars = {};
 							mechanicstarapp.goToPage();
 						}
 					}).catch(function(e) {});
 				},
 				updateMechanicstar() {
-					if (this.addmechanicstar.starrating == '') {
-							alert("请选择星级在修改！")
-							return;
-						}
+					if(this.addmechanicstar.starrating == '') {
+						this.$message({
+							message: '请选择星级在修改',
+							type: 'warning'
+						});
+						return;
+					}
 					axios.put("http://127.0.0.1:8080/dzw_moblie/api/mech/update", this.addmechanicstar).then(function(resp) {
 						if(resp.data.code == "200") {
-							alert('更新成功');
+							mechanicstarapp.$message({
+								message: '更新成功',
+								type: 'success'
+							});
 							mechanicstarapp.goToPage();
 						}
 					}).catch(function(e) {});
 				},
 				deleteMechanicstar(meid) {
-<<<<<<< HEAD
-					if (this.addmechanicstar.starrating == '') {
-=======
-					if (this.addmechanicstar.starratingq == '') {
->>>>>>> b676d716d84b19ba113a649cbcd51837550c1576
-							alert("请选择星级在删除！")
-							return;
-						}
+					if(this.addmechanicstar.starratingq == '') {
+						this.$message({
+							message: '请选择星级在删除！',
+							type: 'warning'
+						});
+						return;
+					}
 					let _this = this;
-					if(window.confirm('是否移除？')) {
+					this.$confirm('确定删除星级？, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
 						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/mech/mechs/${meid}`).then(function(resp) {
 							if(resp.data.code == "200") {
-								alert('移除成功');
+								_this.$message({
+									message: '移除成功',
+									type: 'success'
+								});
 								mechanicstarapp.goToPage();
 							}
 						}).catch(function(e) {});
-					}
+						
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消删除'
+						});
+					});
 				}
 			}
 		});

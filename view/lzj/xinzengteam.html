@@ -4,9 +4,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" href="../../css/index.css" />
 	</head>
 	<style>
+		.el-main {
+				color: #333;
+				padding: 0px;
+			}
 		.el-row {
 			margin-bottom: 20px;
 			&:last-child {
@@ -40,9 +43,9 @@
 			background-color: #f9fafc;
 		}
 	</style>
-
+<link rel="stylesheet" href="../../js/comm.css" />
 	<body>
-		<div id="app" style="background-color: white;color:#F56C6C">
+		<div id="app" style="padding: 0px 10px;">
 			<el-row>
 				<el-dialog title="修改" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
 					<div style="background-color: white;color:#F56C6C">
@@ -142,7 +145,7 @@
 					<span slot="footer" class="dialog-footer">
 						<el-button @click="dialogVisible = false">取 消</el-button>
 						<el-button @click="insertTeamtechnician" type="primary" @click="dialogVisible = false">确 定</el-button>
-						<el-button @click="updateTeam" type="primary" @click="dialogVisible = false">保 存</el-button>
+						<el-button @click="updateTeam"  @click="dialogVisible = false">保 存</el-button>
 					</span>
 				</el-dialog>
 			</el-row>

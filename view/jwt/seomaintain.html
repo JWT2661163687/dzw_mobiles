@@ -4,13 +4,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-
+		
 		<style type="text/css">
 			body,
 			html {
 				width: 100%;
 				height: 100%;
-				margin: 0;
 				font-family: "微软雅黑";
 				font-size: 14px;
 			}
@@ -23,13 +22,17 @@
 			#r-result {
 				width: 100%;
 			}
+			
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
 		</style>
-
 		<title>关键字输入提示词条</title>
 	</head>
 
 	<body>
-		<div id="seomaintainapp">
+		<div id="seomaintainapp" style="padding: 0px 10px;">
 			<el-row>
 				<el-col :span="3">
 					<h1>站外维修</h1>
@@ -37,10 +40,10 @@
 				<el-col :span="19" :push="0">
 					<el-button @click="getDistance">获得距离</el-button>
 					<el-button id="result">查看线路</el-button>
-					<el-button type="primary" @click="weixiushow">添加维修项目</el-button>
-					<el-button type="success" @click="fanggong">生成维修单据</el-button>
-					<el-button type="primary" @click="maintaincarshow(1)">维修车辆信息</el-button>
-					<el-button type="primary" @click="teamshow">添加技工</el-button>
+					<el-button  @click="weixiushow">添加维修项目</el-button>
+					<el-button  @click="fanggong">生成维修单据</el-button>
+					<el-button  @click="maintaincarshow(1)">维修车辆信息</el-button>
+					<el-button  @click="teamshow">添加技工</el-button>
 					<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index)">
 						{{item.mename}}
 					</el-tag>
@@ -225,14 +228,14 @@
 				<br />
 				<el-row>
 					<el-col :span="5" :push="10">
-						<el-button type="success" round @click="clickweixiumotai">确定维修项目</el-button>
+						<el-button  round @click="clickweixiumotai">确定维修项目</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
 			<el-dialog title="技工选择" :visible.sync="dialogVisibletwo" width="50%">
 				<el-row>
 					<el-col :span="20" :push="4">
-						<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index)">
+						<el-tag v-for="(item,index) in teamtechniciantwos" :key="item.mename" closable @close="deletejigong(index,item.mename)">
 							{{item.mename}}
 						</el-tag>
 					</el-col>
@@ -246,8 +249,7 @@
 						<el-table :data="teamtechnicians" style="width: 100%">
 							<el-table-column prop="mename" label="姓名">
 							</el-table-column>
-							<el-table-column prop="b" label="工时">
-							</el-table-column>
+							
 							<el-table-column prop="tename" label="班组名">
 							</el-table-column>
 							<el-table-column prop="starrating" label="星级">
@@ -269,7 +271,7 @@
 				<el-row>
 					<el-col :span="10" :push="11">
 						<el-button @click="clickjigongquxiao">取 消</el-button>
-						<el-button type="primary" @click="clickqueding">确 定</el-button>
+						<el-button  @click="clickqueding">确 定</el-button>
 					</el-col>
 				</el-row>
 			</el-dialog>
@@ -362,7 +364,8 @@
 					id: '', //救援车辆id
 					departaddress: '', //起始地址
 					rescuevehicleaddress: '', //救援地址
-					mileage: '' //总里程
+					mileage: '',//总里程
+					gongshi:''
 
 				},
 				//mileage: '', //总里程
@@ -486,6 +489,12 @@
 					//计算公里
 					this.addmaintaincar.mileage = (map.getDistance(pointB, pointA) / 1000).toFixed(0); // 保留小数点后两位
 					var qian = this.addmaintaincar.mileage * 5;
+					for(var i=0;i<this.addweixiu.length;i++){
+						if(this.addweixiu[i].xmmingcheng=='救援费'){
+							this.addweixiu.splice(i,1);
+							break;
+						}
+					}
 					this.addweixiu.push({
 						xmmingcheng: '救援费',
 						xmbiaozhun: qian
@@ -559,6 +568,7 @@
 										message: '返工数据添加成功',
 										type: 'success'
 									});
+									first.addfront();
 									//清空
 									seomaintainvue.loadchepai();
 									seomaintainvue.addmaintaincar = {};
@@ -606,6 +616,7 @@
 								message: '新增维修单成功',
 								type: 'success'
 							});
+							first.addfront();
 							//清空
 							seomaintainvue.loadchepai();
 							seomaintainvue.addmaintaincar = {};
@@ -710,9 +721,11 @@
 				},
 				//选中子节点时回调函数，查询技工
 				handleNodeClick(tree, node, c) {
+					
 					if(node.level === 2) {
 						this.meid = tree.mechanicstar.meid;
-						this.teamid = node.parent.data.team.teamid
+						this.teamid = node.parent.data.team.teamid;
+						this.gongshi=tree.weight;
 						//查询
 						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/flows/flow/${seomaintainvue.teamid}/${seomaintainvue.meid}`).then(function(res) {
 							seomaintainvue.teamtechnicians = res.data;
@@ -728,11 +741,18 @@
 							return;
 						}
 					}
+					this.addweixiu.push({xmmingcheng:teamtechniciantwo.mename,biaozhun:this.gongshi})
 					//添加技工
 					this.teamtechniciantwos.push(teamtechniciantwo);
 				},
 				//移除
-				deletejigong(index) {
+				deletejigong(index,mename) {
+					for(var i=0;i<this.addweixiu.length;i++){
+						if(this.addweixiu[i].xmmingcheng==mename){
+							this.addweixiu.splice(i,1);
+							break;
+						}
+					}
 					this.teamtechniciantwos.splice(index, 1);
 				},
 				//维修下拉框改变事件

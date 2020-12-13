@@ -4,134 +4,190 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
-
 	<body>
-		<div id="fieldvehiclesapp" style="background-color: white;color:#F56C6C">
+		<div id="fieldvehiclesapp"  style="padding: 0px 10px;">
 
 			<br/>
+			<el-row>
+				<el-col :span="2" :push="9">
+					<el-button  round @click="updatefieldvehicles">保存</el-button>
+				</el-col>
+				<el-col :span="2" :push="9">
+					<el-button round @click="deletefieldvehicles(addfieldvehicles.id)">删除</el-button>
+				</el-col>
+				<el-col :span="2" :push="9">
+					<el-button round @click="insertbanzu">新增</el-button>
+				</el-col>
+			</el-row>
 			<div>
-				<el-row :span="10">
-					<el-col :md="1" :push="2">
-						<el-button type="primary" round @click="updatefieldvehicles">保存</el-button>
-					</el-col>
-					<el-col :md="1" :push="3" style="margin-left: 20px;">
-						<el-button type="success" round @click="deletefieldvehicles(addfieldvehicles.id)">删除</el-button>
-					</el-col>
-					<el-col :md="1" :push="4" style="margin-left: 20px;">
-						<el-button type="danger" round @click="insertbanzu">新增</el-button>
-					</el-col>
-				</el-row>
-			</div>
-			<div style="background-color: white;color:#F56C6C">
-				车牌号
-				<el-input v-model="addfieldvehicles.carnumber" size="small" placeholder="请输入内容" style="width: 150px;">
-				</el-input>
-				品牌
-				<el-input v-model="addfieldvehicles.fbrand" size="small" placeholder="请输入内容" style="width: 150px;">
-				</el-input>
-				车型
-				<el-input v-model="addfieldvehicles.fmodel" size="small" placeholder="请输入内容" style="width: 150px;">
-				</el-input>
-				当前里程
-				<el-input v-model="addfieldvehicles.currentmileage" size="small" placeholder="请输入内容" style="width: 150px;">
-				</el-input>
-				班组
-				<template>
-					<el-select v-model="value" placeholder="请选择">
-						<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
-						</el-option>
-					</el-select>
-				</template>
+				<el-form :inline="true">
+					<el-form-item label="车牌号">
+						<el-input v-model="addfieldvehicles.carnumber" size="small" placeholder="请输入内容" style="width: 150px;">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="品牌">
+						<el-input v-model="addfieldvehicles.fbrand" size="small" placeholder="请输入内容" style="width: 150px;">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="车型">
+
+						<el-input v-model="addfieldvehicles.fmodel" size="small" placeholder="请输入内容" style="width: 150px;">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="当前里程">
+
+						<el-input v-model="addfieldvehicles.currentmileage" size="small" placeholder="请输入内容" style="width: 150px;">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="班组">
+						<template>
+							<el-select v-model="value" placeholder="请选择">
+								<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+								</el-option>
+							</el-select>
+						</template>
+					</el-form-item>
+				</el-form>
 			</div>
 
 			<el-row>
 				<el-dialog title="新增车辆" :visible.sync="dialogVisibless" width="400px">
-					<div style="background-color: white;color:#F56C6C">
+					<div style="background-color: white;">
 						<el-row>
 							<el-col :span="8">
-								车牌号
-								<el-input v-model="addfieldvehicless.carnumber" size="small" style="width: 200px;">
-								</el-input>
+								<el-form label-width="80px">
+									<el-form-item label="车牌号">
+										<el-input v-model="addfieldvehicless.carnumber" size="small" style="width: 200px;">
+										</el-input>
+									</el-form-item>
+								</el-form>
 							</el-col>
 						</el-row>
 						<el-row>
 							<el-col :span="8">
-								品牌
-								<el-input v-model="addfieldvehicless.fbrand" size="small" style="width: 200px;">
-								</el-input>
+								<el-form label-width="80px">
+									<el-form-item label="品牌">
+										<el-input v-model="addfieldvehicless.fbrand" size="small" style="width: 200px;">
+										</el-input>
+									</el-form-item>
+								</el-form>
 							</el-col>
 						</el-row>
 						<el-row>
 							<el-col :span="8">
-								车型
-								<el-input v-model="addfieldvehicless.fmodel" size="small" style="width: 200px;">
-								</el-input>
+								<el-form label-width="80px">
+									<el-form-item label="车型">
+										<el-input v-model="addfieldvehicless.fmodel" size="small" style="width: 200px;">
+										</el-input>
+									</el-form-item>
+								</el-form>
+
 							</el-col>
 						</el-row>
 						<el-row>
 							<el-col :span="8">
-								当前里程
-								<el-input v-model="addfieldvehicless.currentmileage" size="small" style="width: 200px;">
-								</el-input>
+								<el-form label-width="80px">
+									<el-form-item label="当前里程">
+										<el-input v-model="addfieldvehicless.currentmileage" size="small" style="width: 200px;">
+										</el-input>
+									</el-form-item>
+								</el-form>
 							</el-col>
 						</el-row>
 						<el-row>
-							<el-col :span="8">
-								班组
-								<template>
-									<el-select v-model="value" placeholder="请选择">
-										<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
-										</el-option>
-									</el-select>
-								</template>
+							<el-col :span="19">
+								<el-form label-width="80px">
+									<el-form-item label="班组">
+										<el-select v-model="value" placeholder="请选择">
+											<el-option v-for="item in Team" :key="item.teamid" :label="item.tename" :value="item.teamid">
+											</el-option>
+										</el-select>
+									</el-form-item>
+								</el-form>
 							</el-col>
 						</el-row>
 					</div>
 					<span slot="footer" class="dialog-footer">
 						<el-button @click="dialogVisibless = false">取 消</el-button>
-						<el-button @click="insertfieldvehicles" type="primary" @click="dialogVisibless = false">确 定</el-button>
+						<el-button @click="insertfieldvehicles"  @click="dialogVisibless = false">确 定</el-button>
 					</span>
 				</el-dialog>
 			</el-row>
-
 			<template>
-				<el-table :data="fieldvehicles" height="200" style="background-color: white;color:#F56C6C;width: 100%" @current-change="fuzhi" highlight-current-row>
-					<el-table-column prop="carnumber" label="车牌号">
-					</el-table-column>
-					<el-table-column prop="fbrand" label="品牌">
-					</el-table-column>
-					<el-table-column prop="fmodel" label="车型">
-					</el-table-column>
-					<el-table-column prop="currentmileage" label="当前里程">
-					</el-table-column>
-					<el-table-column prop="tename" label="归属班组">
-					</el-table-column>
-				</el-table>
+				<el-tabs v-model="activeName" @tab-click="handleClick">
+					<el-tab-pane label="空闲车辆" name="first">
+						<template>
+							<el-table :data="fieldvehicles" height="200" @current-change="fuzhi" highlight-current-row>
+								<el-table-column prop="carnumber" label="车牌号">
+								</el-table-column>
+								<el-table-column prop="fbrand" label="品牌">
+								</el-table-column>
+								<el-table-column prop="fmodel" label="车型">
+								</el-table-column>
+								<el-table-column prop="currentmileage" label="当前里程">
+								</el-table-column>
+								<el-table-column prop="tename" label="归属班组">
+								</el-table-column>
+							</el-table>
+						</template>
+					</el-tab-pane>
+					<el-tab-pane label="救援中车辆" name="second">
+						<template>
+							<el-table :data="fieldvehicles" height="200" @current-change="fuzhi" highlight-current-row>
+								<el-table-column prop="carnumber" label="车牌号">
+								</el-table-column>
+								<el-table-column prop="fbrand" label="品牌">
+								</el-table-column>
+								<el-table-column prop="fmodel" label="车型">
+								</el-table-column>
+								<el-table-column prop="currentmileage" label="当前里程">
+								</el-table-column>
+								<el-table-column prop="tename" label="归属班组">
+								</el-table-column>
+								<el-table-column label="操作">
+									<template slot-scope="scope">
+										<el-button size="mini" @click="handleEdit(scope.row.id)">完成</el-button>
+									</template>
+
+								</el-table-column>
+							</el-table>
+						</template>
+					</el-tab-pane>
+
+				</el-tabs>
 			</template>
+
 		</div>
 	</body>
 	<script>
-		var fieldvehiclesapp=new Vue({
+		var fieldvehiclesapp = new Vue({
 			el: "#fieldvehiclesapp",
 			data: {
+				activeName: 'first',
 				addfieldvehicles: {
-					id:0,
+					id: 0,
 					carnumber: '',
 					fbrand: '',
 					fmodel: '',
 					currentmileage: '',
-					tename:'',
-					teamid:0
+					tename: '',
+					teamid: 0
 				},
 				addfieldvehicless: {
-					id:0,
+					id: 0,
 					carnumber: '',
 					fbrand: '',
 					fmodel: '',
 					currentmileage: '',
-					tename:'',
-					teamid:0
+					tename: '',
+					teamid: 0
 				},
 				fieldvehicles: [],
 				Team: [],
@@ -143,14 +199,25 @@
 				this.queryTeam();
 			},
 			methods: {
-				insertbanzu(){
-						this.dialogVisibless = true;
-					},
-				deletefieldvehicles(id) {
-					if (this.value == '') {
-							alert("请选择车辆在删除！")
-							return;
+				handleEdit(id){
+					//修改状态
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/updatezhuangtai/${id}`).then(function(res){
+						if(res.data.code=="200"){
+							fieldvehiclesapp.goToPage();
 						}
+					})
+				},
+				handleClick() {
+					this.goToPage();
+				},
+				insertbanzu() {
+					this.dialogVisibless = true;
+				},
+				deletefieldvehicles(id) {
+					if(this.value == '') {
+						alert("请选择车辆在删除！")
+						return;
+					}
 					let _this = this;
 					if(window.confirm('是否移除？')) {
 						axios.delete(`http://127.0.0.1:8080/dzw_moblie/api/fiel/fiels/${id}`).then(function(resp) {
@@ -161,51 +228,58 @@
 						}).catch(function(e) {});
 					}
 				},
-				fuzhi(currentRow,oldCurrenRow){
-					if(currentRow==null){
+				fuzhi(currentRow, oldCurrenRow) {
+					if(currentRow == null) {
 						return;
 					}
-					fieldvehiclesapp.addfieldvehicles.carnumber=currentRow.carnumber;
-					fieldvehiclesapp.addfieldvehicles.fbrand=currentRow.fbrand;
-					fieldvehiclesapp.addfieldvehicles.fmodel=currentRow.fmodel;
-					fieldvehiclesapp.addfieldvehicles.currentmileage=currentRow.currentmileage;
-					fieldvehiclesapp.addfieldvehicles.tename=currentRow.tename;
-					fieldvehiclesapp.addfieldvehicles.id=currentRow.id;
-					for(var i=0;i<this.Team.length;i++){
-						if(currentRow.tename==this.Team[i].tename){
-							this.value=this.Team[i].teamid;
+					fieldvehiclesapp.addfieldvehicles.carnumber = currentRow.carnumber;
+					fieldvehiclesapp.addfieldvehicles.fbrand = currentRow.fbrand;
+					fieldvehiclesapp.addfieldvehicles.fmodel = currentRow.fmodel;
+					fieldvehiclesapp.addfieldvehicles.currentmileage = currentRow.currentmileage;
+					fieldvehiclesapp.addfieldvehicles.tename = currentRow.tename;
+					fieldvehiclesapp.addfieldvehicles.id = currentRow.id;
+					for(var i = 0; i < this.Team.length; i++) {
+						if(currentRow.tename == this.Team[i].tename) {
+							this.value = this.Team[i].teamid;
 							break;
 						}
 					}
 				},
 				goToPage() {
-						let _this = this;
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/query`).then(function(resp) {
-							_this.fieldvehicles = resp.data;
-						}).catch(function(e) {
-							console.info(e);
-						});
-					},
+					let _this = this;
+					let zhuangtai;
+					if(this.activeName == "first") {
+						zhuangtai = 1;
+					} else {
+						zhuangtai = 2;
+					}
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/query/${zhuangtai}`).then(function(resp) {
+						_this.fieldvehicles = resp.data;
+					}).catch(function(e) {
+						console.info(e);
+					});
+				},
 				insertfieldvehicles() {
-					if (this.value == '') {
-							alert("请选择车辆在新增！")
-							return;
-						}
-					this.addfieldvehicless.teamid=parseInt(this.value);
+					if(this.value == '') {
+						alert("请选择车辆在新增！")
+						return;
+					}
+					this.addfieldvehicless.teamid = parseInt(this.value);
 					axios.post("http://127.0.0.1:8080/dzw_moblie/api/fiel/insert", this.addfieldvehicless).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('新增成功');
+							fieldvehiclesapp.addfieldvehicless = {};
 							fieldvehiclesapp.goToPage();
 						}
 					}).catch(function(e) {});
 				},
-				
+
 				updatefieldvehicles() {
-					if (this.value == '') {
-							alert("请选择车辆在更新！")
-							return;
-						}
-					this.addfieldvehicles.teamid=parseInt(this.value);
+					if(this.value == '') {
+						alert("请选择车辆在更新！")
+						return;
+					}
+					this.addfieldvehicles.teamid = parseInt(this.value);
 					axios.put("http://127.0.0.1:8080/dzw_moblie/api/fiel/update", this.addfieldvehicles).then(function(resp) {
 						if(resp.data.code == "200") {
 							alert('更新成功');
@@ -213,15 +287,15 @@
 						}
 					}).catch(function(e) {});
 				},
-				
-				queryTeam(){
-						let _this = this;
-						axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {
-							_this.Team = resp.data;
+
+				queryTeam() {
+					let _this = this;
+					axios.get(`http://127.0.0.1:8080/dzw_moblie/api/fiel/queryteam`).then(function(resp) {
+						_this.Team = resp.data;
 					})
+				}
 			}
-		}
-	});
+		});
 	</script>
 
 </html>

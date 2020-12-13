@@ -13,11 +13,14 @@
 			.ss {
 				background-color: red;
 			}
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
 		</style>
 	</head>
-
 	<body>
-		<div id="UserVehicleApp">
+		<div id="UserVehicleApp" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :md="2">
 					<el-button type="primary" @click="queryAllClient">车辆添加</el-button>

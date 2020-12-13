@@ -13,7 +13,7 @@
 		<style>
 			.el-header,
 			.el-footer {
-				background-color: black;
+				background-color: whitesmoke;
 				color: #333;
 				text-align: center;
 				line-height: 60px;
@@ -25,6 +25,8 @@
 			.el-main {
 				color: #333;
 				padding: 0px;
+				height: 650px;
+				
 			}
 		</style>
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=EkSAGbHAEvGI8a8eCBZhKrshRm5BTUsD"></script>
@@ -35,49 +37,34 @@
 			<el-container>
 				<el-header>
 					<el-row>
-						<el-col :span="2" :push="1">
-							<!--<img src="/dzw_mobiles/img/aaa.png" height="60px"/>-->
+						<el-col :span="6" >
+							<i style="text-align: center;color: gray;font-weight:bold;font-family: '微软雅黑';font-size: 25px;">德召文汽修管理系统</i>
 						</el-col>
-						<el-col :span="2" :push="4">
-							<i class="el-icon-user"></i>&nbsp;用户：<span>{{employee.empname}}</span>
+						<el-col :span="2" >
+							<i class="el-icon-user"></i><span style="text-align: center;color: gray;font-weight:bold;font-family: '微软雅黑';">&nbsp;用户：{{employee.empname}}</span>
 						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-no-smoking"></i>&nbsp;<span @click="loadclick('view/jwt/maintain.html')" style="cursor:pointer">维修</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-document-copy"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('view/zsj/maintain1.html')">结算中心</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-s-custom"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('view/zsj/maintain.html')">客户档案</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-s-check"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/lzj/maintain.html')">行政人事</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-tickets"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/pjw/maintain.html')">基础数据</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							<i class="el-icon-setting"></i>&nbsp;<span style="cursor:pointer" @click="loadclick('/dzw_mobiles/view/jwt/maintain2.html')">系统</span>
-						</el-col>
-						<el-col :span="2" :push="6">
-							&nbsp;<span style="cursor:pointer" @click="zhuxaio">注销</span>
+						
+						<el-col :span="2" :push="14">
+							&nbsp;<span @click="zhuxaio" style="text-align: center;color: gray;font-weight:bold;font-family: '微软雅黑';cursor:pointer;">注销</span>
 						</el-col>
 					</el-row>
 				</el-header>
+				
 				<el-main>
-					<el-col   :span="4">
+					<el-col :span="4">
 						<div id="divload" ></div>
 					</el-col>
-					<el-col :span="19" >
+					<el-col :span="20" >
 						<div id="qiehuan">
-							<el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-								<el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
-									<div :id=`${item.title}${item.name}`></div>
+							<el-tabs  v-model="editableTabsValue" closable  type="card"  @edit="handleTabsEdit" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+								<el-tab-pane :key="item.name" v-for="(item, index) in editableTabs"  :label="item.title" :name="item.name">
+									<div :id=`${item.title}${item.name}` ></div>
 								</el-tab-pane>
 							</el-tabs>
 						</div>
 					</el-col>
 				</el-main>
+				
 			</el-container>
 		</div>
 
@@ -94,7 +81,8 @@
 				editableTabsValue: '0',
 				editableTabs: [],
 				url: 'view/jwt/maintain.html',
-				employee:{}
+				employee:{},
+				aabb:true
 				
 			},
 			mounted: function() {
@@ -102,6 +90,7 @@
 				this.getsesstion();
 			},
 			methods: {
+				
 				//获得sess
 				getsesstion(){
 					//获得sess

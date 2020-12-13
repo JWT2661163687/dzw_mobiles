@@ -4,15 +4,22 @@
 		<meta charset="UTF-8">
 		<title>离职登记</title>
 		<link rel="stylesheet" href="css/index.css" />
+		<style type="text/css">
+			
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
+		</style>
 	</head>
 	<body>
-		<div id="lizhiapp">
+		<div id="lizhiapp" style="padding: 0px 10px;">
 			<el-row>
 				<el-col :span="4">
 					<h1>离职登记</h1>
 				</el-col>
 				<el-col :span="18" :push="5">
-					<el-button type="success" @click="dialogFormVisible = true">离职员工</el-button>
+					<el-button  @click="dialogFormVisible = true">离职员工</el-button>
 					<el-dialog title="离职登记" :visible.sync="dialogFormVisible">
 					  <el-form :inline="true" :model="form" class="demo-form-inline">
 					    <el-form-item label="员工姓名" :label-width="formLabelWidth">
@@ -50,13 +57,13 @@
 						  </el-table>
 					</template>
 					  <div slot="footer" class="dialog-footer">
-					  	<el-button type="primary" @click="xiugai()">确 定</el-button>					 
+					  	<el-button  @click="xiugai()">确 定</el-button>					 
 					    <el-button @click="dialogFormVisible = false">取 消</el-button>
 					   </div>
 					</el-dialog>
 					
-					<el-button type="primary">回滚</el-button>
-					<el-button type="success">关闭</el-button>
+					<el-button >回滚</el-button>
+					<el-button >关闭</el-button>
 				</el-col>
 				
 				<el-col>

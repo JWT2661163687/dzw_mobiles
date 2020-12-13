@@ -5,9 +5,7 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<style>
-			body {
-				background-color: #f7f7f7
-			}
+			
 			
 			.el-table .warning-row {
 				background: oldlace;
@@ -16,15 +14,19 @@
 			.el-table .success-row {
 				background: #f0f9eb;
 			}
+			.el-main {
+				color: #333;
+				padding: 0px;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div id="chexing">
+		<div id="chexing" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :span="10" :offset="1">
 					<el-form :inline="true" class="demo-form-inline">
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="addMakedialog()">增加品牌</el-button>
+						<el-button  icon="el-icon-circle-plus-outline" @click="addMakedialog()">增加品牌</el-button>
 						<el-dialog :title="titleType2" :visible.sync="dialogFormVisible2" @close="resetForm('addmake')">
 							<el-form :model="addmake" ref="addmake">
 								<el-row :span="24">
@@ -51,19 +53,19 @@
 							</el-form>
 							<div slot="footer" class="dialog-footer" align="center">
 								<el-button @click="dialogFormVisible2 = false">取 消</el-button>
-								<el-button type="primary" @click="makedialogs(addmake)">确 定</el-button>
+								<el-button  @click="makedialogs(addmake)">确 定</el-button>
 							</div>
 						</el-dialog>
 						<el-form-item :push="4">
 							<el-input v-model="wenben1" placeholder="匹配 匹配编码/名称/首字母"></el-input>
 						</el-form-item>
-						<el-button type="primary" icon="el-icon-search" @click="SelectInput(wenben1)">查询</el-button>
+						<el-button  icon="el-icon-search" @click="SelectInput(wenben1)">查询</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="10" :offset="3">
 					<el-form :inline="true" class="demo-form-inline">
-						<el-button type="primary" icon="el-icon-circle-plus-outline" @click="adddialog()">增加车型</el-button>
+						<el-button  icon="el-icon-circle-plus-outline" @click="adddialog()">增加车型</el-button>
 						<el-dialog :title="titleType" :visible.sync="dialogFormVisible" @close="resetForm2('addMotorcycles')">
 							<el-form :model="addMotorcycles" ref="addMotorcycles">
 								<el-row :span="24">
@@ -103,14 +105,14 @@
 							</el-form>
 							<div slot="footer" class="dialog-footer" align="center">
 								<el-button @click="dialogFormVisible = false">取 消</el-button>
-								<el-button type="primary" @click="Motorcycledialogs(addMotorcycles)">确 定</el-button>
+								<el-button  @click="Motorcycledialogs(addMotorcycles)">确 定</el-button>
 							</div>
 						</el-dialog>
 						<el-form-item :push="4">
 							<el-input v-model="wenben" placeholder="匹配 匹配车型编码/车型名称"></el-input>
 						</el-form-item>
 
-						<el-button type="primary" icon="el-icon-search" @click="SelectByInput(wenben,1,3)">查询</el-button>
+						<el-button icon="el-icon-search" @click="SelectByInput(wenben,1,3)">查询</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -128,8 +130,8 @@
 								</el-table-column>
 								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
-										<el-button size="mini" type="danger" @click="deleteById(scope.row.makeid)">删除</el-button>
-										<el-button size="mini" type="danger" @click="updateMakedialog(scope.row)">编辑</el-button>
+										<el-button size="mini"  @click="deleteById(scope.row.makeid)">删除</el-button>
+										<el-button size="mini"  @click="updateMakedialog(scope.row)">编辑</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -151,17 +153,17 @@
 								
 								<el-table-column label="操作" align="center" header-align="center" width="150">
 									<template slot-scope="scope">
-										<el-button size="mini" type="danger" @click="updatedialog(scope.row)">编辑</el-button>
-										<el-button size="mini" type="danger" @click="DeleteById(scope.row.motorcycleid)">删除</el-button>
+										<el-button size="mini"  @click="updatedialog(scope.row)">编辑</el-button>
+										<el-button size="mini"  @click="DeleteById(scope.row.motorcycleid)">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
 							<el-row :span="24" style="margin-top: 20px;">
 								<el-col :span="14" :offset="6">
-									<el-button size="mini" type="primary" @click="SelectMotorcycleShouye()">首页</el-button>
-									<el-button size="mini" type="primary" icon="el-icon-arrow-left" @click="SelectMotorcyclepre()">上一页</el-button>
-									<el-button size="mini" type="primary" @click="SelectMotorcyclenext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-									<el-button size="mini" type="primary" @click="SelectMotorcycleLast()">尾页</el-button>
+									<el-button size="mini"  @click="SelectMotorcycleShouye()">首页</el-button>
+									<el-button size="mini"  icon="el-icon-arrow-left" @click="SelectMotorcyclepre()">上一页</el-button>
+									<el-button size="mini"  @click="SelectMotorcyclenext()">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+									<el-button size="mini"  @click="SelectMotorcycleLast()">尾页</el-button>
 								</el-col>
 							</el-row>
 						</template>
