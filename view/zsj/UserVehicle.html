@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<title></title>
 
-		<style>
+		<style scoped>
 			a {
 				text-decoration: none;
 			}
@@ -19,36 +19,38 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<div id="UserVehicleApp" style="padding: 0px 10px;">
 			<el-row :span="24">
 				<el-col :md="2">
-					<el-button type="primary" @click="queryAllClient">车辆添加</el-button>
+					<el-button @click="queryAllClient">车辆添加</el-button>
 				</el-col>
 				<el-col :push="14" :md="2" style="margin-top: 10px;"><a href="#">查询内容</a></el-col>
 				<el-col :md="6" :push="14">
 					<el-col :md="15">
 						<el-input placeholder="车辆编号" v-model="veh"></el-input>
 					</el-col>
-					<el-button type="primary" icon="el-icon-search" @click="queryVehicle" style="margin-left: 5px;">搜索</el-button>
+					<el-button icon="el-icon-search" @click="queryVehicle" style="margin-left: 5px;">搜索</el-button>
 				</el-col>
 			</el-row>
 			<br />
 			<el-dialog title="车辆添加" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
-				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
+				<el-form :inline="true" :model="formInline" class="la" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="客户编号">
 						<!--<el-input v-model="formInline.cid" placeholder="客户编号"></el-input>-->
-						<el-select v-model="formInline.cid" placeholder="请选择">
-							<el-option v-for="item in client5" :key="item.cid" :lable="item.cid" :value="item.cname"></el-option>
-							<!--<el-option :label="cid" value="公司车"></el-option>
-							<el-option :label="cid" value="租赁车"></el-option>-->
-						</el-select>
+						<template>
+							<el-select v-model="formInline.cid" placeholder="请选择">
+								<el-option v-for="item in client5" :key="item.cname" :label="item.cname" :value="item.cid">
+								</el-option>
+							</el-select>
+						</template>
 					</el-form-item>
-					<el-form-item label="驾驶员">
-						<el-input v-model="formInline.vdriver" placeholder="驾驶员"></el-input>
+					<el-form-item label="驾 驶 员 ">
+						<el-input v-model="formInline.vdriver" placeholder="驾驶员" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input v-model="formInline.vlicense" placeholder="车牌号码" width="350"></el-input>
+						<el-input v-model="formInline.vlicense" placeholder="车牌号码" width="350" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆品牌">
 						<el-input v-model="formInline.vbrand" placeholder="请选择" suffix-icon="el-icon-arrow-down" @click.native="pinpai" :row-class-name="tableRowClassName1" :row-style="selectedstyle1" @row-click="css11"></el-input>
@@ -62,7 +64,7 @@
 										<el-input v-model="input" placeholder="品牌编号/品牌名称"></el-input>
 									</el-col>
 									<el-col :md="3" style="margin-left: 10px;">
-										<el-button type="primary" icon="el-icon-search" @click="pinpai">搜索</el-button>
+										<el-button icon="el-icon-search" @click="pinpai">搜索</el-button>
 									</el-col>
 								</el-col>
 								<el-col :md="12">
@@ -70,7 +72,7 @@
 										<el-input v-model="input1" placeholder="车型编号/车型名称"></el-input>
 									</el-col>
 									<el-col :md="3" :push="5" style="margin-left: 10px;">
-										<el-button type="primary" icon="el-icon-search" @click="queryMoto1">搜索</el-button>
+										<el-button icon="el-icon-search" @click="queryMoto1">搜索</el-button>
 									</el-col>
 								</el-col>
 							</el-row>
@@ -104,7 +106,7 @@
 							</el-row>
 							<span slot="footer" class="dialog-footer">
 							    <el-button @click="dialogVisible2 = false">取 消</el-button>
-							    <el-button type="primary" @click="ok">确 定</el-button>
+							    <el-button @click="ok">确 定</el-button>
 							 </span>
 						</el-dialog>
 					</el-row>
@@ -114,49 +116,49 @@
 							<el-option label="区域一" value="shanghai"></el-option>
 							<el-option label="区域二" value="beijing"></el-option>
 						</el-select>-->
-						<el-input v-model="formInline.vmodel" placeholder="车辆型号" disabled></el-input>
+						<el-input v-model="formInline.vmodel" placeholder="车辆型号" disabled style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话">
-						<el-input v-model="formInline.vphone" placeholder="联系电话"></el-input>
+						<el-input v-model="formInline.vphone" placeholder="联系电话" style="width: 220px;"></el-input>
 					</el-form-item>
-					<el-form-item label="归属">
+					<el-form-item label="车辆归属">
 						<el-select v-model="formInline.vaffiliation" placeholder="请选择">
 							<el-option label="个人车" value="个人车"></el-option>
 							<el-option label="公司车" value="公司车"></el-option>
 							<el-option label="租赁车" value="租赁车"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="里程">
-						<el-input v-model="formInline.vmileage" placeholder="里程"></el-input>
+					<el-form-item label="车辆里程">
+						<el-input v-model="formInline.vmileage" placeholder="里程" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="上牌日期">
 						<div class="block">
-							<el-date-picker v-model="formInline.registereddate" type="date" placeholder="选择日期">
+							<el-date-picker v-model="formInline.registereddate" type="date" placeholder="选择日期" style="width: 220px;">
 							</el-date-picker>
 						</div>
 					</el-form-item>
 					<el-form-item label="购买日期">
 						<div class="block">
-							<el-date-picker v-model="formInline.purchasedate" type="date" placeholder="选择日期">
+							<el-date-picker v-model="formInline.purchasedate" type="date" placeholder="选择日期" style="width: 220px;">
 							</el-date-picker>
 						</div>
 					</el-form-item>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
     				<el-button @click="dialogVisible = false">取 消</el-button>
-    				<el-button type="primary" @click="add('formInline')">确 定</el-button>
+    				<el-button @click="add('formInline')">确 定</el-button>
   				</span>
 			</el-dialog>
 			<el-dialog title="车辆修改" :visible.sync="dialogVisible1" width="50%" :before-close="handleClose">
 				<el-form :inline="true" :model="formInline" ref="formInline" :rules="rules" class="demo-form-inline">
 					<el-form-item label="客户编号">
-						<el-input v-model="formInline.cid" placeholder="客户编号"></el-input>
+						<el-input v-model="formInline.cid" placeholder="客户编号" style="width: 220px;"></el-input>
 					</el-form-item>
-					<el-form-item label="驾驶员">
-						<el-input v-model="formInline.vdriver" placeholder="驾驶员"></el-input>
+					<el-form-item label="驾 驶 员">
+						<el-input v-model="formInline.vdriver" placeholder="驾驶员" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input v-model="formInline.vlicense" placeholder="车牌号码"></el-input>
+						<el-input v-model="formInline.vlicense" placeholder="车牌号码" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆品牌">
 						<el-input v-model="formInline.vbrand" placeholder="请选择" suffix-icon="el-icon-arrow-down" @click.native="pinpai"></el-input>
@@ -170,7 +172,7 @@
 										<el-input v-model="input" placeholder="品牌编号/品牌名称"></el-input>
 									</el-col>
 									<el-col :md="3" style="margin-left: 10px;">
-										<el-button type="primary" icon="el-icon-search" @click="pinpai">搜索</el-button>
+										<el-button icon="el-icon-search" @click="pinpai">搜索</el-button>
 									</el-col>
 								</el-col>
 								<el-col :md="12">
@@ -178,7 +180,7 @@
 										<el-input v-model="input1" placeholder="车型编号/车型名称"></el-input>
 									</el-col>
 									<el-col :md="3" :push="5" style="margin-left: 10px;">
-										<el-button type="primary" icon="el-icon-search" @click="queryMoto1">搜索</el-button>
+										<el-button icon="el-icon-search" @click="queryMoto1">搜索</el-button>
 									</el-col>
 								</el-col>
 							</el-row>
@@ -212,7 +214,7 @@
 							</el-row>
 							<span slot="footer" class="dialog-footer">
 							    <el-button @click="dialogVisible2 = false">取 消</el-button>
-							    <el-button type="primary" @click="ok">确 定</el-button>
+							    <el-button @click="ok">确 定</el-button>
 							 </span>
 						</el-dialog>
 					</el-row>
@@ -222,30 +224,30 @@
 							<el-option label="区域一" value="shanghai"></el-option>
 							<el-option label="区域二" value="beijing"></el-option>
 						</el-select>-->
-						<el-input v-model="formInline.vmodel" placeholder="车辆型号" disabled></el-input>
+						<el-input v-model="formInline.vmodel" placeholder="车辆型号" disabled style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="联系电话">
-						<el-input v-model="formInline.vphone" placeholder="联系电话"></el-input>
+						<el-input v-model="formInline.vphone" placeholder="联系电话" style="width: 220px;"></el-input>
 					</el-form-item>
-					<el-form-item label="归属">
+					<el-form-item label="车辆归属">
 						<el-select v-model="formInline.vaffiliation" placeholder="请选择">
 							<el-option label="个人车" value="个人车"></el-option>
 							<el-option label="公司车" value="公司车"></el-option>
 							<el-option label="租赁车" value="租赁车"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="里程">
-						<el-input v-model="formInline.vmileage" placeholder="里程"></el-input>
+					<el-form-item label="车辆里程">
+						<el-input v-model="formInline.vmileage" placeholder="里程" style="width: 220px;"></el-input>
 					</el-form-item>
 					<el-form-item label="上牌日期">
 						<div class="block">
-							<el-date-picker v-model="formInline.registereddate" type="date" placeholder="选择日期">
+							<el-date-picker v-model="formInline.registereddate" type="date" placeholder="选择日期" style="width: 220px;">
 							</el-date-picker>
 						</div>
 					</el-form-item>
 					<el-form-item label="购买日期">
 						<div class="block">
-							<el-date-picker v-model="formInline.purchasedate" type="date" placeholder="选择日期">
+							<el-date-picker v-model="formInline.purchasedate" type="date" placeholder="选择日期" style="width: 220px;">
 							</el-date-picker>
 						</div>
 					</el-form-item>
@@ -305,7 +307,7 @@
 				</el-form>-->
 				<span slot="footer" class="dialog-footer">
     				<el-button @click="dialogVisible = false">取 消</el-button>
-    				<el-button type="primary" @click="update">确 定</el-button>
+    				<el-button @click="update">确 定</el-button>
   				</span>
 			</el-dialog>
 			<el-row :span="24">
@@ -346,8 +348,8 @@
 						</el-table-column>-->
 						<el-table-column fixed="right" label="操作" width="180">
 							<template slot-scope="scope">
-								<el-button type="success" icon="el-icon-edit" title="修改" @click="tiao(scope.row)"></el-button>
-								<el-button type="primary" icon="el-icon-delete" title="删除" @click="del(scope.row.vid)"></el-button>
+								<el-button icon="el-icon-edit" title="修改" @click="tiao(scope.row)"></el-button>
+								<el-button icon="el-icon-delete" title="删除" @click="del(scope.row.vid)"></el-button>
 								<!--<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
 								<el-button type="text" size="small">编辑</el-button>-->
 							</template>
